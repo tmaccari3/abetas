@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<meta charset="ISO-8859-1">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
+<link href="/site.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="header">Welcome User</div>
+	<div class="menu-div">
+		<form action="/">
+			<button type="submit">
+				<span class="fas fa-home"></span> Home
+			</button>
+		</form>
+		<form action="/task/index">
+			<button type="submit">View My Tasks</button>
+		</form>
+		<form action="/task/create">
+			<button type="submit">Create Task</button>
+		</form>
+		<form action="/task/viewCreated">
+			<button type="submit">View Created Tasks</button>
+		</form>
+		<form action="/doc/index">
+			<button type="submit">View Improvement Docs</button>
+		</form>
+		<form action="/edit">
+			<button type="submit">Edit Home Page</button>
+		</form>
+		<div sec:authorize="hasRole('ADMIN')">
+			<form action="/manage">
+				<button type="submit">Admin Menu</button>
+			</form>
+		</div>
+		<form action="/login">
+			<button class="login-tab" type="submit">Login</button>
+		</form>
+	</div>
+	<div layout:fragment="content"></div>
+</body>
+</html>

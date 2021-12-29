@@ -1,0 +1,49 @@
+@charset "ISO-8859-1";
+
+h3 {
+	font-weight: bold;
+}
+
+div.child {
+	position: relative;
+	display: flex;
+	justify-content: center;
+}
+
+div.container {
+	position: relative;
+    text-align:center;
+	margin: auto;
+	vertical-align: middle;
+	background-color: #e6f2ff;
+	border: 5px groove;
+	padding: 20px;
+	border-color: gray;
+	width: 30%;
+	height: 350px;
+}
+
+table {
+	margin-left: auto;
+	margin-right: auto;
+	border-collapse: collapse;
+}
+
+td {
+	text-align: center;
+	font-weight: bold;
+	padding: 5px;
+}
+
+button {
+	background-color: #999999;
+	border: none;
+	border-radius: 3px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	color: white;
+	font-weight: bold;
+	cursor: pointer;
+}

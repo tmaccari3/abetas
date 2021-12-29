@@ -1,0 +1,57 @@
+@charset "ISO-8859-1";
+
+body {
+	background-color: #e6eeff;
+}
+
+.header {
+	background-color: #d6e0f5;
+	width: 100%;
+	height: 40px;
+	margin: auto;
+	padding-top: 7px;
+}
+
+.div-inline {
+	display: inline-block;
+}
+
+.menu-div {
+	display: inline-block;
+	background-color: #00004d;
+	width: 100%;
+	height: 50px;
+	padding: 2px;
+}
+
+.menu-div button {
+	background-color: #00004d;
+	border: none;
+	color: white;
+	font-weight: bold;
+	padding: 10px 24px;
+	cursor: pointer;
+	float: left;
+}
+
+.menu-div:after {
+	content: "";
+	clear: both;
+	display: table;
+}
+
+.menu-div button:not(:last-child) {
+	border-right: none;
+}
+
+.menu-div button:hover {
+	background-color: #000066;
+}
+
+.login-tab {
+	background-color: #00004d;
+	border: none;
+	color: white;
+	font-weight: bold;
+	float: right !important;
+}
