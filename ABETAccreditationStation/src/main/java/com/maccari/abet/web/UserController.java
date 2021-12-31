@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.maccari.abet.domain.entity.User;
 import com.maccari.abet.domain.service.UserService;
-import com.maccari.abet.repository.UserDao;
 
 @Controller
 public class UserController {
@@ -55,7 +54,8 @@ public class UserController {
 	
 	@RequestMapping(value = "/manage")
 	public String manage(Model model) {
-		//List<User>
+		List<User> users = userService.getAll();
+		model.addAttribute("users", users);
 		
 		return "home/manage";
 	}

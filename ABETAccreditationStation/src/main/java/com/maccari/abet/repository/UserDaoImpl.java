@@ -2,6 +2,7 @@ package com.maccari.abet.repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -60,7 +61,31 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public List<User> getAllUsers() {
-		return null;
+		ArrayList<User> users = new ArrayList<>();
+		try {
+			String SQL = "SELECT * from account";
+			users = (ArrayList<User>) jdbcTemplate.query(SQL, new UserMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+		
+		for(User user : users) {
+			user.setRoles(getUserRoles(user.getEmail()));
+		}
+		
+		return users;
+	}
+	
+	public List<String> getUserRoles(String email) {
+		try {
+			String SQL = "SELECT role FROM authority WHERE email=?";
+			ArrayList<String> roles = new ArrayList<>();
+			roles = (ArrayList<String>) jdbcTemplate.query(SQL, new AuthMapper(), email);
+			
+			return roles;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 	
 	@Override
@@ -68,8 +93,7 @@ public class UserDaoImpl implements UserDao {
 		try {
 			String SQL = "SELECT email FROM account WHERE email=?";
 			User user = new User();
-			user = jdbcTemplate.queryForObject(SQL,
-					new Object[] { email }, new UserMapper());
+			user = jdbcTemplate.queryForObject(SQL, new UserMapper(), email);
 			
 			return user;
 		} catch (EmptyResultDataAccessException e) {
@@ -79,8 +103,13 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public List<String> getRoles() {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			String sql = "select * from roles";
+			
+			return jdbcTemplate.query(sql, (rs, rowNum) -> (rs.getString("name")));
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 	
 	class UserMapper implements RowMapper<User> {
@@ -89,6 +118,14 @@ public class UserDaoImpl implements UserDao {
 			user.setEmail(rs.getString("email"));
 			
 			return user;
+		}
+	}
+	
+	class AuthMapper implements RowMapper<String> {
+		public String mapRow(ResultSet rs, int rowNum) throws SQLException{
+			String role = rs.getString("role");
+			
+			return role;
 		}
 	}
 }

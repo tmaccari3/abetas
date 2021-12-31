@@ -5,9 +5,25 @@
 <head>
 <link href="/manage.css" rel="stylesheet" />
 <meta charset="ISO-8859-1">
-<title>Admin Menu</title>
+<title>Manage Users</title>
 </head>
 <body layout:fragment="content">
-	Admin Menu
+	<br>
+	<br>
+	<div class="container">
+		<p>User List</p>
+		<div class="table-container">
+			<table>
+				<tr>
+					<th>Email</th>
+					<th>Role</th>
+				</tr>
+				<tr th:each="user : ${users}">
+					<td th:text="${user.email}"></td>
+					<td th:text="${user.roles}"></td>
+				</tr>
+			</table>
+		</div>
+	</div>
 </body>
 </html>
