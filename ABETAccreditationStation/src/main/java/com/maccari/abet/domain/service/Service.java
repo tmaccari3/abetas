@@ -9,4 +9,5 @@ public interface Service<T> {
 	List<T> getAll();
 	T getById(int id);
 	void create(T item);
+	void remove(T item);
 }

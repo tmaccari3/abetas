@@ -58,6 +58,24 @@ public class UserDaoImpl implements UserDao {
 			throw e;
 		}
 	}
+	
+	@Override
+	public void removeUser(User user) {
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+		TransactionStatus status = transactionManager.getTransaction(def);
+		
+		try {
+			String SQL = "DELETE FROM account WHERE email = ?";
+			jdbcTemplate.update(SQL, user.getEmail());
+			
+			transactionManager.commit(status);
+		} catch(DataAccessException e) {
+			System.out.println("Error in removing user record, rolling back");
+			transactionManager.rollback(status);
+			throw e;
+		}
+	}
 
 	@Override
 	public List<User> getAllUsers() {
@@ -67,10 +85,6 @@ public class UserDaoImpl implements UserDao {
 			users = (ArrayList<User>) jdbcTemplate.query(SQL, new UserMapper());
 		} catch (EmptyResultDataAccessException e) {
 			return null;
-		}
-		
-		for(User user : users) {
-			user.setRoles(getUserRoles(user.getEmail()));
 		}
 		
 		return users;
@@ -92,8 +106,7 @@ public class UserDaoImpl implements UserDao {
 	public User getUserByEmail(String email) {
 		try {
 			String SQL = "SELECT email FROM account WHERE email=?";
-			User user = new User();
-			user = jdbcTemplate.queryForObject(SQL, new UserMapper(), email);
+			User user = jdbcTemplate.queryForObject(SQL, new UserMapper(), email);
 			
 			return user;
 		} catch (EmptyResultDataAccessException e) {
@@ -116,6 +129,7 @@ public class UserDaoImpl implements UserDao {
 		public User mapRow(ResultSet rs, int rowNum) throws SQLException{
 			User user = new User();
 			user.setEmail(rs.getString("email"));
+			user.setRoles(getUserRoles(user.getEmail()));
 			
 			return user;
 		}

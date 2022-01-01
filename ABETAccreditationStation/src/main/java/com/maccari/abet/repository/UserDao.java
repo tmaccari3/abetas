@@ -8,11 +8,13 @@ import com.maccari.abet.domain.entity.User;
 
 @Repository
 public interface UserDao {
-	public void createUser(final User user);
+	void createUser(final User user);
 	
-	public List<User> getAllUsers();
+	void removeUser(final User user);
 	
-	public User getUserByEmail(String email);
+	List<User> getAllUsers();
 	
-	public List<String> getRoles();
+	User getUserByEmail(String email);
+	
+	List<String> getRoles();
 }

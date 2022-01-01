@@ -23,14 +23,18 @@ public class UserService implements Service<User> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	public User getUserByEmail(String email) {
-		return userDao.getUserByEmail(email);
-	}
 
 	@Override
 	public void create(User item) {
-		// TODO Auto-generated method stub
-		
+		userDao.createUser(item);
+	}
+
+	@Override
+	public void remove(User item) {
+		userDao.removeUser(item);
+	}
+	
+	public User getUserByEmail(String email) {
+		return userDao.getUserByEmail(email);
 	}
 }

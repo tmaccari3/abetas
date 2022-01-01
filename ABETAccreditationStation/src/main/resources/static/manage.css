@@ -3,6 +3,7 @@
 p {
 	margin: 0;
 	font-weight: bold;
+	text-decoration: underline;
 }
 
 .container {
@@ -10,6 +11,15 @@ p {
 	margin-right: auto;
 	width: 60%;
 	height: 438px;
+}
+
+.options-container {
+	padding-bottom: 3px;
+}
+
+.option {
+	display: inline-block;
+	padding-right: 5px;
 }
 
 .table-container {
@@ -63,4 +73,13 @@ td:first-child {
 td {
 	border-top: 2px solid black;
 	border-right: 2px solid black;
+}
+
+button.user {
+	color: black;
+    background-color: #c2c2d6;
+    border-color: #a3a3c2;
+    border-radius: 4px;
+	font-size: 12px;
+	font-weight: bold;
 }

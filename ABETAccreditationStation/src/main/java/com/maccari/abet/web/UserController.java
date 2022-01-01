@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.maccari.abet.domain.entity.User;
 import com.maccari.abet.domain.service.UserService;
@@ -57,19 +58,19 @@ public class UserController {
 		List<User> users = userService.getAll();
 		model.addAttribute("users", users);
 		
-		return "home/manage";
+		return "user/manage";
 	}
 	
 	@RequestMapping(value = "/register")
 	public String displayForm(User user) {
-		return "home/register";
+		return "user/register";
 	}
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String addUser(@Valid User user, BindingResult bindingResult) {
 		userValidator.validate(user, bindingResult);
 		if(bindingResult.hasErrors()) {
-			return "home/register";
+			return "user/register";
 		}
 		
 		String encodedPswd = passwordEncoder.encode(user.getPassword());
@@ -84,9 +85,25 @@ public class UserController {
 		user.setRoles(roles);
 		userService.create(user);
 		
-		autologin(user, roles);
+		//autologin(user, roles);
 		
-		return "redirect:/";
+		return "redirect:/manage";
+	}
+	
+	@RequestMapping(value = "/remove")
+	public String displayUser(@RequestParam(value = "email", required = true) String email, Model model) {
+		User user = userService.getUserByEmail(email);
+		model.addAttribute("user", user);
+		
+		return "user/remove";
+	}
+	
+	@RequestMapping(value = "/remove", method = RequestMethod.POST)
+	public String removeUser(@RequestParam(value = "email", required = true) String email, Model model) {
+		User user = userService.getUserByEmail(email);
+		userService.remove(user);
+		
+		return "redirect:/manage";
 	}
 	
 	//automatically logs a user in after they register for an account
