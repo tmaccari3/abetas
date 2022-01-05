@@ -34,11 +34,22 @@
 					<td th:text="${user.email}"></td>
 					<td th:text="${user.roles}"></td>
 					<td>
-						<form action="/remove">
-							<button class="user" name="email" th:value = "${user.email}" type="submit">
-								<span class="fas fa-minus"></span> Remove
-							</button>
-						</form>
+						<div class="option">
+							<form action="/edit">
+								<button class="user" name="email" th:value="${user.email}"
+									type="submit">
+									<span class="fa fa-edit"></span> Edit
+								</button>
+							</form>
+						</div>
+						<div class="option">
+							<form action="/remove">
+								<button class="user" name="email" th:value="${user.email}"
+									type="submit">
+									<span class="fas fa-minus"></span> Remove
+								</button>
+							</form>
+						</div>
 					</td>
 				</tr>
 			</table>

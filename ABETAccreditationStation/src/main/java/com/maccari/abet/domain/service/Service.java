@@ -10,4 +10,5 @@ public interface Service<T> {
 	T getById(int id);
 	void create(T item);
 	void remove(T item);
+	T update(T item);
 }

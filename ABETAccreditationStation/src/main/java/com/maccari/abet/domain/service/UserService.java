@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.maccari.abet.domain.entity.User;
+import com.maccari.abet.domain.entity.WebUser;
 import com.maccari.abet.repository.UserDao;
 
 @Component
@@ -20,7 +21,6 @@ public class UserService implements Service<User> {
 
 	@Override
 	public User getById(int id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -34,7 +34,20 @@ public class UserService implements Service<User> {
 		userDao.removeUser(item);
 	}
 	
+	@Override
+	public User update(User item) {
+		return userDao.updateUser(item);
+	}
+	
 	public User getUserByEmail(String email) {
 		return userDao.getUserByEmail(email);
+	}
+	
+	public List<String> getRoles(){
+		return userDao.getRoles();
+	}
+	
+	public User convertWebUser(WebUser webUser) {
+		return new User(webUser.getEmail(), webUser.getRoles());
 	}
 }

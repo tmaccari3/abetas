@@ -18,6 +18,15 @@ public class User {
 	private String confPassword;
 	
 	private List<String> roles;
+	
+	public User() {
+		
+	}
+	
+	public User(String email, List<String> roles) {
+		this.email = email;
+		this.roles = roles;
+	}
 
 	public String getEmail() {
 		return email;

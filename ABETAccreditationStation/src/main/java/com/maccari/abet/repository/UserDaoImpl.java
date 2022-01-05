@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ public class UserDaoImpl implements UserDao {
 			}
 			
 			transactionManager.commit(status);
-		} catch(DataAccessException e) {
+		} catch(Exception e) {
 			System.out.println("Error in creating user record, rolling back");
 			transactionManager.rollback(status);
 			throw e;
@@ -70,7 +71,35 @@ public class UserDaoImpl implements UserDao {
 			jdbcTemplate.update(SQL, user.getEmail());
 			
 			transactionManager.commit(status);
-		} catch(DataAccessException e) {
+		} catch(Exception e) {
+			System.out.println("Error in removing user record, rolling back");
+			transactionManager.rollback(status);
+			throw e;
+		}
+	}
+	
+	@Override
+	public User updateUser(User user) {
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+		TransactionStatus status = transactionManager.getTransaction(def);
+		
+		try {
+			String SQL = "DELETE FROM authority WHERE email = ?";
+			int size = user.getRoles().size();
+			for(int i = 0; i < size; i++) {
+				jdbcTemplate.update(SQL, user.getEmail());
+			}
+			
+			SQL = "INSERT INTO authority (email, role) " + " VALUES (?, ?)";
+			for(String role : user.getRoles()) {
+				jdbcTemplate.update(SQL, user.getEmail(), role);
+			}
+			
+			transactionManager.commit(status);
+			
+			return user;
+		} catch(Exception e) {
 			System.out.println("Error in removing user record, rolling back");
 			transactionManager.rollback(status);
 			throw e;
@@ -117,9 +146,9 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public List<String> getRoles() {
 		try {
-			String sql = "select * from roles";
+			String sql = "select * from role";
 			
-			return jdbcTemplate.query(sql, (rs, rowNum) -> (rs.getString("name")));
+			return jdbcTemplate.query(sql, (rs, rowNum) -> ("ROLE_" + rs.getString("name")));
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

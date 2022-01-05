@@ -4,28 +4,36 @@
 <head>
 <link href="/manage.css" rel="stylesheet" />
 <meta charset="ISO-8859-1">
-<title>Register</title>
+<title>Remove User</title>
 </head>
 <body layout:fragment="content">
 	<form action="#" th:action="@{/remove}" th:object="${user}"
 		method="post">
+		<br>
 		<div class="container">
-		<h3>Selected User</h3>
-		<br>
-		<table>
-			<tr>
-				<td>Email Address:</td>
-				<td th:text="${user.email}"></td>
-			</tr>
-			<tr>
-				<td>Roles:</td>
-				<td th:text="${user.roles}"></td>
-			</tr>
-		</table>
-		<br>
-		<div class="flex-parent jc-center">
-			<button class="user" name="email" th:value = "${user.email}" type="submit">Remove User</button>
-		</div>
+			<h3>Selected User</h3>
+			<br>
+			<div class="summary-container">
+				<table>
+					<tr>
+						<td>Email Address:</td>
+						<td th:text="${user.email}"></td>
+					</tr>
+					<tr>
+						<td>Roles:</td>
+						<td th:text="${user.roles}"></td>
+					</tr>
+				</table>
+			</div>
+			<br>
+			<div style="float: right" class="inline">
+				<button class="user" name="email" th:value="${null}" 
+					type="submit">Return</button>
+			</div>
+			<div class="inline">
+				<button class="user" name="email" th:value="${user.email}"
+					type="submit">Remove User</button>
+			</div>
 		</div>
 	</form>
 </body>
