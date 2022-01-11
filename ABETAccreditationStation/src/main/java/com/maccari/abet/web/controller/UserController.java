@@ -65,10 +65,6 @@ public class UserController {
 		String encodedPswd = passwordEncoder.encode(user.getPassword());
 		user.setPassword(encodedPswd);
 		
-		List<String> roles = new ArrayList<String>();
-		roles.add("ROLE_GENERAL");
-
-		user.setRoles(roles);
 		userService.create(user);
 		
 		return "redirect:/manage";

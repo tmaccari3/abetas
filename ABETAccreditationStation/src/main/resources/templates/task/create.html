@@ -8,6 +8,44 @@
 <title>Create Task</title>
 </head>
 <body layout:fragment="content">
-	Make a task
+	<form action="#" th:action="@{/task/create}" th:object="${task}"
+		method="post">
+		<div class="container">
+			<h3 style="text-align: center">Create a Task</h3>
+			<br>
+			<table>
+				<tr>
+					<td>Coordinator Email:</td>
+					<td><input type="email" th:field="*{coordinator}" /></td>
+				</tr>
+				<tr>
+					<td>Title:</td>
+					<td><input type="text" th:field="*{title}" /></td>
+				</tr>
+			</table>
+			<br>
+			<p>Program Outcome:</p>
+			<textarea placeholder="Enter program outcome..."
+				th:field="*{outcome}" rows="4" cols="50" maxlength="255">
+           					Enter Program Outcome...</textarea>
+			<p>Task Description:</p>
+			<textarea placeholder="Enter description..."
+				th:field="*{description}" rows="4" cols="50" maxlength="255">
+           					Enter Program Outcome...</textarea>
+			<br>
+			<table>
+				<tr>
+					<td th:if="${#fields.hasErrors('coordinator')}"
+						th:errors="*{coordinator}">Email Error</td>
+				</tr>
+			</table>
+			<div class="flex-parent jc-center">
+				<button type="submit">Submit</button>
+			</div>
+		</div>
+	</form>
 </body>
+<script>
+	
+</script>
 </html>

@@ -1,1 +1,29 @@
 @charset "ISO-8859-1";
+
+div.container {
+	position: relative;
+	text-align: center;
+	margin: auto;
+	vertical-align: middle;
+	background-color: #e6f2ff;
+	border: 5px groove;
+	padding: 20px;
+	border-color: gray;
+	width: 60%;
+}
+
+table {
+	margin-left: auto;
+	margin-right: auto;
+	border-collapse: collapse;
+}
+
+td {
+	text-align: center;
+	font-weight: bold;
+	padding: 5px;
+}
+
+p {
+	font-weight: bold;
+}

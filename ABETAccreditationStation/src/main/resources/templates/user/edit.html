@@ -13,7 +13,7 @@
 			<h3>Selected User</h3>
 			<br>
 			<label>Email Address:</label>
-			<input type="text" th:field="*{email}" readonly/>
+			<input type="email" th:field="*{email}" readonly/>
 
 			<h4>Role(s)</h4>
 			<label th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Role

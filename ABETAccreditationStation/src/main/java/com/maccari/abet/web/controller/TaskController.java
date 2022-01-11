@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.maccari.abet.domain.entity.Task;
+
 @Controller
 @RequestMapping("/task")
 public class TaskController {
@@ -13,7 +15,7 @@ public class TaskController {
 	}
 	
 	@GetMapping("/create")
-	public String createTask() {
+	public String createTask(Task task) {
 		return "task/create";
 	}
 	

@@ -34,7 +34,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/", "/home", "/login", "/403").permitAll()
-			.antMatchers("/manage", "register").hasAnyRole("ADMIN")
+			.antMatchers("/task/index").hasAnyRole("FACULTY")
+			.antMatchers("/task/index", "/task/create", "/task/viewCreated").hasAnyRole("ASSESSMENT_COORD")
+			.antMatchers("/doc/index").hasAnyRole("ABET_READER")
+			.antMatchers("/manage", "/register", "/home/edit", "/task/index").hasAnyRole("ADMIN")
 			.and().formLogin().loginPage("/login").defaultSuccessUrl("/")
 			.and().exceptionHandling().accessDeniedPage("/403");
 	}

@@ -18,22 +18,32 @@
 				<span class="fas fa-home"></span> Home
 			</button>
 		</form>
-		<form action="/task/index">
-			<button type="submit">View My Tasks</button>
-		</form>
-		<form action="/task/create">
-			<button type="submit">Create Task</button>
-		</form>
-		<form action="/task/viewCreated">
-			<button type="submit">View Created Tasks</button>
-		</form>
-		<form action="/doc/index">
-			<button type="submit">View Improvement Docs</button>
-		</form>
-		<form action="/home/edit">
-			<button type="submit">Edit Home Page</button>
-		</form>
-		<div sec:authorize="hasRole('ADMIN')">
+		<div sec:authorize="hasAnyRole('FACULTY, ASSESSMENT_COORD, ADMIN')">
+			<form action="/task/index">
+				<button type="submit">View My Tasks</button>
+			</form>
+		</div>
+		<div sec:authorize="hasAnyRole('ASSESSMENT_COORD, ADMIN')">
+			<form action="/task/create">
+				<button type="submit">Create Task</button>
+			</form>
+		</div>
+		<div sec:authorize="hasAnyRole('ASSESSMENT_COORD')">
+			<form action="/task/viewCreated">
+				<button type="submit">View Created Tasks</button>
+			</form>
+		</div>
+		<div sec:authorize="hasAnyRole('ABET_READER')">
+			<form action="/doc/index">
+				<button type="submit">View Improvement Docs</button>
+			</form>
+		</div>
+		<div sec:authorize="hasAnyRole('ADMIN')">
+			<form action="/home/edit">
+				<button type="submit">Edit Home Page</button>
+			</form>
+		</div>
+		<div sec:authorize="hasAnyRole('ADMIN')">
 			<form action="/manage">
 				<button type="submit">Admin Menu</button>
 			</form>

@@ -19,7 +19,7 @@ public class WebUserValidator implements Validator {
 		WebUser user = (WebUser) target;
 
 		if (user.getRoles().isEmpty()) {
-			errors.rejectValue("roles", "webUser.roles.misMatch");
+			errors.rejectValue("roles", "webUser.roles.empty");
 		}
 	}
 }

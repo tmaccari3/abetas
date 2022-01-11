@@ -23,5 +23,9 @@ public class UserValidator implements Validator {
 		if (!password.equals(confPassword)) {
 			errors.rejectValue("password", "user.password.misMatch");
 		}
+		
+		if (user.getRoles().isEmpty()) {
+			errors.rejectValue("roles", "webUser.roles.empty");
+		}
 	}
 }
