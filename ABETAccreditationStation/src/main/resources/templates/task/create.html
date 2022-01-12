@@ -13,25 +13,42 @@
 		<div class="container">
 			<h3 style="text-align: center">Create a Task</h3>
 			<br>
-			<table>
-				<tr>
-					<td>Coordinator Email:</td>
-					<td><input type="email" th:field="*{coordinator}" /></td>
-				</tr>
-				<tr>
-					<td>Title:</td>
-					<td><input type="text" th:field="*{title}" /></td>
-				</tr>
-			</table>
+			<div class="inline">
+				<table>
+					<tr>
+						<td>Coordinator Email:</td>
+						<td><input type="email" th:field="*{coordinator}" /></td>
+					</tr>
+					<tr>
+						<td>Title:</td>
+						<td><input type="text" th:field="*{title}" /></td>
+					</tr>
+				</table>
+			</div>
+			<div class="inline">
+				<div>
+					<h5>Program(s)</h5>
+					<label th:if="${#fields.hasErrors('programs')}"
+						th:errors="*{programs}">Program Error</label>
+					<ul>
+						<li th:each="aProg : ${progTypes}"><input type="checkbox"
+							th:field="*{programs}" th:value="${aProg}" /> <label
+							th:for="${#ids.prev('programs')}" th:text="${aProg}">Default
+								Program</label></li>
+					</ul>
+				</div>
+			</div>
 			<br>
-			<p>Program Outcome:</p>
-			<textarea placeholder="Enter program outcome..."
-				th:field="*{outcome}" rows="4" cols="50" maxlength="255">
+			<div class="area-container">
+				<p>Program Outcome:</p>
+				<textarea placeholder="Enter program outcome..."
+					th:field="*{outcome}" rows="4" cols="50" maxlength="255">
            					Enter Program Outcome...</textarea>
-			<p>Task Description:</p>
-			<textarea placeholder="Enter description..."
-				th:field="*{description}" rows="4" cols="50" maxlength="255">
+				<p>Task Description:</p>
+				<textarea placeholder="Enter description..."
+					th:field="*{description}" rows="4" cols="50" maxlength="255">
            					Enter Program Outcome...</textarea>
+			</div>
 			<br>
 			<table>
 				<tr>
@@ -39,8 +56,11 @@
 						th:errors="*{coordinator}">Email Error</td>
 				</tr>
 			</table>
-			<div class="flex-parent jc-center">
-				<button type="submit">Submit</button>
+			<div style="float: right" class="inline">
+				<button class="task" type="submit" name="cancel" value="cancel">Return</button>
+			</div>
+			<div class="inline">
+				<button class="task" type="submit" name="submit" value="Submit">Submit</button>
 			</div>
 		</div>
 	</form>

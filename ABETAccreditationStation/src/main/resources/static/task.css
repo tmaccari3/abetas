@@ -2,7 +2,6 @@
 
 div.container {
 	position: relative;
-	text-align: center;
 	margin: auto;
 	vertical-align: middle;
 	background-color: #e6f2ff;
@@ -10,12 +9,31 @@ div.container {
 	padding: 20px;
 	border-color: gray;
 	width: 60%;
+	min-width: 400px;
+}
+
+div.area-container {
+	text-align: center;
 }
 
 table {
 	margin-left: auto;
 	margin-right: auto;
 	border-collapse: collapse;
+}
+
+button.task {
+	color: black;
+    background-color: #c2c2d6;
+    border-color: #a3a3c2;
+    border-radius: 4px;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+textarea {
+	width: 60%;
+	min-width: 300px;
 }
 
 td {

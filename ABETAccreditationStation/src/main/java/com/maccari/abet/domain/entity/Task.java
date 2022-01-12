@@ -11,7 +11,7 @@ public class Task {
 
 	private List<String> assignee;
 
-	private List<String> program;
+	private List<String> programs;
 
 	private String outcome;
 
@@ -49,12 +49,12 @@ public class Task {
 		this.assignee = assignee;
 	}
 
-	public List<String> getProgram() {
-		return program;
+	public List<String> getPrograms() {
+		return programs;
 	}
 
-	public void setProgram(List<String> program) {
-		this.program = program;
+	public void setPrograms(List<String> programs) {
+		this.programs = programs;
 	}
 
 	public String getOutcome() {
