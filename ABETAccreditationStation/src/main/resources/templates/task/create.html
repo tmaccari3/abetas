@@ -16,54 +16,38 @@
 			<h3 style="text-align: center">Create a Task</h3>
 			<br>
 			<div class="inline">
-				<table>
-					<tr>
-						<td>Coordinator Email:</td>
-						<td><input type="email" th:field="*{coordinator}" /></td>
-					</tr>
-					<tr>
-						<td>Title:</td>
-						<td><input type="text" th:field="*{title}" /></td>
-					</tr>
-				</table>
+				<label>Title:</label> <input type="text" th:field="*{title}" />
 			</div>
+			<br>
+			<h5>Assignee List</h5>
 			<table>
 				<thead>
 					<tr>
-						<th th:text="#{seedstarter.rows.head.rownum}">Row</th>
-						<th th:text="#{seedstarter.rows.head.variety}">Variety</th>
-						<th th:text="#{seedstarter.rows.head.seedsPerCell}">Seeds per
-							cell</th>
-						<th>
-							<button type="submit" name="addRow"
-								th:text="#{seedstarter.row.add}">Add row</button>
+						<th>Email</th>
+						<th></th>
+						<th class="create">
+							<button class="add" type="submit" name="addRow"
+								formnovalidate="formnovalidate">
+								<span class="fa fa-plus"></span> Add Assignee
+							</button>
 						</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="row,rowStat : *{rows}">
-						<td th:text="${rowStat.count}">1</td>
-						<td><select th:field="*{rows[__${rowStat.index}__].variety}">
-								<option th:each="var : ${allVarieties}" th:value="${var.id}"
-									th:text="${var.name}">Thymus Thymi</option>
-						</select></td>
-						<td><input type="text"
-							th:field="*{rows[__${rowStat.index}__].seedsPerCell}" /></td>
-						<td>
-							<button type="submit" name="removeRow"
-								th:value="${rowStat.index}" th:text="#{seedstarter.row.remove}">Remove
-								row</button>
+					<tr th:each="assignee,rowIter : *{assignees}">
+						<td th:text="${rowIter.index + 1}" /></td>
+						<td><input type="email"
+							th:field="*{assignees[__${rowIter.index}__]}" /></td>
+						<td class="create">
+							<button class="remove" type="submit" name="removeRow"
+								th:value="${rowIter.index}" formnovalidate="formnovalidate">
+								<span class="fa fa-minus"></span> Remove Assignee
+							</button>
 						</td>
 					</tr>
 				</tbody>
 			</table>
 
-			<div class="row">
-				<div class="col">
-					<a class="btn btn-primary" href="javascript:void(0)"
-						id="addAssignee" onclick="add()"> Add </a><br>
-				</div>
-			</div>
 			<div class="inline">
 				<div>
 					<h5>Program(s)</h5>
@@ -96,10 +80,10 @@
 				</tr>
 			</table>
 			<div style="float: right" class="inline">
-				<button class="task" type="submit" name="cancel" value="cancel">Return</button>
+				<button class="submit" type="submit" name="cancel" value="cancel">Return</button>
 			</div>
 			<div class="inline">
-				<button class="task" type="submit" name="submit" value="Submit">Submit</button>
+				<button class="submit" type="submit" name="submit" value="Submit">Submit</button>
 			</div>
 		</div>
 	</form>

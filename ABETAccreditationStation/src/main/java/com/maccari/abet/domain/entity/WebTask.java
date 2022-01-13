@@ -3,14 +3,14 @@ package com.maccari.abet.domain.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Task {
+public class WebTask {
 	private int id;
 
 	private String coordinator;
 
 	private String title;
-
-	private List<String> assignees;
+	
+	private List<WebUser> assignees;
 
 	private List<String> programs;
 
@@ -18,11 +18,11 @@ public class Task {
 
 	private String description;
 	
-	public Task() {
-		assignees = new ArrayList<String>();
+	public WebTask() {
+		assignees = new ArrayList<WebUser>();
 	}
 	
-	public Task(List<String> assignees) {
+	public WebTask(List<WebUser> assignees) {
 		this.assignees = assignees;
 	}
 
@@ -50,11 +50,11 @@ public class Task {
 		this.title = title;
 	}
 
-	public List<String> getAssignees() {
+	public List<WebUser> getAssignees() {
 		return assignees;
 	}
 
-	public void setAssignees(List<String> assignees) {
+	public void setAssignees(List<WebUser> assignees) {
 		this.assignees = assignees;
 	}
 
