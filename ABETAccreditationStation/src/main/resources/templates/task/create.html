@@ -8,6 +8,8 @@
 <title>Create Task</title>
 </head>
 <body layout:fragment="content">
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<form action="#" th:action="@{/task/create}" th:object="${task}"
 		method="post">
 		<div class="container">
@@ -24,6 +26,43 @@
 						<td><input type="text" th:field="*{title}" /></td>
 					</tr>
 				</table>
+			</div>
+			<table>
+				<thead>
+					<tr>
+						<th th:text="#{seedstarter.rows.head.rownum}">Row</th>
+						<th th:text="#{seedstarter.rows.head.variety}">Variety</th>
+						<th th:text="#{seedstarter.rows.head.seedsPerCell}">Seeds per
+							cell</th>
+						<th>
+							<button type="submit" name="addRow"
+								th:text="#{seedstarter.row.add}">Add row</button>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="row,rowStat : *{rows}">
+						<td th:text="${rowStat.count}">1</td>
+						<td><select th:field="*{rows[__${rowStat.index}__].variety}">
+								<option th:each="var : ${allVarieties}" th:value="${var.id}"
+									th:text="${var.name}">Thymus Thymi</option>
+						</select></td>
+						<td><input type="text"
+							th:field="*{rows[__${rowStat.index}__].seedsPerCell}" /></td>
+						<td>
+							<button type="submit" name="removeRow"
+								th:value="${rowStat.index}" th:text="#{seedstarter.row.remove}">Remove
+								row</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div class="row">
+				<div class="col">
+					<a class="btn btn-primary" href="javascript:void(0)"
+						id="addAssignee" onclick="add()"> Add </a><br>
+				</div>
 			</div>
 			<div class="inline">
 				<div>
@@ -65,7 +104,4 @@
 		</div>
 	</form>
 </body>
-<script>
-	
-</script>
 </html>

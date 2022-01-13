@@ -9,7 +9,7 @@ public class Task {
 
 	private String title;
 
-	private List<String> assignee;
+	private List<String> assignees;
 
 	private List<String> programs;
 
@@ -41,12 +41,12 @@ public class Task {
 		this.title = title;
 	}
 
-	public List<String> getAssignee() {
-		return assignee;
+	public List<String> getAssignees() {
+		return assignees;
 	}
 
-	public void setAssignee(List<String> assignee) {
-		this.assignee = assignee;
+	public void setAssignees(List<String> assignees) {
+		this.assignees = assignees;
 	}
 
 	public List<String> getPrograms() {
@@ -71,5 +71,15 @@ public class Task {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	//for debugging
+	public String toString() {
+		String result = "";
+		
+		result += title + "\n";
+		result += assignees + "\n" + programs;
+		
+		return result;
 	}
 }

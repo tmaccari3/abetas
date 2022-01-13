@@ -28,31 +28,31 @@ public class TaskDaoImpl implements TaskDao {
 	}
 
 	@Override
-	public void createUser(Task task) {
+	public void createTask(Task task) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void removeUser(Task task) {
+	public void removeTask(Task task) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public Task updateUser(Task task) {
+	public Task updateTask(Task task) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Task> getAllUsers() {
+	public List<Task> getAllTask() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Task getUserById(int id) {
+	public Task getTaskById(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -67,5 +67,4 @@ public class TaskDaoImpl implements TaskDao {
 			return null;
 		}
 	}
-
 }

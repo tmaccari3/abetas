@@ -8,15 +8,15 @@ import com.maccari.abet.domain.entity.Task;
 
 @Repository
 public interface TaskDao {
-	void createUser(final Task task);
+	void createTask(final Task task);
 	
-	void removeUser(final Task task);
+	void removeTask(final Task task);
 	
-	Task updateUser(final Task task);
+	Task updateTask(final Task task);
 	
-	List<Task> getAllUsers();
+	List<Task> getAllTask();
 	
-	Task getUserById(int id);
+	Task getTaskById(int id);
 	
 	List<String> getPrograms();
 }
