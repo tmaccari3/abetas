@@ -15,11 +15,19 @@
 		<div class="container">
 			<h3 style="text-align: center">Create a Task</h3>
 			<br>
-			<div class="inline">
-				<label>Title:</label> <input type="text" th:field="*{title}" />
+			<div class="title-container">
+				<div class="inline center">
+					<label>Title:</label> <input type="text" th:field="*{title}" />
+				</div>
+				<div class="inline center">
+					<p class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title
+						Error</p>
+				</div>
 			</div>
 			<br>
 			<h5>Assignee List</h5>
+			<label class="error" th:if="${#fields.hasErrors('assignees')}"
+				th:errors="*{assignees}">Assignees Error</label>
 			<table>
 				<thead>
 					<tr>
@@ -51,7 +59,7 @@
 			<div class="inline">
 				<div>
 					<h5>Program(s)</h5>
-					<label th:if="${#fields.hasErrors('programs')}"
+					<label class="error" th:if="${#fields.hasErrors('programs')}"
 						th:errors="*{programs}">Program Error</label>
 					<ul>
 						<li th:each="aProg : ${progTypes}"><input type="checkbox"
@@ -63,11 +71,15 @@
 			</div>
 			<br>
 			<div class="area-container">
-				<p>Program Outcome:</p>
+				<h6>Program Outcome:</h6>
+				<p class="error" th:if="${#fields.hasErrors('outcome')}" th:errors="*{outcome}">Outcome
+					Error</p>
 				<textarea placeholder="Enter program outcome..."
 					th:field="*{outcome}" rows="4" cols="50" maxlength="255">
            					Enter Program Outcome...</textarea>
-				<p>Task Description:</p>
+				<h6>Task Description:</h6>
+				<p class="error" th:if="${#fields.hasErrors('description')}"
+					th:errors="*{description}">Description Error</p>
 				<textarea placeholder="Enter description..."
 					th:field="*{description}" rows="4" cols="50" maxlength="255">
            					Enter Program Outcome...</textarea>

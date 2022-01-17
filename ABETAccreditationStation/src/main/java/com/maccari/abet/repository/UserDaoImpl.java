@@ -146,9 +146,9 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public List<String> getRoles() {
 		try {
-			String sql = "select * from role";
+			String SQL = "select * from role";
 			
-			return jdbcTemplate.query(sql, (rs, rowNum) -> ("ROLE_" + rs.getString("name")));
+			return jdbcTemplate.query(SQL, (rs, rowNum) -> ("ROLE_" + rs.getString("name")));
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

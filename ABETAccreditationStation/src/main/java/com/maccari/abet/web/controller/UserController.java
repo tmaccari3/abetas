@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.maccari.abet.domain.entity.User;
 import com.maccari.abet.domain.entity.WebUser;
 import com.maccari.abet.domain.service.UserService;
-import com.maccari.abet.web.UserValidator;
-import com.maccari.abet.web.WebUserValidator;
+import com.maccari.abet.web.validation.UserValidator;
+import com.maccari.abet.web.validation.WebUserValidator;
 
 @Controller
 public class UserController {
@@ -71,7 +71,8 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/remove")
-	public String displayUser(@RequestParam(value = "email", required = true) String email, Model model) {
+	public String displayUser(@RequestParam(value = "email", required = true) 
+		String email, Model model) {
 		User user = userService.getUserByEmail(email);
 		model.addAttribute("user", user);
 		
@@ -79,7 +80,8 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/remove", method = RequestMethod.POST)
-	public String removeUser(@RequestParam(value = "email", required = true) String email, Model model) {
+	public String removeUser(@RequestParam(value = "email", required = true) 
+		String email, Model model) {
 		if(email.isEmpty()) {
 			return "redirect:/manage";
 		}
@@ -90,7 +92,8 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/edit")
-	public String editUser(@RequestParam(value = "email", required = true) String email, WebUser webUser,
+	public String editUser(@RequestParam(value = "email", required = true) 
+		String email, WebUser webUser,
 			Model model) {
 		User user = userService.getUserByEmail(email);
 		model.addAttribute("webUser", new WebUser(user.getEmail(), user.getRoles()));

@@ -1,22 +1,32 @@
 package com.maccari.abet.domain.entity;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.validation.constraints.NotEmpty;
 
 public class Task {
 	private int id;
 
 	private String coordinator;
 
+	@NotEmpty(message = "*required")
 	private String title;
 
 	private List<String> assignees;
 
 	private List<String> programs;
 
+	@NotEmpty(message = "*required")
 	private String outcome;
 
+	@NotEmpty(message = "*required")
 	private String description;
+	
+	private Date assignDate;
+	
+	private boolean complete = false;
 	
 	public Task() {
 		assignees = new ArrayList<String>();
@@ -80,6 +90,31 @@ public class Task {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public boolean isComplete() {
+		return complete;
+	}
+
+	public void setComplete(boolean complete) {
+		this.complete = complete;
+	}
+	
+	public String getStatus() {
+		String result = "incomplete";
+		if(complete) {
+			result = "complete";
+		}
+		
+		return result;
+	}
+
+	public Date getAssignDate() {
+		return assignDate;
+	}
+
+	public void setAssignDate(Date assignDate) {
+		this.assignDate = assignDate;
 	}
 	
 	//for debugging

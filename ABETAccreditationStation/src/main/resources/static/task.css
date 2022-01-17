@@ -16,6 +16,10 @@ div.area-container {
 	text-align: center;
 }
 
+div.title-container {
+	text-align: center;
+}
+
 table {
 	width: 100%;
 	border-collapse: collapse;
@@ -59,10 +63,15 @@ th, td {
 	border-bottom: 1px solid #00004d;
 }
 
-.create:last-child {
-	text-align: right
+.view th {
+	background-color: #00004d;
+	color: white;
 }
 
-p {
-	font-weight: bold;
+.view td { 
+	background-color: #e9f0fc
+}
+
+.create:last-child {
+	text-align: right
 }

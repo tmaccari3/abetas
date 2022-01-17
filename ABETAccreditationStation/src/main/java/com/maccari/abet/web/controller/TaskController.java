@@ -1,6 +1,10 @@
 package com.maccari.abet.web.controller;
 
+import java.security.Principal;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -16,21 +20,30 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.maccari.abet.domain.entity.Task;
 import com.maccari.abet.domain.service.TaskService;
+import com.maccari.abet.web.validation.TaskValidator;
 
 @Controller
 @RequestMapping("/task")
 public class TaskController {
 	@Autowired
 	private TaskService taskService;
+	
+	@Autowired
+	private TaskValidator taskValidator;
 
 	@GetMapping(value = "/index")
-	public String viewMyTasks() {
+	public String viewMyTasks(Model model) {
+		List<Task> tasks = taskService.getAll();
+		model.addAttribute("tasks", tasks);
+		
 		return "task/index";
 	}
 
 	@GetMapping("/create")
 	public String createTask(Task task) {
-		
+		Instant instant = Instant.now();
+		Timestamp ts = instant != null ? Timestamp.from(instant) : null;
+		System.out.println(ts);
 		return "task/create";
 	}
 
@@ -52,12 +65,21 @@ public class TaskController {
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String addTask(@Valid Task task, BindingResult bindingResult) {
-		if (bindingResult.hasErrors()) {
-			return "user/register";
+	public String addTask(Principal principal, @Valid Task task, 
+			BindingResult bindingResult, Model model) {
+		taskValidator.validate(task, bindingResult);
+		
+		int invalidEmail = taskService.userExists(task.getAssignees());
+		if(invalidEmail >= 0) {
+			bindingResult.rejectValue("assignees", "task.assignees.invalid");
 		}
-
-		System.out.println(task);
+		
+		if (bindingResult.hasErrors()) {
+			return "task/create";
+		}
+		
+		task.setCoordinator(principal.getName());
+		taskService.create(task);
 
 		return "redirect:/";
 	}

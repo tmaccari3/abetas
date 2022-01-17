@@ -1,4 +1,4 @@
-package com.maccari.abet.web;
+package com.maccari.abet.web.validation;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
