@@ -31,9 +31,9 @@ public class TaskController {
 	@Autowired
 	private TaskValidator taskValidator;
 
-	@GetMapping(value = "/index")
-	public String viewMyTasks(Model model) {
-		List<Task> tasks = taskService.getAll();
+	@GetMapping("/index")
+	public String viewMyTasks(Principal principal, Model model) {
+		List<Task> tasks = taskService.getAssigned(principal.getName());
 		model.addAttribute("tasks", tasks);
 		
 		return "task/index";

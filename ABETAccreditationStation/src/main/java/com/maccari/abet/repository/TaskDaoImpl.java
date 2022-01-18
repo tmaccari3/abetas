@@ -23,6 +23,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.maccari.abet.domain.entity.Task;
 import com.maccari.abet.domain.entity.User;
+import com.maccari.abet.repository.UserDaoImpl.AuthMapper;
 import com.maccari.abet.repository.UserDaoImpl.UserMapper;
 
 @Repository
@@ -49,15 +50,15 @@ public class TaskDaoImpl implements TaskDao {
 
 		try {
 			String SQL = "INSERT INTO task (coordinator, title, outcome, "
-					+ "description, assign_date, complete) VALUES (?, ?, ?, ?, "
+					+ "description, complete) VALUES (?, ?, ?, "
 					+ "?, ?) RETURNING id";
 
 			Instant instant = Instant.now();
 			Timestamp ts = instant != null ? Timestamp.from(instant) : null;
 			
 			taskId = jdbcTemplate.query(SQL, new IdMapper(), task.getCoordinator(),
-					task.getTitle(), task.getOutcome(), ts, 
-					task.isComplete(), task.getDescription()).get(0);
+					task.getTitle(), task.getOutcome(),
+					task.getDescription(), task.isComplete()).get(0);
 
 			SQL = "INSERT INTO assigned (id, assignee) VALUES (?, ?)";
 			for (String assignee : task.getAssignees()) {
@@ -121,7 +122,34 @@ public class TaskDaoImpl implements TaskDao {
 			return null;
 		}
 	}
+	
+	public List<Task> getAssignedTasks(String email){
+		try {
+			List<Task> tasks = new ArrayList<Task>();
+			List<Integer> taskIds = getAssignedTaskIds(email);
+			String SQL = "SELECT * FROM task WHERE id = ?";
+			
+			for(Integer id : taskIds) {
+				tasks.add(jdbcTemplate.queryForObject(SQL, new SimpleTaskMapper(), id));
+			}
+			
+			return tasks;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
 
+	private List<Integer> getAssignedTaskIds(String email){
+		try {
+			String SQL = "SELECT id FROM assigned WHERE assignee = ?";
+			List<Integer> taskIds = jdbcTemplate.query(SQL, new IdMapper(), email);
+			
+			return taskIds;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+	
 	class SimpleTaskMapper implements RowMapper<Task> {
 		public Task mapRow(ResultSet rs, int rowNum) throws SQLException {
 			Task task = new Task();

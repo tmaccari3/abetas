@@ -119,7 +119,7 @@ public class UserDaoImpl implements UserDao {
 		return users;
 	}
 	
-	public List<String> getUserRoles(String email) {
+	private List<String> getUserRoles(String email) {
 		try {
 			String SQL = "SELECT role FROM authority WHERE email=?";
 			ArrayList<String> roles = new ArrayList<>();

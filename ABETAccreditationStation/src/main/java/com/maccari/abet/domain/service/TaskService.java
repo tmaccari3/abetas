@@ -49,6 +49,10 @@ public class TaskService implements Service<Task>{
 		return null;
 	}
 	
+	public List<Task> getAssigned(String email) {
+		return taskDao.getAssignedTasks(email);
+	}
+	
 	public int userExists(List<String> emails) {
 		for(int i = 0; i < emails.size(); i++) {
 			if(userDao.getUserByEmail(emails.get(i)) == null) {
