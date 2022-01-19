@@ -11,7 +11,8 @@
 <link href="/site.css" rel="stylesheet" />
 </head>
 <body>
-	<div class="header">Welcome User</div>
+    <div class="header" sec:authorize="isAuthenticated()">
+      Welcome, <span sec:authentication="name"></span></div>
 	<div class="menu-div">
 		<form action="/">
 			<button type="submit">

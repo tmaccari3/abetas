@@ -70,7 +70,7 @@ public class UserController {
 		return "redirect:/manage";
 	}
 	
-	@RequestMapping(value = "/remove")
+	@RequestMapping(value = "/user/remove")
 	public String displayUser(@RequestParam(value = "email", required = true) 
 		String email, Model model) {
 		User user = userService.getUserByEmail(email);
@@ -79,7 +79,7 @@ public class UserController {
 		return "user/remove";
 	}
 	
-	@RequestMapping(value = "/remove", method = RequestMethod.POST)
+	@RequestMapping(value = "/user/remove", method = RequestMethod.POST)
 	public String removeUser(@RequestParam(value = "email", required = true) 
 		String email, Model model) {
 		if(email.isEmpty()) {
@@ -91,7 +91,7 @@ public class UserController {
 		return "redirect:/manage";
 	}
 	
-	@RequestMapping(value = "/edit")
+	@RequestMapping(value = "/user/edit")
 	public String editUser(@RequestParam(value = "email", required = true) 
 		String email, WebUser webUser,
 			Model model) {
@@ -101,7 +101,7 @@ public class UserController {
 		return "user/edit";
 	}
 	
-	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "submit")
+	@RequestMapping(value = "/user/edit", method = RequestMethod.POST, params = "submit")
 	public String editUser(@Valid WebUser webUser, BindingResult bindingResult) {
 		webUserValidator.validate(webUser, bindingResult);
 		if(bindingResult.hasErrors()) {
@@ -114,7 +114,7 @@ public class UserController {
 		return "redirect:/manage";
 	}
 	
-	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "cancel")
+	@RequestMapping(value = "/user/edit", method = RequestMethod.POST, params = "cancel")
 	public String cancelUserEdit(@Valid WebUser webUser, BindingResult bindingResult) {
 		return "redirect:/manage";
 	}

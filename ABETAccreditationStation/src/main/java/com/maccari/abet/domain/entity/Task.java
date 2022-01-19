@@ -1,6 +1,8 @@
 package com.maccari.abet.domain.entity;
 
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +26,7 @@ public class Task {
 	@NotEmpty(message = "*required")
 	private String description;
 	
-	private Date assignDate;
+	private Timestamp assignDate;
 	
 	private boolean complete = false;
 	
@@ -109,20 +111,31 @@ public class Task {
 		return result;
 	}
 
-	public Date getAssignDate() {
+	public Timestamp getAssignDate() {
 		return assignDate;
 	}
 
-	public void setAssignDate(Date assignDate) {
+	public void setAssignDate(Timestamp assignDate) {
 		this.assignDate = assignDate;
+	}
+	
+	public String getFormattedDate() {
+		if(assignDate == null) {
+			return "";
+		}
+		
+		else {
+			return new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(assignDate);
+		}
 	}
 	
 	//for debugging
 	public String toString() {
 		String result = "";
 		
-		result += title + "\n";
-		result += assignees + "\n" + programs;
+		result += id + ": " + title + "\n";
+		result += assignees + "\n" + programs + "\n";
+		result += assignDate;
 		
 		return result;
 	}

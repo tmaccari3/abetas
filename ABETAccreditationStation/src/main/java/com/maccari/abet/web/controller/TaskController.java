@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.maccari.abet.domain.entity.Task;
 import com.maccari.abet.domain.service.TaskService;
@@ -34,6 +35,7 @@ public class TaskController {
 	@GetMapping("/index")
 	public String viewMyTasks(Principal principal, Model model) {
 		List<Task> tasks = taskService.getAssigned(principal.getName());
+		System.out.println(tasks);
 		model.addAttribute("tasks", tasks);
 		
 		return "task/index";
@@ -41,9 +43,6 @@ public class TaskController {
 
 	@GetMapping("/create")
 	public String createTask(Task task) {
-		Instant instant = Instant.now();
-		Timestamp ts = instant != null ? Timestamp.from(instant) : null;
-		System.out.println(ts);
 		return "task/create";
 	}
 
@@ -87,6 +86,16 @@ public class TaskController {
 	@GetMapping("/viewCreated")
 	public String viewCreateTask() {
 		return "task/viewCreated";
+	}
+	
+	@GetMapping("/details")
+	public String viewTaskDetails(@RequestParam(value = "id", required = true)
+			int id, Model model) {
+		Task task = taskService.getById(id);
+		System.out.println(task);
+		model.addAttribute("task", task);
+		
+		return "task/details";
 	}
 
 	@ModelAttribute("progTypes")

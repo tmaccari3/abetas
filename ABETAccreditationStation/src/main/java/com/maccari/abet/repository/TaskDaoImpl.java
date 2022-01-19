@@ -1,11 +1,14 @@
 package com.maccari.abet.repository;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.OffsetTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,16 +52,15 @@ public class TaskDaoImpl implements TaskDao {
 		int taskId = -1;
 
 		try {
-			String SQL = "INSERT INTO task (coordinator, title, outcome, "
-					+ "description, complete) VALUES (?, ?, ?, "
-					+ "?, ?) RETURNING id";
+			String SQL = "INSERT INTO task (coordinator, title, outcome, assign_date,"
+					+ "description, complete) VALUES (?, ?, ?, ?," + "?, ?) RETURNING id";
 
 			Instant instant = Instant.now();
 			Timestamp ts = instant != null ? Timestamp.from(instant) : null;
-			
-			taskId = jdbcTemplate.query(SQL, new IdMapper(), task.getCoordinator(),
+
+			taskId = jdbcTemplate.query(SQL, new IdMapper(), task.getCoordinator(), 
 					task.getTitle(), task.getOutcome(),
-					task.getDescription(), task.isComplete()).get(0);
+					ts.toLocalDateTime(), task.getDescription(), task.isComplete()).get(0);
 
 			SQL = "INSERT INTO assigned (id, assignee) VALUES (?, ?)";
 			for (String assignee : task.getAssignees()) {
@@ -108,8 +110,14 @@ public class TaskDaoImpl implements TaskDao {
 
 	@Override
 	public Task getTaskById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			String SQL = "SELECT * FROM task WHERE id = ?";
+			Task task = jdbcTemplate.queryForObject(SQL, new FullTaskMapper(), id);
+
+			return task;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
 	@Override
@@ -122,50 +130,91 @@ public class TaskDaoImpl implements TaskDao {
 			return null;
 		}
 	}
-	
-	public List<Task> getAssignedTasks(String email){
+
+	public List<Task> getAssignedTasks(String email) {
 		try {
 			List<Task> tasks = new ArrayList<Task>();
 			List<Integer> taskIds = getAssignedTaskIds(email);
 			String SQL = "SELECT * FROM task WHERE id = ?";
-			
-			for(Integer id : taskIds) {
+
+			for (Integer id : taskIds) {
 				tasks.add(jdbcTemplate.queryForObject(SQL, new SimpleTaskMapper(), id));
 			}
-			
+
 			return tasks;
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
 	}
 
-	private List<Integer> getAssignedTaskIds(String email){
+	private List<Integer> getAssignedTaskIds(String email) {
 		try {
 			String SQL = "SELECT id FROM assigned WHERE assignee = ?";
 			List<Integer> taskIds = jdbcTemplate.query(SQL, new IdMapper(), email);
-			
+
 			return taskIds;
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
 	}
-	
+
 	class SimpleTaskMapper implements RowMapper<Task> {
 		public Task mapRow(ResultSet rs, int rowNum) throws SQLException {
 			Task task = new Task();
+			task.setId(rs.getInt("id"));
 			task.setTitle(rs.getString("title"));
 			task.setCoordinator(rs.getString("coordinator"));
+			task.setAssignDate(rs.getObject("assign_date", Timestamp.class));
 			task.setComplete(rs.getBoolean("complete"));
 
 			return task;
 		}
 	}
-	
+
+	class FullTaskMapper implements RowMapper<Task> {
+		public Task mapRow(ResultSet rs, int rowNum) throws SQLException {
+			Task task = new Task();
+			task.setId(rs.getInt("id"));
+			task.setTitle(rs.getString("title"));
+			task.setCoordinator(rs.getString("coordinator"));
+			task.setOutcome(rs.getString("outcome"));
+			task.setDescription(rs.getString("description"));
+			task.setAssignDate(rs.getObject("assign_date", Timestamp.class));
+			task.setComplete(rs.getBoolean("complete"));
+			
+			try {
+				String SQL = "SELECT assignee FROM assigned WHERE id = ?";
+				task.setAssignees(jdbcTemplate.query(SQL, new StringMapper(), task.getId()));
+
+			} catch (EmptyResultDataAccessException e) {
+				task.setAssignees(null);
+			}
+			
+			try {
+				String SQL = "SELECT program FROM task_program WHERE id = ?";
+				task.setPrograms(jdbcTemplate.query(SQL, new StringMapper(), task.getId()));
+
+			} catch (EmptyResultDataAccessException e) {
+				task.setPrograms(null);
+			}
+
+			return task;
+		}
+	}
+
 	class IdMapper implements RowMapper<Integer> {
 		public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
 			int id = rs.getInt(1);
 
 			return id;
+		}
+	}
+	
+	class StringMapper implements RowMapper<String> {
+		public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+			String result = rs.getString(1);
+
+			return result;
 		}
 	}
 }

@@ -12,7 +12,7 @@
 		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<form action="#" th:action="@{/task/create}" th:object="${task}"
 		method="post">
-		<div class="container">
+		<div class="task-container">
 			<h3 style="text-align: center">Create a Task</h3>
 			<br>
 			<div class="title-container">
@@ -85,12 +85,6 @@
            					Enter Program Outcome...</textarea>
 			</div>
 			<br>
-			<table>
-				<tr>
-					<td th:if="${#fields.hasErrors('coordinator')}"
-						th:errors="*{coordinator}">Email Error</td>
-				</tr>
-			</table>
 			<div style="float: right" class="inline">
 				<button class="submit" type="submit" name="cancel" value="cancel">Return</button>
 			</div>

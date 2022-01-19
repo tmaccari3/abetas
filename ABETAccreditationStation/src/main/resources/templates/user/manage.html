@@ -35,7 +35,7 @@
 					<td th:text="${user.roles}"></td>
 					<td>
 						<div class="option">
-							<form action="/edit">
+							<form action="/user/edit">
 								<button class="user" name="email" th:value="${user.email}"
 									type="submit">
 									<span class="fa fa-edit"></span> Edit
@@ -43,7 +43,7 @@
 							</form>
 						</div>
 						<div class="option">
-							<form action="/remove">
+							<form action="/user/remove">
 								<button class="user" name="email" th:value="${user.email}"
 									type="submit">
 									<span class="fas fa-minus"></span> Remove

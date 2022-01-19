@@ -1,13 +1,22 @@
 @charset "ISO-8859-1";
 
-div.container {
+div.task-container {
 	position: relative;
 	margin: auto;
 	vertical-align: middle;
 	background-color: #e6f2ff;
 	border: 5px groove;
-	padding: 20px;
 	border-color: gray;
+	padding: 20px;
+	width: 60%;
+	min-width: 400px;
+}
+
+div.containter {
+	position: relative;
+	margin: auto;
+	vertical-align: middle;
+	padding: 20px;
 	width: 60%;
 	min-width: 400px;
 }
@@ -16,8 +25,37 @@ div.area-container {
 	text-align: center;
 }
 
-div.title-container {
-	text-align: center;
+.task-details {
+	width: 100%;
+}
+
+.task-title {
+	border-bottom: 1px solid #bfbfbf;
+}
+
+.task-assignees {
+	display: inline-block;
+	vertical-align:top;
+	width: 49%;
+}
+
+
+.task-programs {
+	display: inline-block;
+	vertical-align:top;
+	width: 49%;
+}
+
+.task-outcome {
+	display: inline-block;
+	vertical-align:top;
+	width: 49%;
+}
+
+.task-description {
+	display: inline-block;
+	vertical-align:top;
+	width: 49%;
 }
 
 table {

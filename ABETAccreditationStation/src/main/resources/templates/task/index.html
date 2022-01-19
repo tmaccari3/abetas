@@ -21,16 +21,18 @@
 				<tr>
 					<th>Title</th>
 					<th>Assigned By</th>
+					<th>Date Assigned</th>
 					<th>Status</th>
 					<th>Options</th>
 				</tr>
 				<tr th:each="task : ${tasks}">
 					<td th:text="${task.title}"></td>
 					<td th:text="${task.coordinator}"></td>
+					<td th:text="${task.getFormattedDate()}"></td>
 					<td th:text="${task.status}"></td>
 					<td>
 						<div class="option">
-							<form action="/details">
+							<form action="/task/details">
 								<button class="submit" name="id" th:value="${task.id}"
 									type="submit">
 									<span class="fa fa-plus"></span> Details

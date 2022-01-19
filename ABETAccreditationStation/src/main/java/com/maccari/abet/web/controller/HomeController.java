@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HomeController {
 	@RequestMapping(value = "/")
 	public String homePage(Principal principal, Model model) {
-		String email = "user email";
+		String email = "Welcome!";
 		if(principal != null) {
 			principal.getName();
-			email = principal.getName();
+			email = "Welcome, " + principal.getName();
 		}
 		model.addAttribute("msg", email);
 		

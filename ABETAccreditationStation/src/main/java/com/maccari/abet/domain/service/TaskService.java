@@ -28,8 +28,7 @@ public class TaskService implements Service<Task>{
 
 	@Override
 	public Task getById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		return taskDao.getTaskById(id);
 	}
 
 	@Override
