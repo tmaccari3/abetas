@@ -11,4 +11,9 @@ public class DocumentController {
 	public String viewDocs() {
 		return "documents/index";
 	}
+	
+	@GetMapping(value = "/create")
+	public String createDocs() {
+		return "documents/create";
+	}
 }

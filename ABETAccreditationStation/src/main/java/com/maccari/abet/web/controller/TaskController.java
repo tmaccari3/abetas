@@ -1,8 +1,6 @@
 package com.maccari.abet.web.controller;
 
 import java.security.Principal;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +33,6 @@ public class TaskController {
 	@GetMapping("/index")
 	public String viewMyTasks(Principal principal, Model model) {
 		List<Task> tasks = taskService.getAssigned(principal.getName());
-		System.out.println(tasks);
 		model.addAttribute("tasks", tasks);
 		
 		return "task/index";

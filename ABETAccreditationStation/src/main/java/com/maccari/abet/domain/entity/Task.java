@@ -1,6 +1,5 @@
 package com.maccari.abet.domain.entity;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,6 +26,8 @@ public class Task {
 	private String description;
 	
 	private Timestamp assignDate;
+	
+	private List<File> files;
 	
 	private boolean complete = false;
 	
@@ -117,6 +118,14 @@ public class Task {
 
 	public void setAssignDate(Timestamp assignDate) {
 		this.assignDate = assignDate;
+	}
+	
+	public List<File> getFiles() {
+		return files;
+	}
+
+	public void setFiles(List<File> files) {
+		this.files = files;
 	}
 	
 	public String getFormattedDate() {

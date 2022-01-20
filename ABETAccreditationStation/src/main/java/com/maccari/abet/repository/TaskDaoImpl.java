@@ -1,14 +1,9 @@
 package com.maccari.abet.repository;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.OffsetTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,10 +19,8 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.Task;
-import com.maccari.abet.domain.entity.User;
-import com.maccari.abet.repository.UserDaoImpl.AuthMapper;
-import com.maccari.abet.repository.UserDaoImpl.UserMapper;
 
 @Repository
 public class TaskDaoImpl implements TaskDao {
@@ -197,11 +190,29 @@ public class TaskDaoImpl implements TaskDao {
 			} catch (EmptyResultDataAccessException e) {
 				task.setPrograms(null);
 			}
+			
+			try {
+				String SQL = "SELECT * FROM file WHERE task_id = ?";
+				task.setFiles(jdbcTemplate.query(SQL, new FileMapper(), task.getId()));
+
+			} catch (EmptyResultDataAccessException e) {
+				task.setFiles(null);
+			}
 
 			return task;
 		}
 	}
 
+	class FileMapper implements RowMapper<File> {
+		public File mapRow(ResultSet rs, int rowNum) throws SQLException {
+			File file = new File();
+			file.setId(rs.getInt("id"));
+			file.setTaskId(rs.getInt("task_id"));
+
+			return file;
+		}
+	}
+	
 	class IdMapper implements RowMapper<Integer> {
 		public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
 			int id = rs.getInt(1);

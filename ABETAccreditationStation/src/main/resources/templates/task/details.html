@@ -10,9 +10,8 @@
 <body layout:fragment="content">
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<div class="container">
-		<br>
-		<h3 style="text-align: center">Task Details</h3>
+	<div class="task-details-container">
+		<h3>Task Details</h3>
 		<div class="task-title">
 			<div class="inline">
 				<h6>Title:</h6>
@@ -53,6 +52,16 @@
 					<h6>Description:</h6>
 				</div>
 				<p th:text="${task.description}"></p>
+			</div>
+		</div>
+		<div class="task-details">
+			<div class="task-file">
+				<div class="task-title">
+					<h6>File(s):</h6>
+				</div>
+				<div th:each="file : *{task.files}">
+					<p th:text="${file.id}"></p>
+				</div>
 			</div>
 		</div>
 		<br>

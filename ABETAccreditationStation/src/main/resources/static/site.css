@@ -14,8 +14,9 @@ body {
 	font-weight: bold;
 }
 
-.inline {
-	display: inline-block;
+.header-div {
+	background-color: #00004d;
+	height: 50px;
 }
 
 .menu-div {
@@ -25,7 +26,7 @@ body {
 	top: 0px;
 	z-index: 1;
 	background-color: #00004d;
-	width: 100%;
+	width: 89%;
 	height: 50px;
 	padding: 2px;
 }
@@ -54,12 +55,30 @@ body {
 	background-color: #000066;
 }
 
-.login-tab {
+.login-div {
+	display: inline-block;
+	height: 50px;
+	padding-top: 1px;
+	background-color: #00004d;
+	width: 10%;
+}
+
+.login-button {
 	background-color: #00004d;
 	border: none;
+	padding: 10px 24px;
+	cursor: pointer;
 	color: white;
 	font-weight: bold;
 	float: right !important;
+}
+
+.login-button:hover {
+	background-color: #000066;
+}
+
+.inline {
+	display: inline-block;
 }
 
 input[type=email], input[type=text], input[type=password] {
