@@ -29,7 +29,7 @@
 				</tr>
 			</table>
 			<br>
-			<h5>Role(s)</h5>
+			<h6>Role(s)</h6>
 			<label th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Role
 				Error</label>
 			<ul>
@@ -45,8 +45,8 @@
 						th:errors="*{password}">Password Error</td>
 				</tr>
 			</table>
-			<div class="flex-parent jc-center">
-				<button type="submit">Register</button>
+			<div style="text-align: center;">
+				<button class="login" type="submit">Register</button>
 			</div>
 		</div>
 	</form>

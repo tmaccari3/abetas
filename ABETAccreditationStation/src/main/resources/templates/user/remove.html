@@ -7,28 +7,23 @@
 <title>Remove User</title>
 </head>
 <body layout:fragment="content">
-	<form action="#" th:action="@{/remove}" th:object="${user}"
-		method="post">
-		<br>
-		<div class="container">
-			<h3>Selected User</h3>
-			<br>
-			<div class="summary-container">
-				<table>
-					<tr>
-						<td>Email Address:</td>
-						<td th:text="${user.email}"></td>
-					</tr>
-					<tr>
-						<td>Roles:</td>
-						<td th:text="${user.roles}"></td>
-					</tr>
-				</table>
+	<form action="#" th:action="@{/user/remove}" method="post">
+		<div class="user-details-container">
+			<div class="user-title">
+				<h3>User to remove</h3>
+			</div>
+			<br> <label>Email Address:</label>
+			<p th:text="${user.email}" /></p>
+			<div class="user-title">
+				<br>
+				<h6>Role(s)</h6>
+			</div>
+			<div th:each="role : ${user.roles}">
+				<p th:text="${role}"></p>
 			</div>
 			<br>
 			<div style="float: right" class="inline">
-				<button class="user" name="email" th:value="${null}" 
-					type="submit">Return</button>
+				<button class="user" type="submit" name="cancel" value="cancel">Return</button>
 			</div>
 			<div class="inline">
 				<button class="user" name="email" th:value="${user.email}"

@@ -38,7 +38,7 @@ h3 {
 	width: 5%;
 }
 
-button {
+.login {
 	background-color: #999999;
 	border: none;
 	border-radius: 3px;
@@ -51,7 +51,7 @@ button {
 	cursor: pointer;
 }
 
-div.container {
+.container {
 	position: relative;
 	margin: auto;
 	vertical-align: middle;
@@ -60,6 +60,7 @@ div.container {
 	padding: 20px;
 	border-color: gray;
 	width: 30%;
+	min-width: 400px;
 }
 
 table {

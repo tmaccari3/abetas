@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.maccari.abet.domain.entity.Task;
+import com.maccari.abet.domain.entity.WebUser;
 import com.maccari.abet.domain.service.TaskService;
 import com.maccari.abet.web.validation.TaskValidator;
 
@@ -32,8 +33,7 @@ public class TaskController {
 
 	@GetMapping("/index")
 	public String viewMyTasks(Principal principal, Model model) {
-		List<Task> tasks = taskService.getAssigned(principal.getName());
-		model.addAttribute("tasks", tasks);
+		model.addAttribute("tasks", taskService.getAssigned(principal.getName()));
 		
 		return "task/index";
 	}
@@ -79,18 +79,22 @@ public class TaskController {
 
 		return "redirect:/";
 	}
+	
+	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "cancel")
+	public String cancelTaskCreate() {
+		return "redirect:/";
+	}
 
 	@GetMapping("/viewCreated")
-	public String viewCreateTask() {
+	public String viewCreatedTasks(Principal principal, Model model) {
+		model.addAttribute("tasks", taskService.getCreated(principal.getName()));
 		return "task/viewCreated";
 	}
 	
 	@GetMapping("/details")
 	public String viewTaskDetails(@RequestParam(value = "id", required = true)
 			int id, Model model) {
-		Task task = taskService.getById(id);
-		System.out.println(task);
-		model.addAttribute("task", task);
+		model.addAttribute("task", taskService.getById(id));
 		
 		return "task/details";
 	}

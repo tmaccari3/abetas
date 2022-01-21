@@ -44,8 +44,7 @@ public class UserController {
 	
 	@RequestMapping(value = "/manage")
 	public String manage(Model model) {
-		List<User> users = userService.getAll();
-		model.addAttribute("users", users);
+		model.addAttribute("users", userService.getAll());
 		
 		return "user/manage";
 	}
@@ -73,8 +72,7 @@ public class UserController {
 	@RequestMapping(value = "/user/remove")
 	public String displayUser(@RequestParam(value = "email", required = true) 
 		String email, Model model) {
-		User user = userService.getUserByEmail(email);
-		model.addAttribute("user", user);
+		model.addAttribute("user", userService.getUserByEmail(email));
 		
 		return "user/remove";
 	}
@@ -82,19 +80,24 @@ public class UserController {
 	@RequestMapping(value = "/user/remove", method = RequestMethod.POST)
 	public String removeUser(@RequestParam(value = "email", required = true) 
 		String email, Model model) {
-		if(email.isEmpty()) {
+		if(email.isEmpty() || email == null) {
 			return "redirect:/manage";
 		}
+		System.out.println(email);
 		User user = userService.getUserByEmail(email);
 		userService.remove(user);
 		
 		return "redirect:/manage";
 	}
 	
+	@RequestMapping(value = "/user/remove", method = RequestMethod.POST, params = "cancel")
+	public String cancelRemoveUser() {
+		return "redirect:/manage";
+	}
+	
 	@RequestMapping(value = "/user/edit")
 	public String editUser(@RequestParam(value = "email", required = true) 
-		String email, WebUser webUser,
-			Model model) {
+		String email, WebUser webUser, Model model) {
 		User user = userService.getUserByEmail(email);
 		model.addAttribute("webUser", new WebUser(user.getEmail(), user.getRoles()));
 		

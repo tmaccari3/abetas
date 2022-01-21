@@ -7,20 +7,19 @@
 <title>Edit User</title>
 </head>
 <body layout:fragment="content">
-	<form action="#" th:action="@{/edit}" th:object="${webUser}" method="post">
-		<br>
-		<div class="container">
+	<form action="#" th:action="@{/user/edit}" th:object="${webUser}"
+		method="post">
+		<div class="user-details-container">
 			<h3>Selected User</h3>
-			<br>
-			<label>Email Address:</label>
-			<input type="email" th:field="*{email}" readonly/>
+			<br> <label>Email Address:</label> <input type="email"
+				th:field="*{email}" readonly />
 
 			<h4>Role(s)</h4>
 			<label th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Role
 				Error</label>
 			<ul>
 				<li th:each="aRole : ${roleTypes}"><input type="checkbox"
-					th:field="*{roles}" th:value="${aRole}"/> <label
+					th:field="*{roles}" th:value="${aRole}" /> <label
 					th:for="${#ids.prev('roles')}" th:text="${aRole}">Default
 						Role</label></li>
 			</ul>
@@ -29,7 +28,8 @@
 				<button class="user" type="submit" name="cancel" value="cancel">Return</button>
 			</div>
 			<div class="inline">
-				<button class="user" type="submit" name="submit" value="Submit">Save Changes</button>
+				<button class="user" type="submit" name="submit" value="Submit">Save
+					Changes</button>
 			</div>
 		</div>
 	</form>

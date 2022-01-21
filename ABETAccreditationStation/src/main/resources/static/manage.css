@@ -1,11 +1,5 @@
 @charset "ISO-8859-1";
 
-p {
-	margin: 0;
-	font-weight: bold;
-	text-decoration: underline;
-}
-
 .container {
 	margin-left: auto;
 	margin-right: auto;
@@ -13,8 +7,22 @@ p {
 	height: 438px;
 }
 
+.user-details-container {
+	position: relative;
+	margin: auto;
+	vertical-align: middle;
+	background-color: #edf2f7;
+	padding: 20px;
+	min-width: 400px;
+	width: 60%;
+}
+
+.user-title {
+	border-bottom: 1px solid #bfbfbf;
+}
+
 .options-container {
-	padding-bottom: 3px;
+	height: 30px;
 }
 
 .option {
@@ -33,10 +41,6 @@ p {
 	overflow-x: hidden;
     overflow-y: visible;
     border: 2px solid black;
-}
-
-.summary-container {
-    border-left: 2px solid black;
 }
 
 table {

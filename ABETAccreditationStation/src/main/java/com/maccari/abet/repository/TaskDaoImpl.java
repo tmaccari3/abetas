@@ -124,6 +124,7 @@ public class TaskDaoImpl implements TaskDao {
 		}
 	}
 
+	@Override
 	public List<Task> getAssignedTasks(String email) {
 		try {
 			List<Task> tasks = new ArrayList<Task>();
@@ -146,6 +147,18 @@ public class TaskDaoImpl implements TaskDao {
 			List<Integer> taskIds = jdbcTemplate.query(SQL, new IdMapper(), email);
 
 			return taskIds;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+	
+	@Override
+	public List<Task> getCreatedTasks(String email){
+		try {
+			String SQL = "SELECT * FROM task WHERE coordinator = ?";
+			List<Task> tasks = jdbcTemplate.query(SQL, new SimpleTaskMapper(), email);
+
+			return tasks;
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

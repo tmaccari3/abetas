@@ -6,13 +6,47 @@
 <meta charset="ISO-8859-1">
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 <script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <link rel="stylesheet"
 	href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
 <link href="/site.css" rel="stylesheet" />
+<script>
+	(function() {
+		// hold onto the drop down menu                                             
+		var dropdownMenu;
+
+		// and when you show it, move it to the body                                     
+		$(window).on('show.bs.dropdown', function(e) {
+
+			// grab the menu        
+			dropdownMenu = $(e.target).find('.dropdown-menu');
+
+			// detach it and append it to the body
+			$('body').append(dropdownMenu.detach());
+
+			// grab the new offset position
+			var eOffset = $(e.target).offset();
+
+			// make sure to place it where it would normally go (this could be improved)
+			dropdownMenu.css({
+				'display' : 'block',
+				'top' : eOffset.top + $(e.target).outerHeight(),
+				'left' : eOffset.left
+			});
+		});
+
+		// and when you hide it, reattach the drop down, and hide it normally                                                   
+		$(window).on('hide.bs.dropdown', function(e) {
+			$(e.target).append(dropdownMenu.detach());
+			dropdownMenu.hide();
+		});
+	})();
+</script>
 </head>
 <body>
 	<div class="header" sec:authorize="isAuthenticated()">
@@ -25,6 +59,27 @@
 					<span class="fas fa-home"></span> Home
 				</button>
 			</form>
+			<div sec:authorize="hasAnyRole('ADMIN')" class="dropdown">
+				<button class="btn btn-default dropdown-toggle admin-menu" type="button"
+					id="menu1" data-toggle="dropdown">
+					Admin Menu <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+					<li role="presentation">
+						<form action="/manage">
+							<button type="submit" class="menu-item-button" role="menuitem"
+								tabindex="-1">Manage Users</button>
+						</form>
+					</li>
+					<li role="presentation">
+						<form action="/home/edit">
+							<button type="submit" class="menu-item-button" role="menuitem"
+								tabindex="-1">Edit Home Page</button>
+						</form>
+					</li>
+					<li role="presentation" class="divider"></li>
+				</ul>
+			</div>
 			<div sec:authorize="hasAnyRole('FACULTY, ASSESSMENT_COORD, ADMIN')">
 				<form action="/task/index">
 					<button type="submit">View My Tasks</button>
@@ -48,22 +103,6 @@
 			<div sec:authorize="hasAnyRole('ABET_READER')">
 				<form action="/doc/index">
 					<button type="submit">Improvement Hub</button>
-				</form>
-			</div>
-			<div class="dropdown">
-				<button class="btn btn-primary dropdown-toggle" type="button"
-					data-toggle="dropdown">
-					Dropdown Example <span class="caret"></span>
-				</button>
-				<ul class="dropdown-menu">
-					<li><a href="#">HTML</a></li>
-					<li><a href="#">CSS</a></li>
-					<li><a href="#">JavaScript</a></li>
-				</ul>
-			</div>
-			<div sec:authorize="hasAnyRole('ADMIN')">
-				<form action="/manage">
-					<button type="submit">Admin Menu</button>
 				</form>
 			</div>
 		</div>

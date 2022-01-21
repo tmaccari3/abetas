@@ -20,5 +20,7 @@ public interface TaskDao {
 	
 	List<Task> getAssignedTasks(String email);
 	
+	List<Task> getCreatedTasks(String email);
+	
 	List<String> getPrograms();
 }

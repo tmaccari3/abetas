@@ -28,7 +28,6 @@ body {
 	background-color: #00004d;
 	width: 89%;
 	height: 50px;
-	padding: 2px;
 }
 
 .menu-div button {
@@ -36,6 +35,7 @@ body {
 	border: none;
 	color: white;
 	font-weight: bold;
+	height: 50px;
 	padding: 10px 24px;
 	cursor: pointer;
 	float: left;
@@ -55,10 +55,29 @@ body {
 	background-color: #000066;
 }
 
+.dropdown-menu {
+	background-color: #edf2f7;
+}
+
+.menu-item-button {
+	border: none;
+	width: 100%;
+	text-align: left;
+	background-color: #edf2f7;
+}
+
+.menu-item-button:hover {
+	border: none;
+	background-color: white;
+}
+
+.admin-menu:hover {
+	color: white;
+}
+
 .login-div {
 	display: inline-block;
 	height: 50px;
-	padding-top: 1px;
 	background-color: #00004d;
 	width: 10%;
 }
@@ -69,6 +88,7 @@ body {
 	padding: 10px 24px;
 	cursor: pointer;
 	color: white;
+	height: 50px;
 	font-weight: bold;
 	float: right !important;
 }
@@ -82,7 +102,6 @@ body {
 }
 
 input[type=email], input[type=text], input[type=password] {
-	width: 70%;
 	min-width: 80px;
 }
 
