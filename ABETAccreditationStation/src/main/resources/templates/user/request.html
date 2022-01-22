@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+<link href="/register.css" rel="stylesheet" />
+<meta charset="ISO-8859-1">
+<title>Request an Account</title>
+</head>
+<body layout:fragment="content">
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<form action="#" th:action="@{/register/request}" th:object="${webEmail}"
+		method="post">
+		<div class="email-container">
+			<h3 style="text-align: center">Request an Account</h3>
+			<br>
+			<div class="title-container">
+				<div class="inline center">
+					<label>Subject:</label> <input type="text" th:field="*{subject}" />
+				</div>
+				<div class="inline center">
+					<p class="error" th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}">Subject
+						Error</p>
+				</div>
+				<div class="inline center">
+					<label>Your email:</label> <input type="email" th:field="*{from}" />
+				</div>
+				<div class="inline center">
+					<p class="error" th:if="${#fields.hasErrors('from')}" th:errors="*{from}">Subject
+						Error</p>
+				</div>
+			</div>
+			<br>
+			<div class="body-container">
+				<h6>Email Body:</h6>
+				<p class="error" th:if="${#fields.hasErrors('body')}" th:errors="*{body}">Body
+					Error</p>
+				<textarea placeholder="Type email here..."
+					th:field="*{body}" rows="4" cols="50" maxlength="255">
+           					Type email here...</textarea>
+			</div>
+			<br>
+			<div style="float: right" class="inline">
+				<button class="submit" type="submit" name="cancel"
+					formnovalidate="formnovalidate" value="cancel">Return</button>
+			</div>
+			<div class="inline">
+				<button class="submit" type="submit" name="submit" value="Submit">Submit</button>
+			</div>
+		</div>
+	</form>
+</body>
+</html>

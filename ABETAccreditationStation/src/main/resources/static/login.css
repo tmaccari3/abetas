@@ -10,7 +10,7 @@ div.child {
 	justify-content: center;
 }
 
-div.container {
+.container {
 	position: relative;
     text-align:center;
 	margin: auto;
@@ -20,7 +20,7 @@ div.container {
 	padding: 20px;
 	border-color: gray;
 	width: 30%;
-	min-width: 300px;
+	min-width: 400px;
 	height: 350px;
 }
 

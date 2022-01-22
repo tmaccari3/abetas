@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.maccari.abet.domain.entity.WebEmail;
 import com.maccari.abet.domain.entity.User;
 import com.maccari.abet.domain.entity.WebUser;
+import com.maccari.abet.domain.service.EmailServiceImpl;
 import com.maccari.abet.domain.service.UserService;
 import com.maccari.abet.web.validation.UserValidator;
 import com.maccari.abet.web.validation.WebUserValidator;
@@ -38,15 +41,45 @@ public class UserController {
 	@Autowired
 	private WebUserValidator webUserValidator;
 	
+	@Autowired
+	private EmailServiceImpl emailService;
+	
 	@Lazy
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	private final String systemEmail = "abetastest@gmail.com";
 	
 	@RequestMapping(value = "/manage")
 	public String manage(Model model) {
 		model.addAttribute("users", userService.getAll());
 		
 		return "user/manage";
+	}
+	
+	@RequestMapping(value = "/register/request")
+	public String registerRequest(WebEmail webEmail) {
+		return "user/request";
+	}
+	
+	@RequestMapping(value = "/register/request", method = RequestMethod.POST, params = "submit")
+	public String submitEmail(@Valid WebEmail email, BindingResult bindingResult) {
+		if(bindingResult.hasErrors()) {
+			return "user/request";
+		}
+		email.setTo(systemEmail);
+		try {
+			emailService.sendEmail(email);
+		} catch(MessagingException e) {
+			System.out.println("Email not sent.");
+		}
+		
+		return "redirect:/";
+	}
+	
+	@RequestMapping(value = "/register/request", method = RequestMethod.POST, params = "cancel")
+	public String cancelSubmitEmail() {
+		return "redirect:/";
 	}
 	
 	@RequestMapping(value = "/register")
