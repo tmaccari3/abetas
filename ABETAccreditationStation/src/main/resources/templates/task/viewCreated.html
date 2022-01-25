@@ -30,9 +30,25 @@
 					<td>
 						<div class="option">
 							<form action="/task/details">
-								<button class="submit" name="id" th:value="${task.id}"
+								<button class="abetas-button" name="id" th:value="${task.id}"
 									type="submit">
 									<span class="fa fa-plus"></span> Details
+								</button>
+							</form>
+						</div>
+						<div class="option">
+							<form action="/task/edit">
+								<button class="abetas-button" name="id" th:value="${task.id}"
+									type="submit">
+									<span class="fa fa-plus"></span> Edit
+								</button>
+							</form>
+						</div>
+						<div class="option">
+							<form action="/task/delete">
+								<button class="abetas-button" name="id" th:value="${task.id}"
+									type="submit">
+									<span class="fa fa-plus"></span> Delete
 								</button>
 							</form>
 						</div>

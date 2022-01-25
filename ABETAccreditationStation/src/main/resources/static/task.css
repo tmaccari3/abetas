@@ -71,33 +71,6 @@ table {
 	border-collapse: collapse;
 }
 
-button.submit {
-	color: black;
-    background-color: #c2c2d6;
-    border-color: #a3a3c2;
-    border-radius: 4px;
-	font-size: 12px;
-	font-weight: bold;
-}
-
-button.add {
-	color: black;
-    background-color: #c2c2d6;
-    border-color: #a3a3c2;
-    border-radius: 4px;
-	font-size: 12px;
-	font-weight: bold;
-}
-
-button.remove {
-	color: black;
-    background-color: #c2c2d6;
-    border-color: #a3a3c2;
-    border-radius: 4px;
-	font-size: 12px;
-	font-weight: bold;
-}
-
 textarea {
 	width: 60%;
 	min-width: 300px;
@@ -116,6 +89,11 @@ th, td {
 
 .view td { 
 	background-color: #edf2f7;
+}
+
+.option {
+	display: inline-block;
+	padding-right: 5px;
 }
 
 .create:last-child {

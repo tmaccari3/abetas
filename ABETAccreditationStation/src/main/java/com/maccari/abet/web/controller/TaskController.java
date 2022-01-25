@@ -98,6 +98,28 @@ public class TaskController {
 		
 		return "task/details";
 	}
+	
+	@RequestMapping(value = "/complete")
+	public String completeTask(@RequestParam(value = "id", required = true)
+			int id, Task task, Model model) {
+		model.addAttribute("task", taskService.getById(id));
+		
+		return "task/complete";
+	}
+	
+	@RequestMapping(value = "/complete", method = RequestMethod.POST, params = "submit")
+	public String submitCompletedTask(@Valid Task task, BindingResult bindingResult) {
+		
+		
+		return "redirect:/task/index";
+	}
+	
+	@RequestMapping(value = "/complete", method = RequestMethod.POST, params = "cancel")
+	public String cancelCompletedTask(@Valid Task task, BindingResult bindingResult) {
+		
+		
+		return "redirect:/task/index";
+	}
 
 	@ModelAttribute("progTypes")
 	public ArrayList<String> getRoles() {

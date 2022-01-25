@@ -71,6 +71,15 @@ body {
 	background-color: white;
 }
 
+.abetas-button {
+	color: black;
+    background-color: #c2c2d6;
+    border-color: #a3a3c2;
+    border-radius: 4px;
+	font-size: 12px;
+	font-weight: bold;
+}
+
 .admin-menu:hover {
 	color: white;
 }

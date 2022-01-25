@@ -144,7 +144,6 @@ public class UserController {
 			return "user/edit";
 		}
 		
-		System.out.println(webUser.getEmail());
 		userService.update(userService.convertWebUser(webUser));
 		
 		return "redirect:/manage";

@@ -34,7 +34,7 @@
 						<th>Email</th>
 						<th></th>
 						<th class="create">
-							<button class="add" type="submit" name="addRow"
+							<button class="abetas-button" type="submit" name="addRow"
 								formnovalidate="formnovalidate">
 								<span class="fa fa-plus"></span> Add Assignee
 							</button>
@@ -47,7 +47,7 @@
 						<td><input type="email"
 							th:field="*{assignees[__${rowIter.index}__]}" /></td>
 						<td class="create">
-							<button class="remove" type="submit" name="removeRow"
+							<button class="abetas-button" type="submit" name="removeRow"
 								th:value="${rowIter.index}" formnovalidate="formnovalidate">
 								<span class="fa fa-minus"></span> Remove
 							</button>
@@ -86,11 +86,11 @@
 			</div>
 			<br>
 			<div style="float: right" class="inline">
-				<button class="submit" type="submit" name="cancel"
+				<button class="abetas-button" type="submit" name="cancel"
 					formnovalidate="formnovalidate" value="cancel">Return</button>
 			</div>
 			<div class="inline">
-				<button class="submit" type="submit" name="submit" value="Submit">Submit</button>
+				<button class="abetas-button" type="submit" name="submit" value="Submit">Submit</button>
 			</div>
 		</div>
 	</form>

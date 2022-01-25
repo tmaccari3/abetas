@@ -10,7 +10,9 @@
 	<form action="#" th:action="@{/user/edit}" th:object="${webUser}"
 		method="post">
 		<div class="user-details-container">
-			<h3>Selected User</h3>
+			<div class="user-title">
+				<h3>Selected User</h3>
+			</div>
 			<br> <label>Email Address:</label> <input type="email"
 				th:field="*{email}" readonly />
 
@@ -25,10 +27,10 @@
 			</ul>
 			<br>
 			<div style="float: right" class="inline">
-				<button class="user" type="submit" name="cancel" value="cancel">Return</button>
+				<button class="abetas-button" type="submit" name="cancel" value="cancel">Return</button>
 			</div>
 			<div class="inline">
-				<button class="user" type="submit" name="submit" value="Submit">Save
+				<button class="abetas-button" type="submit" name="submit" value="Submit">Save
 					Changes</button>
 			</div>
 		</div>
