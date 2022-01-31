@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+<link href="/task.css" rel="stylesheet" />
+<meta charset="ISO-8859-1">
+<title>Edit Task</title>
+</head>
+<body layout:fragment="content">
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<form action="#" th:action="@{/task/edit}" th:object="${task}"
+		method="post">
+		<div class="task-container">
+			<input type="hidden" th:field="*{id}" th:value="${id}"></input>
+			<h3 style="text-align: center">Edit Task</h3>
+			<br>
+			<div class="title-container">
+				<div class="inline center">
+					<label>Title:</label> <input type="text" th:field="*{title}" />
+				</div>
+				<div class="inline center">
+					<p class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title
+						Error</p>
+				</div>
+			</div>
+			<br>
+			<h5>Assignee List</h5>
+			<label class="error" th:if="${#fields.hasErrors('assignees')}"
+				th:errors="*{assignees}">Assignees Error</label>
+			<table>
+				<thead>
+					<tr>
+						<th>Email</th>
+						<th></th>
+						<th class="create">
+							<button class="abetas-button" type="submit" name="addRow"
+								formnovalidate="formnovalidate">
+								<span class="fa fa-plus"></span> Add Assignee
+							</button>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="assignee,rowIter : *{assignees}">
+						<td th:text="${rowIter.index + 1}" /></td>
+						<td><input type="email"
+							th:field="*{assignees[__${rowIter.index}__]}" /></td>
+						<td class="create">
+							<button class="abetas-button" type="submit" name="removeRow"
+								th:value="${rowIter.index}" formnovalidate="formnovalidate">
+								<span class="fa fa-minus"></span> Remove
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div class="inline">
+				<div>
+					<h5>Program(s)</h5>
+					<label class="error" th:if="${#fields.hasErrors('programs')}"
+						th:errors="*{programs}">Program Error</label>
+					<ul>
+						<li th:each="aProg : ${progTypes}"><input type="checkbox"
+							th:field="*{programs}" th:value="${aProg}" /> <label
+							th:for="${#ids.prev('programs')}" th:text="${aProg}">Default
+								Program</label></li>
+					</ul>
+				</div>
+			</div>
+			<br>
+			<div class="area-container">
+				<h6>Program Outcome:</h6>
+				<p class="error" th:if="${#fields.hasErrors('outcome')}" th:errors="*{outcome}">Outcome
+					Error</p>
+				<textarea placeholder="Enter program outcome..."
+					th:field="*{outcome}" rows="4" cols="50" maxlength="255">
+           					Enter Program Outcome...</textarea>
+				<h6>Task Description:</h6>
+				<p class="error" th:if="${#fields.hasErrors('description')}"
+					th:errors="*{description}">Description Error</p>
+				<textarea placeholder="Enter description..."
+					th:field="*{description}" rows="4" cols="50" maxlength="255">
+           					Enter Program Outcome...</textarea>
+			</div>
+			<br>
+			<div style="float: right" class="inline">
+				<button class="abetas-button" type="submit" name="cancel"
+					formnovalidate="formnovalidate" value="cancel">Return</button>
+			</div>
+			<div class="inline">
+				<button class="abetas-button" type="submit" name="submit" value="Submit">Submit</button>
+			</div>
+		</div>
+	</form>
+</body>
+</html>

@@ -41,11 +41,11 @@ public class UserDaoImpl implements UserDao {
 		TransactionStatus status = transactionManager.getTransaction(def);
 		
 		try {
-			String SQL = "INSERT INTO account (email, password) " + " VALUES (?, ?)";
+			String SQL = "INSERT INTO account (email, password) VALUES (?, ?)";
 			jdbcTemplate.update(SQL, user.getEmail(), user.getPassword());
 			
 			
-			SQL = "INSERT INTO authority (email, role) " + " VALUES (?, ?)";
+			SQL = "INSERT INTO authority (email, role) VALUES (?, ?)";
 			for(String role : user.getRoles()) {
 				jdbcTemplate.update(SQL, user.getEmail(), role);
 			}
@@ -84,12 +84,9 @@ public class UserDaoImpl implements UserDao {
 		
 		try {
 			String SQL = "DELETE FROM authority WHERE email = ?";
-			int size = user.getRoles().size();
-			for(int i = 0; i < size; i++) {
-				jdbcTemplate.update(SQL, user.getEmail());
-			}
+			jdbcTemplate.update(SQL, user.getEmail());
 			
-			SQL = "INSERT INTO authority (email, role) " + " VALUES (?, ?)";
+			SQL = "INSERT INTO authority (email, role) VALUES (?, ?)";
 			for(String role : user.getRoles()) {
 				jdbcTemplate.update(SQL, user.getEmail(), role);
 			}

@@ -1,9 +1,5 @@
 package com.maccari.abet.domain.service;
 
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,14 +34,12 @@ public class TaskService implements Service<Task>{
 
 	@Override
 	public void remove(Task item) {
-		// TODO Auto-generated method stub
-		
+		taskDao.removeTask(item);
 	}
 
 	@Override
 	public Task update(Task item) {
-		// TODO Auto-generated method stub
-		return null;
+		return taskDao.updateTask(item);
 	}
 	
 	public List<Task> getAssigned(String email) {

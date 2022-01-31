@@ -46,27 +46,15 @@ public class TaskDaoImpl implements TaskDao {
 
 		try {
 			String SQL = "INSERT INTO task (coordinator, title, outcome, assign_date,"
-					+ "description, complete) VALUES (?, ?, ?, ?," + "?, ?) RETURNING id";
+					+ "description, complete) VALUES (?, ?, ?, ?, ?, ?) RETURNING id";
 
 			Instant instant = Instant.now();
 			Timestamp ts = instant != null ? Timestamp.from(instant) : null;
 
-			taskId = jdbcTemplate.query(SQL, new IdMapper(), task.getCoordinator(), 
-					task.getTitle(), task.getOutcome(),
-					ts.toLocalDateTime(), task.getDescription(), task.isComplete()).get(0);
+			task.setId(jdbcTemplate.query(SQL, new IdMapper(), task.getCoordinator(), task.getTitle(),
+					task.getOutcome(), ts.toLocalDateTime(), task.getDescription(), task.isComplete()).get(0));
 
-			SQL = "INSERT INTO assigned (id, assignee) VALUES (?, ?)";
-			for (String assignee : task.getAssignees()) {
-				jdbcTemplate.update(SQL, taskId, assignee);
-			}
-
-			SQL = "INSERT INTO task_program (id, program) VALUES (?, ?)";
-			for (String program : task.getPrograms()) {
-				jdbcTemplate.update(SQL, taskId, program);
-			}
-
-			SQL = "INSERT INTO file (task_id) VALUES (?)";
-			jdbcTemplate.update(SQL, taskId);
+			insertRelations(task);
 
 			transactionManager.commit(status);
 		} catch (Exception e) {
@@ -76,16 +64,71 @@ public class TaskDaoImpl implements TaskDao {
 		}
 	}
 
-	@Override
-	public void removeTask(Task task) {
-		// TODO Auto-generated method stub
+	public void insertRelations(Task task) {
+		String SQL = "INSERT INTO assigned (id, assignee) VALUES (?, ?)";
+		for (String assignee : task.getAssignees()) {
+			jdbcTemplate.update(SQL, task.getId(), assignee);
+		}
 
+		SQL = "INSERT INTO task_program (id, program) VALUES (?, ?)";
+		for (String program : task.getPrograms()) {
+			jdbcTemplate.update(SQL, task.getId(), program);
+		}
+
+		SQL = "INSERT INTO file (task_id) VALUES (?)";
+		jdbcTemplate.update(SQL, task.getId());
 	}
 
 	@Override
 	public Task updateTask(Task task) {
-		// TODO Auto-generated method stub
-		return null;
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+		TransactionStatus status = transactionManager.getTransaction(def);
+		System.out.println("ID: " + task.getId());
+		try {
+			String SQL = "UPDATE task set coordinator = ?, title = ?, outcome = "
+					+ "?, description = ?, complete = ? where id = ?";
+			jdbcTemplate.update(SQL, task.getCoordinator(), task.getTitle(), 
+					task.getOutcome(), task.getDescription(), task.isComplete(), 
+					task.getId());
+
+			SQL = "DELETE FROM assigned WHERE id = ?";
+			jdbcTemplate.update(SQL, task.getId());
+
+			SQL = "DELETE FROM task_program WHERE id = ?";
+			jdbcTemplate.update(SQL, task.getId());
+
+			SQL = "DELETE FROM file WHERE task_id = ?";
+			jdbcTemplate.update(SQL, task.getId());
+
+			insertRelations(task);
+
+			transactionManager.commit(status);
+
+			return task;
+		} catch (Exception e) {
+			System.out.println("Error in updating task record, rolling back");
+			transactionManager.rollback(status);
+			throw e;
+		}
+	}
+
+	@Override
+	public void removeTask(Task task) {
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+		TransactionStatus status = transactionManager.getTransaction(def);
+
+		try {
+			String SQL = "DELETE FROM task WHERE id = ?";
+			jdbcTemplate.update(SQL, task.getId());
+
+			transactionManager.commit(status);
+		} catch (Exception e) {
+			System.out.println("Error in removing task record, rolling back");
+			transactionManager.rollback(status);
+			throw e;
+		}
 	}
 
 	@Override
@@ -151,9 +194,9 @@ public class TaskDaoImpl implements TaskDao {
 			return null;
 		}
 	}
-	
+
 	@Override
-	public List<Task> getCreatedTasks(String email){
+	public List<Task> getCreatedTasks(String email) {
 		try {
 			String SQL = "SELECT * FROM task WHERE coordinator = ?";
 			List<Task> tasks = jdbcTemplate.query(SQL, new SimpleTaskMapper(), email);
@@ -187,7 +230,7 @@ public class TaskDaoImpl implements TaskDao {
 			task.setDescription(rs.getString("description"));
 			task.setAssignDate(rs.getObject("assign_date", Timestamp.class));
 			task.setComplete(rs.getBoolean("complete"));
-			
+
 			try {
 				String SQL = "SELECT assignee FROM assigned WHERE id = ?";
 				task.setAssignees(jdbcTemplate.query(SQL, new StringMapper(), task.getId()));
@@ -195,7 +238,7 @@ public class TaskDaoImpl implements TaskDao {
 			} catch (EmptyResultDataAccessException e) {
 				task.setAssignees(null);
 			}
-			
+
 			try {
 				String SQL = "SELECT program FROM task_program WHERE id = ?";
 				task.setPrograms(jdbcTemplate.query(SQL, new StringMapper(), task.getId()));
@@ -203,7 +246,7 @@ public class TaskDaoImpl implements TaskDao {
 			} catch (EmptyResultDataAccessException e) {
 				task.setPrograms(null);
 			}
-			
+
 			try {
 				String SQL = "SELECT * FROM file WHERE task_id = ?";
 				task.setFiles(jdbcTemplate.query(SQL, new FileMapper(), task.getId()));
@@ -225,7 +268,7 @@ public class TaskDaoImpl implements TaskDao {
 			return file;
 		}
 	}
-	
+
 	class IdMapper implements RowMapper<Integer> {
 		public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
 			int id = rs.getInt(1);
@@ -233,7 +276,7 @@ public class TaskDaoImpl implements TaskDao {
 			return id;
 		}
 	}
-	
+
 	class StringMapper implements RowMapper<String> {
 		public String mapRow(ResultSet rs, int rowNum) throws SQLException {
 			String result = rs.getString(1);

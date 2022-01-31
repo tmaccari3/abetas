@@ -116,9 +116,7 @@ public class UserController {
 		if(email.isEmpty() || email == null) {
 			return "redirect:/manage";
 		}
-		System.out.println(email);
-		User user = userService.getUserByEmail(email);
-		userService.remove(user);
+		userService.remove(userService.getUserByEmail(email));
 		
 		return "redirect:/manage";
 	}
