@@ -9,13 +9,13 @@
 <body layout:fragment="content">
 	<form action="#" th:action="@{/user/remove}" method="post">
 		<div class="user-details-container">
+			<h3>User to remove</h3>
+			<br>
 			<div class="user-title">
-				<h3>User to remove</h3>
+				<h6>Email Address:</h6>
 			</div>
-			<br> <label>Email Address:</label>
 			<p th:text="${user.email}" /></p>
 			<div class="user-title">
-				<br>
 				<h6>Role(s)</h6>
 			</div>
 			<div th:each="role : ${user.roles}">
@@ -23,7 +23,8 @@
 			</div>
 			<br>
 			<div style="float: right" class="inline">
-				<button class="abetas-button" type="submit" name="cancel" value="cancel">Return</button>
+				<button class="abetas-button" type="submit" name="cancel"
+					value="cancel">Return</button>
 			</div>
 			<div class="inline">
 				<button class="abetas-button" name="email" th:value="${user.email}"

@@ -78,7 +78,7 @@ public class TaskController {
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public String addTask(Principal principal, @Valid Task task, 
-			BindingResult bindingResult, Model model) {
+			BindingResult bindingResult, Model model, final HttpServletRequest req) {
 		taskValidator.validate(task, bindingResult);
 		
 		int invalidEmail = taskService.userExists(task.getAssignees());
@@ -87,7 +87,14 @@ public class TaskController {
 		}
 		
 		if (bindingResult.hasErrors()) {
-			return "task/create";
+		    String mapping = (String) req.getAttribute(
+	                HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
+		    if(mapping.contains("create")) {
+				return "task/create";
+		    }
+		    else {
+				return "task/edit";
+		    }
 		}
 		
 		task.setCoordinator(principal.getName());

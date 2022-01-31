@@ -10,13 +10,17 @@
 	<form action="#" th:action="@{/user/edit}" th:object="${webUser}"
 		method="post">
 		<div class="user-details-container">
+			<h3>User Summary</h3>
+			<input type="hidden"
+					th:field="*{email}" th:value="${email}" />
+			<br>
 			<div class="user-title">
-				<h3>Selected User</h3>
+				<h6>Email Address:</h6>
 			</div>
-			<br> <label>Email Address:</label> <input type="email"
-				th:field="*{email}" readonly />
-
-			<h4>Role(s)</h4>
+			<p th:text="${webUser.email}" /></p>
+			<div class="user-title">
+				<h6>Role(s)</h6>
+			</div>
 			<label th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Role
 				Error</label>
 			<ul>
@@ -27,11 +31,12 @@
 			</ul>
 			<br>
 			<div style="float: right" class="inline">
-				<button class="abetas-button" type="submit" name="cancel" value="cancel">Return</button>
+				<button class="abetas-button" type="submit" name="cancel"
+					value="cancel">Return</button>
 			</div>
 			<div class="inline">
-				<button class="abetas-button" type="submit" name="submit" value="Submit">Save
-					Changes</button>
+				<button class="abetas-button" type="submit" name="submit"
+					value="Submit">Save Changes</button>
 			</div>
 		</div>
 	</form>

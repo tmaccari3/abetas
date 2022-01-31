@@ -141,7 +141,6 @@ public class UserController {
 		if(bindingResult.hasErrors()) {
 			return "user/edit";
 		}
-		
 		userService.update(userService.convertWebUser(webUser));
 		
 		return "redirect:/manage";

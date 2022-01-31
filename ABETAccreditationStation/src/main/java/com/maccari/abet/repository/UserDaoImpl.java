@@ -88,6 +88,7 @@ public class UserDaoImpl implements UserDao {
 			
 			SQL = "INSERT INTO authority (email, role) VALUES (?, ?)";
 			for(String role : user.getRoles()) {
+				System.out.println(role);
 				jdbcTemplate.update(SQL, user.getEmail(), role);
 			}
 			
