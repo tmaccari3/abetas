@@ -22,18 +22,18 @@ public class EmailServiceImpl implements EmailService {
         
         message.setFrom(from);
         message.setTo(to); 
-        message.setSubject(subject); 
+        message.setSubject(subject);
         message.setText(text);
         
         emailSender.send(message);
     }
     
-    public void sendEmail(WebEmail email) throws MessagingException {
+    public void sendRegistrationEmail(WebEmail email) throws MessagingException {
     	MimeMessage message = emailSender.createMimeMessage();
     	MimeMessageHelper helper = new MimeMessageHelper(message, true);
     	
     	helper.setTo(email.getTo());
-    	helper.setSubject(email.getSubject());
+    	helper.setSubject(email.getSubject() + ": " + email.getFrom());
     	helper.setText(email.getBody());
     	
         emailSender.send(message);

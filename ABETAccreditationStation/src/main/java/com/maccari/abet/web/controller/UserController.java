@@ -69,9 +69,9 @@ public class UserController {
 		}
 		email.setTo(systemEmail);
 		try {
-			emailService.sendEmail(email);
+			emailService.sendRegistrationEmail(email);
 		} catch(MessagingException e) {
-			System.out.println("Email not sent.");
+			System.out.println("Registration failed, email not sent.");
 		}
 		
 		return "redirect:/";

@@ -17,14 +17,14 @@ body {
 .header-div {
 	background-color: #00004d;
 	height: 50px;
+	position: sticky;
+	top: 0;
+	z-index: 1;
 }
 
 .menu-div {
 	display: inline-block;
 	overflow: hidden;
-	position: sticky;
-	top: 0px;
-	z-index: 1;
 	background-color: #00004d;
 	width: 89%;
 	height: 50px;
