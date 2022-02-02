@@ -104,15 +104,15 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public List<User> getAllUsers() {
-		ArrayList<User> users = new ArrayList<>();
 		try {
 			String SQL = "SELECT * from account";
-			users = (ArrayList<User>) jdbcTemplate.query(SQL, new UserMapper());
+			ArrayList<User> users = (ArrayList<User>) jdbcTemplate.query(SQL, 
+					new UserMapper());
+			
+			return users;
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
-		
-		return users;
 	}
 	
 	private List<String> getUserRoles(String email) {
@@ -151,7 +151,7 @@ public class UserDaoImpl implements UserDao {
 	}
 	
 	class UserMapper implements RowMapper<User> {
-		public User mapRow(ResultSet rs, int rowNum) throws SQLException{
+		public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 			User user = new User();
 			user.setEmail(rs.getString("email"));
 			user.setRoles(getUserRoles(user.getEmail()));
@@ -161,7 +161,7 @@ public class UserDaoImpl implements UserDao {
 	}
 	
 	class AuthMapper implements RowMapper<String> {
-		public String mapRow(ResultSet rs, int rowNum) throws SQLException{
+		public String mapRow(ResultSet rs, int rowNum) throws SQLException {
 			String role = rs.getString("role");
 			
 			return role;

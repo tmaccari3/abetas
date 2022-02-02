@@ -3,21 +3,21 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout}">
 <head>
-<link href="/manage.css" rel="stylesheet" />
+<link href="/program.css" rel="stylesheet" />
 <meta charset="ISO-8859-1">
-<title>Manage Users</title>
+<title>Manage Programs</title>
 </head>
 <body layout:fragment="content">
 	<br>
 	<div class="container">
 		<div class="options-container">
 			<div class="option">
-				<p>User List</p>
+				<p>Program List</p>
 			</div>
 			<div class="option">
-				<form action="/register">
-					<button class="abetas-button" type="submit">
-						<span class="fas fa-plus"></span> Add a User
+				<form action="/program/create">
+					<button class="abetas-button" type="submit" name="addRow">
+						<span class="fas fa-plus"></span> Add a Program
 					</button>
 				</form>
 			</div>
@@ -25,25 +25,25 @@
 		<div class="table-container">
 			<table>
 				<tr>
-					<th>Email</th>
-					<th>Role(s)</th>
+					<th>Programs</th>
+					<th>Active</th>
 					<th>Options</th>
 				</tr>
-				<tr th:each="user : ${users}">
-					<td th:text="${user.email}"></td>
-					<td th:text="${user.roles}"></td>
+				<tr th:each="program : ${programs}">
+					<td th:text="${program.name}"></td>
+					<td th:text="${program.active}"></td>
 					<td>
 						<div class="option">
-							<form action="/user/edit">
-								<button class="abetas-button" name="email" th:value="${user.email}"
+							<form action="/program/edit">
+								<button class="abetas-button" name="id" th:value="${program.id}"
 									type="submit">
-									<span class="fa fa-edit"></span> Edit
+									<span class="fa fa-edit"></span> Add Outcome
 								</button>
 							</form>
 						</div>
 						<div class="option">
-							<form action="/user/remove">
-								<button class="abetas-button" name="email" th:value="${user.email}"
+							<form action="/program/remove">
+								<button class="abetas-button" name="id" th:value="${program.id}"
 									type="submit">
 									<span class="fas fa-minus"></span> Remove
 								</button>

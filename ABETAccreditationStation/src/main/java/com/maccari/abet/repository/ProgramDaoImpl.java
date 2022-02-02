@@ -1,0 +1,96 @@
+package com.maccari.abet.repository;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
+
+import com.maccari.abet.domain.entity.Program;
+
+@Repository
+public class ProgramDaoImpl implements ProgramDao {
+	@Autowired
+	private DataSourceTransactionManager transactionManager;
+	
+	private DataSource dataSource;
+	
+	private JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	public void setDataSource(DataSource dataSource) {
+		this.dataSource = dataSource;
+		this.jdbcTemplate = new JdbcTemplate(this.dataSource);
+	}
+
+	@Override
+	public void createProgram(Program program) {
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+		TransactionStatus status = transactionManager.getTransaction(def);
+		
+		try {
+			String SQL = "INSERT INTO program (name, active) VALUES (?, ?)";
+			jdbcTemplate.update(SQL, program.getName(), true);
+			
+			transactionManager.commit(status);
+		} catch(Exception e) {
+			System.out.println("Error in creating program record, rolling back");
+			transactionManager.rollback(status);
+			throw e;
+		}
+	}
+
+	@Override
+	public void removeProgram(Program program) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Program updateProgram(Program program) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Program> getAllPrograms() {
+		try {
+			String SQL = "SELECT * FROM program";
+			ArrayList<Program> programs = (ArrayList<Program>) jdbcTemplate.query(
+					SQL, new ProgramMapper());
+			
+			return programs;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public Program getProgramById(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	class ProgramMapper implements RowMapper<Program> {
+		public Program mapRow(ResultSet rs, int rowNum) throws SQLException {
+			Program program = new Program();
+			program.setId(rs.getInt("id"));
+			program.setName(rs.getString("name"));
+			program.setActive(rs.getBoolean("active"));
+			
+			return program;
+		}
+	}
+}

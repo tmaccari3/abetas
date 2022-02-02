@@ -4,6 +4,12 @@ body {
 	background-color: #e6eeff;
 }
 
+.container {
+	min-width: 400px;
+	height: 438px;
+	width: 100%;
+}
+
 .header {
 	background-color: #d6e0f5;
 	width: 100%;
