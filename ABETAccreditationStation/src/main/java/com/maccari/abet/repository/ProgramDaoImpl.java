@@ -18,6 +18,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.StudentOutcome;
 
 @Repository
 public class ProgramDaoImpl implements ProgramDao {
@@ -54,14 +55,45 @@ public class ProgramDaoImpl implements ProgramDao {
 
 	@Override
 	public void removeProgram(Program program) {
-		// TODO Auto-generated method stub
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+		TransactionStatus status = transactionManager.getTransaction(def);
 		
+		try {
+			String SQL = "DELETE FROM program WHERE id=?";
+			jdbcTemplate.update(SQL, program.getId());
+			
+			SQL = "UPDATE student_outcome SET active=false WHERE prog_id=?";
+			jdbcTemplate.update(SQL, program.getId());
+			
+			transactionManager.commit(status);
+		} catch(Exception e) {
+			System.out.println("Error in deactivating program record, rolling back");
+			transactionManager.rollback(status);
+			throw e;
+		}
 	}
 
 	@Override
 	public Program updateProgram(Program program) {
-		// TODO Auto-generated method stub
-		return null;
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+		TransactionStatus status = transactionManager.getTransaction(def);
+		
+		try {
+			String SQL = "UPDATE program SET active=? WHERE id=?";
+			jdbcTemplate.update(SQL, program.isActive(), program.getId());
+			
+			SQL = "UPDATE student_outcome SET active=? WHERE prog_id=?";
+			jdbcTemplate.update(SQL, program.isActive(), program.getId());
+			
+			transactionManager.commit(status);
+			return program;
+		} catch(Exception e) {
+			System.out.println("Error in updating program record, rolling back");
+			transactionManager.rollback(status);
+			throw e;
+		}
 	}
 
 	@Override
@@ -71,7 +103,22 @@ public class ProgramDaoImpl implements ProgramDao {
 			ArrayList<Program> programs = (ArrayList<Program>) jdbcTemplate.query(
 					SQL, new ProgramMapper());
 			
+			for(Program program: programs) {
+				program.setOutcomes(getAllOutcomesForProgram(program.getId()));
+			}
 			return programs;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+	
+	private List<StudentOutcome> getAllOutcomesForProgram(int id){
+		try {
+			String SQL = "SELECT * FROM student_outcome WHERE prog_id = ?";
+			ArrayList<StudentOutcome> outcomes = (ArrayList<StudentOutcome>) jdbcTemplate.query(
+					SQL, new StudentOutcomeMapper(), id);
+			
+			return outcomes;
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
@@ -79,8 +126,14 @@ public class ProgramDaoImpl implements ProgramDao {
 
 	@Override
 	public Program getProgramById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			String SQL = "SELECT * FROM program WHERE id = ?";
+			Program program = jdbcTemplate.queryForObject(SQL, new ProgramMapper(), id);
+			
+			return program;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 	
 	class ProgramMapper implements RowMapper<Program> {
@@ -91,6 +144,18 @@ public class ProgramDaoImpl implements ProgramDao {
 			program.setActive(rs.getBoolean("active"));
 			
 			return program;
+		}
+	}
+	
+	class StudentOutcomeMapper implements RowMapper<StudentOutcome> {
+		public StudentOutcome mapRow(ResultSet rs, int rowNum) throws SQLException {
+			StudentOutcome outcome = new StudentOutcome();
+			outcome.setId(rs.getInt("id"));
+			outcome.setProgramId(rs.getInt("prog_id"));
+			outcome.setName(rs.getString("name"));
+			outcome.setActive(rs.getBoolean("active"));
+			
+			return outcome;
 		}
 	}
 }

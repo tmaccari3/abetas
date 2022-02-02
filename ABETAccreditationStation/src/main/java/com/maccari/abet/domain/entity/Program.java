@@ -8,8 +8,6 @@ import javax.validation.constraints.Size;
 public class Program {
 	private int id;
 	
-	@NotEmpty(message = "Required")
-	@Size(min=1, max=100, message = "Name must be between 1 and 100 characters.")
 	private String name;
 	
 	private boolean active;

@@ -2,6 +2,7 @@ package com.maccari.abet.domain.entity;
 
 public class StudentOutcome {
 	private int id;
+	private int programId;
 	private String name;
 	private boolean active;
 	
@@ -10,6 +11,12 @@ public class StudentOutcome {
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+	public int getProgramId() {
+		return programId;
+	}
+	public void setProgramId(int programId) {
+		this.programId = programId;
 	}
 	public String getName() {
 		return name;

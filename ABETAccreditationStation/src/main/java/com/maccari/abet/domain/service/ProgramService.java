@@ -1,11 +1,13 @@
 package com.maccari.abet.domain.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.WebProgram;
 import com.maccari.abet.repository.ProgramDao;
 
 @Component
@@ -20,8 +22,7 @@ public class ProgramService implements Service<Program> {
 
 	@Override
 	public Program getById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		return programDao.getProgramById(id);
 	}
 
 	@Override
@@ -31,17 +32,22 @@ public class ProgramService implements Service<Program> {
 
 	@Override
 	public void remove(Program item) {
-		// TODO Auto-generated method stub
-		
+		programDao.removeProgram(item);
 	}
 
 	@Override
 	public Program update(Program item) {
-		// TODO Auto-generated method stub
-		return null;
+		return programDao.updateProgram(item);
 	}
 	
-	public Program emptyProgram() {
-		return new Program();
+	public List<WebProgram> getAllWebPrograms() {
+		List<WebProgram> webPrograms = new ArrayList<WebProgram>();
+		List<Program> programs = programDao.getAllPrograms();
+		
+		for(Program program : programs) {
+			webPrograms.add(new WebProgram(program));
+		}
+		
+		return webPrograms;
 	}
 }
