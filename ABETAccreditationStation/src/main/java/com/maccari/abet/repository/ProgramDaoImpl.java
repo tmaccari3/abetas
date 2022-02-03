@@ -83,7 +83,7 @@ public class ProgramDaoImpl implements ProgramDao {
 		try {
 			String SQL = "UPDATE program SET active=? WHERE id=?";
 			jdbcTemplate.update(SQL, program.isActive(), program.getId());
-			
+			System.out.println("asdda"+program.isActive());
 			SQL = "UPDATE student_outcome SET active=? WHERE prog_id=?";
 			jdbcTemplate.update(SQL, program.isActive(), program.getId());
 			
@@ -112,7 +112,8 @@ public class ProgramDaoImpl implements ProgramDao {
 		}
 	}
 	
-	private List<StudentOutcome> getAllOutcomesForProgram(int id){
+	@Override
+	public List<StudentOutcome> getAllOutcomesForProgram(int id){
 		try {
 			String SQL = "SELECT * FROM student_outcome WHERE prog_id = ?";
 			ArrayList<StudentOutcome> outcomes = (ArrayList<StudentOutcome>) jdbcTemplate.query(
@@ -120,10 +121,24 @@ public class ProgramDaoImpl implements ProgramDao {
 			
 			return outcomes;
 		} catch (EmptyResultDataAccessException e) {
+			System.out.println("Error in getting outcomes for program.");
 			return null;
 		}
 	}
 
+	@Override
+	public StudentOutcome getOutcomeById(int id) {
+		try {
+			String SQL = "SELECT * FROM student_outcome WHERE id = ?";
+			StudentOutcome outcome = jdbcTemplate.queryForObject(SQL, new StudentOutcomeMapper(), id);
+			
+			return outcome;
+		} catch (EmptyResultDataAccessException e) {
+			System.out.println("Error in getting outcomes.");
+			return null;
+		}
+	}
+	
 	@Override
 	public Program getProgramById(int id) {
 		try {
@@ -142,6 +157,7 @@ public class ProgramDaoImpl implements ProgramDao {
 			program.setId(rs.getInt("id"));
 			program.setName(rs.getString("name"));
 			program.setActive(rs.getBoolean("active"));
+			program.setOutcomes(getAllOutcomesForProgram(program.getId()));
 			
 			return program;
 		}

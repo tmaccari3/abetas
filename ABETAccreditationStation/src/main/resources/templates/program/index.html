@@ -8,85 +8,75 @@
 <title>Manage Programs</title>
 </head>
 <body layout:fragment="content">
-	<br>
-	<div class="container">
-		<div class="options-container">
-			<div class="option">
-				<p>Program List</p>
-			</div>
-			<div class="option">
-				<form action="/program/create">
+	<form action="#" th:action="@{/program/create}"
+		th:object="${webProgram}" method="post">
+		<br>
+		<div class="container">
+			<div class="options-container">
+				<div class="option">
+					<p>Program List</p>
+				</div>
+				<div class="option">
 					<button class="abetas-button" type="submit" name="addRow">
 						<span class="fas fa-plus"></span> Add a Program
 					</button>
-				</form>
+				</div>
 			</div>
-		</div>
-		<div class="table-container">
-			<table>
-				<tr>
-					<th>Programs</th>
-					<th>Active</th>
-					<th>Options</th>
-				</tr>
-				<tr th:each="program : ${programs}">
-					<td th:if="${!program.newRow}" th:text="${program.name}"></td>
-					<td th:if="${program.newRow}">
-						<form action="#" th:action="@{/program/create}"
-							th:object="${webProgram}" method="post">
-							<input type="text" th:field="*{name}" />
-							<p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Email
-								Error</p>
-						</form>
-					</td>
-					<td th:text="${program.active}"></td>
-					<td th:if="${!program.newRow}">
-						<div class="option">
-							<form action="/program/edit">
-								<button class="abetas-button" name="id" th:value="${program.id}"
-									type="submit">
+			<div class="table-container">
+				<table>
+					<tr>
+						<th>Programs</th>
+						<th>Active</th>
+						<th>Options</th>
+					</tr>
+					<tr th:each="program : ${programs}">
+						<td th:if="${!program.newRow}" th:text="${program.name}"></td>
+						<td th:if="${program.newRow}"><input type="text"
+							th:field="*{name}" />
+							<p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name
+								Error</p></td>
+
+						<td th:text="${program.active}"></td>
+						<td th:if="${program.newRow}">
+							<div class="option">
+								<button class="abetas-button" type="submit" name="submit"
+									value="Submit">Submit</button>
+							</div>
+							<div class="option">
+								<button class="abetas-button" name="cancel"
+									formnovalidate="formnovalidate" value="cancel">Cancel</button>
+							</div>
+						</td>
+						<td th:if="${!program.newRow}">
+							<div class="option">
+								<button class="abetas-button" name="outcome"
+									th:value="${program.id}" type="submit">
 									<span class="fa fa-edit"></span> Add Outcomes
 								</button>
-							</form>
-						</div>
-						<div th:if="${program.active}" class="option">
-							<form action="/program/deactivate">
-								<button class="abetas-button" name="id" th:value="${program.id}"
-									type="submit">
+							</div>
+							<div th:if="${program.active}" class="option">
+								<button class="abetas-button" name="deactivate"
+									th:value="${program.id}" type="submit">
 									<span class="fas fa-minus"></span> Deactivate
 								</button>
-							</form>
-						</div>
-						<div th:if="${!program.active}" class="option">
-							<form action="/program/reactivate">
-								<button class="abetas-button" name="id" th:value="${program.id}"
-									type="submit">
+							</div>
+							<div th:if="${!program.active}" class="option">
+								<button class="abetas-button" name="reactivate"
+									th:value="${program.id}" type="submit">
 									<span class="fas fa-minus"></span> Reactivate
 								</button>
-							</form>
-						</div>
-						<div class="option">
-							<form action="/program/remove">
-								<button class="abetas-button" name="id" th:value="${program.id}"
-									type="submit">
+							</div>
+							<div class="option">
+								<button class="abetas-button" name="remove"
+									th:value="${program.id}" type="submit">
 									<span class="fas fa-minus"></span> Remove
 								</button>
-							</form>
-						</div>
-					</td>
-					<td th:if="${program.newRow}">
-						<div class="option">
-							<button class="abetas-button" type="submit" name="submit"
-								value="Submit">Submit</button>
-						</div>
-						<div class="option">
-							<button class="abetas-button" name="cancel"
-								formnovalidate="formnovalidate" value="cancel">Cancel</button>
-						</div>
-					</td>
-				</tr>
-			</table>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
 		</div>
-	</div>
+	</form>
 </body>
 </html>

@@ -2,7 +2,6 @@ package com.maccari.abet.web.controller;
 
 import java.util.ArrayList;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,33 +19,34 @@ import com.maccari.abet.domain.service.ProgramService;
 @Controller
 @RequestMapping("/program")
 public class ProgramController {
-	
+
 	@Autowired
 	private ProgramService programService;
-	
+
 	@RequestMapping(value = "/index")
-	public String manage(Model model) {
+	public String manage(WebProgram webProgram, Model model) {
 		model.addAttribute("programs", programService.getAllWebPrograms());
-		
+
 		return "program/index";
 	}
-	
-	@RequestMapping(value = "/create", params = { "addRow" })
-	public String addAssignee(Model model, WebProgram webProgram) {
-		ArrayList<WebProgram> programs = (ArrayList<WebProgram>) programService.getAllWebPrograms();
+
+	@RequestMapping(value = "/create", params = "addRow")
+	public String addAssignee(WebProgram webProgram, Model model) {
+		ArrayList<WebProgram> programs = (ArrayList<WebProgram>) programService
+				.getAllWebPrograms();
 		programs.add(new WebProgram("", true));
 		model.addAttribute("programs", programs);
-		
+
 		return "program/index";
 	}
-	
+
 	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "submit")
-	public String submitProgram(@Valid Program program, BindingResult bindingResult) {
-		if(bindingResult.hasErrors()) {
+	public String submitProgram(@Valid WebProgram webProgram, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
 			return "program/create";
 		}
-		programService.create(program);
-		
+		programService.create(programService.convertWebProgram(webProgram));
+
 		return "redirect:/program/index";
 	}
 
@@ -54,48 +54,51 @@ public class ProgramController {
 	public String cancelProgramAdition(Model model) {
 		return "redirect:/program/index";
 	}
-	
-	@RequestMapping(value = "/remove")
-	public String removeProgram(@RequestParam(value = "id", required = true) 
+
+	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "remove")
+	public String removeProgram(@RequestParam(value = "remove", required = true) 
 		int id, Model model) {
 		programService.remove(programService.getById(id));
-		
+
 		return "redirect:/program/index";
 	}
+
+	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "outcome")
+	public String viewOutcomes(@RequestParam(value = "outcome", required = true) int id) {
+		return "redirect:/outcome/index?id=" + id;
+	}
 	
-	@RequestMapping(value = "/deactivate")
-	public String deactivateProgram(@RequestParam(value = "id", required = true) 
+	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "deactivate")
+	public String deactivateProgram(@RequestParam(value = "deactivate", required = true) 
 		int id, Model model) {
 		Program program = programService.getById(id);
 		program.setActive(false);
 		programService.update(program);
-		
+
 		return "redirect:/program/index";
 	}
-	
-	@RequestMapping(value = "/reactivate")
-	public String reactivateProgram(@RequestParam(value = "id", required = true) 
+
+	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "reactivate")
+	public String reactivateProgram(@RequestParam(value = "reactivate", required = true) 
 		int id, Model model) {
 		Program program = programService.getById(id);
-		program.setActive(true);
+		program.setActive(false);
 		programService.update(program);
-		
+
 		return "redirect:/program/index";
 	}
-	
-	/*@RequestMapping(value = "/create", method = RequestMethod.POST, params = "submit")
-	public String submitEmail(@Valid Program program, BindingResult bindingResult) {
-		if(bindingResult.hasErrors()) {
-			return "program/create";
-		}
-		
-		programService.create(program);
-		
-		return "redirect:/program/index";
-	}
-	
-	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "cancel")
-	public String cancelSubmitEmail() {
-		return "redirect:/program/index";
-	}*/
+
+	/*
+	 * @RequestMapping(value = "/create", method = RequestMethod.POST, params =
+	 * "submit") public String submitEmail(@Valid Program program, BindingResult
+	 * bindingResult) { if(bindingResult.hasErrors()) { return "program/create"; }
+	 * 
+	 * programService.create(program);
+	 * 
+	 * return "redirect:/program/index"; }
+	 * 
+	 * @RequestMapping(value = "/create", method = RequestMethod.POST, params =
+	 * "cancel") public String cancelSubmitEmail() { return
+	 * "redirect:/program/index"; }
+	 */
 }

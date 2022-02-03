@@ -2,9 +2,13 @@ package com.maccari.abet.domain.entity;
 
 public class StudentOutcome {
 	private int id;
+	
 	private int programId;
+	
 	private String name;
+	
 	private boolean active;
+	
 	
 	public int getId() {
 		return id;

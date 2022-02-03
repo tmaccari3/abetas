@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+<link href="/program.css" rel="stylesheet" />
+<meta charset="ISO-8859-1">
+<title>Manage Outcomes</title>
+</head>
+<body layout:fragment="content">
+	<form action="#" th:action="@{/outcome/create}"
+		th:object="${webOutcome}" method="post">
+		<br>
+		<div class="container">
+			<div class="options-container">
+				<div class="option">
+					<p>Student Outcome List</p>
+				</div>
+				<div class="option">
+					<button class="abetas-button" type="submit" name="addRow">
+						<span class="fas fa-plus"></span> Add an Outcome
+					</button>
+				</div>
+			</div>
+			<div class="table-container">
+				<table>
+					<tr>
+						<th>Outcomes</th>
+						<th>Active</th>
+						<th>Options</th>
+					</tr>
+					<tr th:each="outcome,rowIter : ${program.outcomes}">
+						<td th:text="${outcome.name}"></td>
+						<td th:text="${outcome.active}"></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</form>
+</body>
+</html>

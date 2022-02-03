@@ -1,13 +1,16 @@
 package com.maccari.abet.domain.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.StudentOutcome;
 import com.maccari.abet.domain.entity.WebProgram;
+import com.maccari.abet.domain.entity.WebStudentOutcome;
 import com.maccari.abet.repository.ProgramDao;
 
 @Component
@@ -48,6 +51,32 @@ public class ProgramService implements Service<Program> {
 			webPrograms.add(new WebProgram(program));
 		}
 		
+		Collections.sort(webPrograms, new WebProgramOrderById());
+		
 		return webPrograms;
+	}
+	
+	public Program convertWebProgram(WebProgram webProgram) {
+		Program program = new Program();
+		program.setId(webProgram.getId());
+		program.setName(webProgram.getName());
+		program.setOutcomes(webProgram.getOutcomes());
+		program.setActive(webProgram.isActive());
+		
+		return program;
+	}
+	
+	public StudentOutcome getOutcomeById(int id) {
+		return programDao.getOutcomeById(id);
+	}
+	
+	public void getAllOutcomesForProgram(WebProgram program){
+		List<WebStudentOutcome> webOutcomes = new ArrayList<WebStudentOutcome>();
+		List<StudentOutcome> outcomes = programDao.getAllOutcomesForProgram(program.getId());
+		
+		for(StudentOutcome outcome : outcomes) {
+			webOutcomes.add(new WebStudentOutcome(outcome));
+		}
+		
 	}
 }

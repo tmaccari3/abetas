@@ -6,7 +6,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 public class WebProgram {
-private int id;
+	private int id;
 	
 	@NotEmpty(message = "Required")
 	@Size(min=1, max=100, message = "Name must be between 1 and 100 characters.")
@@ -39,24 +39,31 @@ private int id;
 	public int getId() {
 		return id;
 	}
+	
 	public void setId(int id) {
 		this.id = id;
 	}
+	
 	public String getName() {
 		return name;
 	}
+	
 	public void setName(String name) {
 		this.name = name;
 	}
+	
 	public boolean isActive() {
 		return active;
 	}
+	
 	public void setActive(boolean active) {
 		this.active = active;
 	}
+	
 	public List<StudentOutcome> getOutcomes() {
 		return outcomes;
 	}
+	
 	public void setOutcomes(List<StudentOutcome> outcomes) {
 		this.outcomes = outcomes;
 	}
