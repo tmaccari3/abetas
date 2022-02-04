@@ -11,9 +11,15 @@ import com.maccari.abet.domain.entity.StudentOutcome;
 public interface ProgramDao {
 	void createProgram(final Program program);
 	
+	void createOutcome(final StudentOutcome outcome);
+	
 	void removeProgram(final Program program);
 	
+	void removeOutcome(final StudentOutcome outcome);
+	
 	Program updateProgram(final Program program);
+	
+	StudentOutcome updateOutcome(final StudentOutcome outcome);
 	
 	Program getProgramById(int id);
 	

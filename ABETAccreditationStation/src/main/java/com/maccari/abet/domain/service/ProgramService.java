@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.StudentOutcome;
 import com.maccari.abet.domain.entity.WebProgram;
-import com.maccari.abet.domain.entity.WebStudentOutcome;
 import com.maccari.abet.repository.ProgramDao;
 
 @Component
@@ -27,20 +26,36 @@ public class ProgramService implements Service<Program> {
 	public Program getById(int id) {
 		return programDao.getProgramById(id);
 	}
+	
+	public StudentOutcome getOutcomeById(int id) {
+		return programDao.getOutcomeById(id);
+	}
 
 	@Override
 	public void create(Program item) {
 		programDao.createProgram(item);
+	}
+	
+	public void createOutcome(StudentOutcome item) {
+		programDao.createOutcome(item);
 	}
 
 	@Override
 	public void remove(Program item) {
 		programDao.removeProgram(item);
 	}
+	
+	public void removeOutcome(StudentOutcome item) {
+		programDao.removeOutcome(item);
+	}
 
 	@Override
 	public Program update(Program item) {
 		return programDao.updateProgram(item);
+	}
+	
+	public StudentOutcome updateOutcome(StudentOutcome item) {
+		return programDao.updateOutcome(item);
 	}
 	
 	public List<WebProgram> getAllWebPrograms() {
@@ -64,19 +79,5 @@ public class ProgramService implements Service<Program> {
 		program.setActive(webProgram.isActive());
 		
 		return program;
-	}
-	
-	public StudentOutcome getOutcomeById(int id) {
-		return programDao.getOutcomeById(id);
-	}
-	
-	public void getAllOutcomesForProgram(WebProgram program){
-		List<WebStudentOutcome> webOutcomes = new ArrayList<WebStudentOutcome>();
-		List<StudentOutcome> outcomes = programDao.getAllOutcomesForProgram(program.getId());
-		
-		for(StudentOutcome outcome : outcomes) {
-			webOutcomes.add(new WebStudentOutcome(outcome));
-		}
-		
 	}
 }

@@ -31,11 +31,10 @@
 					</tr>
 					<tr th:each="program : ${programs}">
 						<td th:if="${!program.newRow}" th:text="${program.name}"></td>
-						<td th:if="${program.newRow}"><input type="text"
+						<td th:if="${program.newRow}"><input class="program-input" type="text"
 							th:field="*{name}" />
 							<p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name
 								Error</p></td>
-
 						<td th:text="${program.active}"></td>
 						<td th:if="${program.newRow}">
 							<div class="option">
@@ -51,7 +50,7 @@
 							<div class="option">
 								<button class="abetas-button" name="outcome"
 									th:value="${program.id}" type="submit">
-									<span class="fa fa-edit"></span> Add Outcomes
+									<span class="fa fa-edit"></span> View Outcomes
 								</button>
 							</div>
 							<div th:if="${program.active}" class="option">

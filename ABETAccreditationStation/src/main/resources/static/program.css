@@ -45,6 +45,10 @@
     border: 2px solid black;
 }
 
+.program-input {
+	width: 100%; 
+}
+
 table {
 	width: 100%;
 }

@@ -1,14 +1,30 @@
 package com.maccari.abet.domain.entity;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
 public class StudentOutcome {
 	private int id;
 	
 	private int programId;
 	
+	@NotEmpty(message = "Required")
+	@Size(min=1, max=100, message = "Name must be between 1 and 100 characters.")
 	private String name;
 	
 	private boolean active;
 	
+	private boolean newRow;
+	
+	public StudentOutcome() {
+		
+	}
+	
+	public StudentOutcome(String name, boolean newRow) {
+		this.name = name;
+		this.setNewRow(newRow);
+		this.active = true;
+	}
 	
 	public int getId() {
 		return id;
@@ -33,5 +49,13 @@ public class StudentOutcome {
 	}
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public boolean isNewRow() {
+		return newRow;
+	}
+
+	public void setNewRow(boolean newRow) {
+		this.newRow = newRow;
 	}
 }

@@ -41,9 +41,12 @@ public class ProgramController {
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "submit")
-	public String submitProgram(@Valid WebProgram webProgram, BindingResult bindingResult) {
+	public String submitProgram(@Valid WebProgram webProgram, BindingResult bindingResult,
+			Model model) {
 		if (bindingResult.hasErrors()) {
-			return "program/create";
+			model.addAttribute("programs", programService.getAllWebPrograms());
+			
+			return "program/index";
 		}
 		programService.create(programService.convertWebProgram(webProgram));
 
@@ -82,23 +85,9 @@ public class ProgramController {
 	public String reactivateProgram(@RequestParam(value = "reactivate", required = true) 
 		int id, Model model) {
 		Program program = programService.getById(id);
-		program.setActive(false);
+		program.setActive(true);
 		programService.update(program);
 
 		return "redirect:/program/index";
 	}
-
-	/*
-	 * @RequestMapping(value = "/create", method = RequestMethod.POST, params =
-	 * "submit") public String submitEmail(@Valid Program program, BindingResult
-	 * bindingResult) { if(bindingResult.hasErrors()) { return "program/create"; }
-	 * 
-	 * programService.create(program);
-	 * 
-	 * return "redirect:/program/index"; }
-	 * 
-	 * @RequestMapping(value = "/create", method = RequestMethod.POST, params =
-	 * "cancel") public String cancelSubmitEmail() { return
-	 * "redirect:/program/index"; }
-	 */
 }

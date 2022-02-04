@@ -9,7 +9,7 @@
 </head>
 <body layout:fragment="content">
 	<form action="#" th:action="@{/outcome/create}"
-		th:object="${webOutcome}" method="post">
+		th:object="${studentOutcome}" method="post">
 		<br>
 		<div class="container">
 			<div class="options-container">
@@ -30,8 +30,42 @@
 						<th>Options</th>
 					</tr>
 					<tr th:each="outcome,rowIter : ${program.outcomes}">
-						<td th:text="${outcome.name}"></td>
+						<td th:if="${!outcome.newRow}" th:text="${outcome.name}">Name</td>
+						<td th:if="${outcome.newRow}">
+							<input class="program-input" type="text" th:field="*{name}" />
+							<p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name
+								Error</p></td>
 						<td th:text="${outcome.active}"></td>
+						<td th:if="${outcome.newRow}">
+							<div class="option">
+								<button class="abetas-button" type="submit" name="submit"
+									value="Submit">Submit</button>
+							</div>
+							<div class="option">
+								<button class="abetas-button" name="cancel"
+									formnovalidate="formnovalidate" value="cancel">Cancel</button>
+							</div>
+						</td>
+						<td th:if="${!outcome.newRow}">
+							<div th:if="${outcome.active}" class="option">
+								<button class="abetas-button" name="deactivate"
+									th:value="${outcome.id}" type="submit">
+									<span class="fas fa-minus"></span> Deactivate
+								</button>
+							</div>
+							<div th:if="${!outcome.active}" class="option">
+								<button class="abetas-button" name="reactivate"
+									th:value="${outcome.id}" type="submit">
+									<span class="fas fa-minus"></span> Reactivate
+								</button>
+							</div>
+							<div class="option">
+								<button class="abetas-button" name="remove"
+									th:value="${outcome.id}" type="submit">
+									<span class="fas fa-minus"></span> Remove
+								</button>
+							</div>
+						</td>
 					</tr>
 				</table>
 			</div>

@@ -52,6 +52,24 @@ public class ProgramDaoImpl implements ProgramDao {
 			throw e;
 		}
 	}
+	
+	@Override
+	public void createOutcome(StudentOutcome outcome) {
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+		TransactionStatus status = transactionManager.getTransaction(def);
+		
+		try {
+			String SQL = "INSERT INTO student_outcome (name, prog_id, active) VALUES (?, ?, ?)";
+			jdbcTemplate.update(SQL, outcome.getName(), outcome.getProgramId(), true);
+			
+			transactionManager.commit(status);
+		} catch(Exception e) {
+			System.out.println("Error in creating student outcome record, rolling back");
+			transactionManager.rollback(status);
+			throw e;
+		}
+	}
 
 	@Override
 	public void removeProgram(Program program) {
@@ -73,6 +91,24 @@ public class ProgramDaoImpl implements ProgramDao {
 			throw e;
 		}
 	}
+	
+	@Override
+	public void removeOutcome(StudentOutcome outcome) {
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+		TransactionStatus status = transactionManager.getTransaction(def);
+		
+		try {
+			String SQL = "DELETE FROM student_outcome WHERE id=?";
+			jdbcTemplate.update(SQL, outcome.getId());
+			
+			transactionManager.commit(status);
+		} catch(Exception e) {
+			System.out.println("Error in deleting student outcome record, rolling back");
+			transactionManager.rollback(status);
+			throw e;
+		}
+	}
 
 	@Override
 	public Program updateProgram(Program program) {
@@ -83,7 +119,7 @@ public class ProgramDaoImpl implements ProgramDao {
 		try {
 			String SQL = "UPDATE program SET active=? WHERE id=?";
 			jdbcTemplate.update(SQL, program.isActive(), program.getId());
-			System.out.println("asdda"+program.isActive());
+			
 			SQL = "UPDATE student_outcome SET active=? WHERE prog_id=?";
 			jdbcTemplate.update(SQL, program.isActive(), program.getId());
 			
@@ -91,6 +127,25 @@ public class ProgramDaoImpl implements ProgramDao {
 			return program;
 		} catch(Exception e) {
 			System.out.println("Error in updating program record, rolling back");
+			transactionManager.rollback(status);
+			throw e;
+		}
+	}
+	
+	@Override
+	public StudentOutcome updateOutcome(StudentOutcome outcome) {
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+		TransactionStatus status = transactionManager.getTransaction(def);
+		
+		try {
+			String SQL = "UPDATE student_outcome SET active=? WHERE id=?";
+			jdbcTemplate.update(SQL, outcome.isActive(), outcome.getId());
+			
+			transactionManager.commit(status);
+			return outcome;
+		} catch(Exception e) {
+			System.out.println("Error in updating student outcome record, rolling back");
 			transactionManager.rollback(status);
 			throw e;
 		}
