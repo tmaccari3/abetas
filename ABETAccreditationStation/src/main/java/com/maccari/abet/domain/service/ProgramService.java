@@ -58,6 +58,10 @@ public class ProgramService implements Service<Program> {
 		return programDao.updateOutcome(item);
 	}
 	
+	public List<Program> getAllPrograms(){
+		return programDao.getAllPrograms();
+	}
+	
 	public List<WebProgram> getAllWebPrograms() {
 		List<WebProgram> webPrograms = new ArrayList<WebProgram>();
 		List<Program> programs = programDao.getAllPrograms();

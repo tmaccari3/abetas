@@ -18,9 +18,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.HandlerMapping;
 
+import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.Task;
 import com.maccari.abet.domain.entity.User;
+import com.maccari.abet.domain.entity.WebTask;
 import com.maccari.abet.domain.entity.WebUser;
+import com.maccari.abet.domain.service.ProgramService;
 import com.maccari.abet.domain.service.TaskService;
 import com.maccari.abet.web.validation.TaskValidator;
 
@@ -29,6 +32,9 @@ import com.maccari.abet.web.validation.TaskValidator;
 public class TaskController {
 	@Autowired
 	private TaskService taskService;
+	
+	@Autowired
+	private ProgramService programService;
 	
 	@Autowired
 	private TaskValidator taskValidator;
@@ -61,12 +67,43 @@ public class TaskController {
 	}
 
 	@RequestMapping(value = {"/create", "/edit"}, params = { "removeRow" })
-	public String removeAssignee(final Task task, final BindingResult bindingResult, 
-			final HttpServletRequest req) {
+	public String removeAssignee(final Task task, final HttpServletRequest req) {
 		final Integer rowId = Integer.valueOf(req.getParameter("removeRow"));
 		task.getAssignees().remove(rowId.intValue());
 	    String mapping = (String) req.getAttribute(
                 HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
+	    if(mapping.contains("create")) {
+			return "task/create";
+	    }
+
+	    else {
+	    	return "task/edit";
+	    }
+	}
+	
+	@RequestMapping(value = {"/create", "/edit"}, params = { "addProgram" })
+	public String addProgram(@RequestParam(value = "addProgram", required = true) 
+		int id, final Task task, final HttpServletRequest req) {
+	    String mapping = (String) req.getAttribute(
+                HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
+	    
+	    System.out.println(task.getPrograms());
+	    if(mapping.contains("create")) {
+			return "task/create";
+	    }
+
+	    else {
+	    	return "task/edit";
+	    }
+	}
+	
+	@RequestMapping(value = {"/create", "/edit"}, params = { "removeProgram" })
+	public String removeProgram(@RequestParam(value = "removeProgram", required = true) 
+		int id, final Task task, final HttpServletRequest req) {
+	    String mapping = (String) req.getAttribute(
+                HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
+	    
+	    System.out.println(task.getPrograms());
 	    if(mapping.contains("create")) {
 			return "task/create";
 	    }
@@ -111,6 +148,7 @@ public class TaskController {
 	@GetMapping("/viewCreated")
 	public String viewCreatedTasks(Principal principal, Model model) {
 		model.addAttribute("tasks", taskService.getCreated(principal.getName()));
+		
 		return "task/viewCreated";
 	}
 	
@@ -147,7 +185,7 @@ public class TaskController {
 		task.setCoordinator(principal.getName());
 		taskService.update(task);
 
-		return "redirect:/";
+		return "redirect:/task/viewCreated";
 	}
 	
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "cancel")
@@ -186,20 +224,21 @@ public class TaskController {
 	
 	@RequestMapping(value = "/complete", method = RequestMethod.POST, params = "submit")
 	public String submitCompletedTask(@Valid Task task, BindingResult bindingResult) {
-		
-		
 		return "redirect:/task/index";
 	}
 	
 	@RequestMapping(value = "/complete", method = RequestMethod.POST, params = "cancel")
 	public String cancelCompletedTask(@Valid Task task, BindingResult bindingResult) {
-		
-		
 		return "redirect:/task/index";
 	}
 
 	@ModelAttribute("progTypes")
-	public ArrayList<String> getRoles() {
-		return (ArrayList<String>) taskService.getPrograms();
+	public ArrayList<Program> getPrograms() {
+		return (ArrayList<Program>) programService.getAll();
+	}
+	
+	@ModelAttribute("outcomeTypes")
+	public ArrayList<Program> getOutcomes() {
+		return (ArrayList<Program>) programService.getAll();
 	}
 }

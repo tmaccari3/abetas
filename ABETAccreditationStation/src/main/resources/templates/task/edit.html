@@ -56,7 +56,7 @@
 					</tr>
 				</tbody>
 			</table>
-
+			<br>
 			<div class="inline">
 				<div>
 					<h5>Program(s)</h5>
@@ -64,20 +64,27 @@
 						th:errors="*{programs}">Program Error</label>
 					<ul>
 						<li th:each="aProg : ${progTypes}"><input type="checkbox"
-							th:field="*{programs}" th:value="${aProg}" /> <label
-							th:for="${#ids.prev('programs')}" th:text="${aProg}">Default
-								Program</label></li>
+							th:field="*{programs}" th:value="${aProg.name}" name="addProgram" />
+							<!-- th:attr="onChange=|addProgram(${aProg.id}, this.id)|"
+							formnovalidate="formnovalidate"/>--> <label
+							th:for="${#ids.prev('programs')}" th:text="${aProg.name}">Default
+								Program</label>
+								
+							<label class="error" th:if="${#fields.hasErrors('outcomes')}"
+							th:errors="*{outcomes}">Outcome Error</label>
+							<ul>
+								<li th:each="outcome : ${aProg.outcomes}"><input
+									type="checkbox" th:field="*{outcomes}"
+									th:value="${outcome.name}" /> <label
+									th:for="${#ids.prev('outcomes')}" th:text="${outcome.name}">Default
+										Outcome</label></li>
+							</ul>
+						</li>
 					</ul>
 				</div>
 			</div>
 			<br>
 			<div class="area-container">
-				<h6>Program Outcome:</h6>
-				<p class="error" th:if="${#fields.hasErrors('outcome')}" th:errors="*{outcome}">Outcome
-					Error</p>
-				<textarea placeholder="Enter program outcome..."
-					th:field="*{outcome}" rows="4" cols="50" maxlength="255">
-           					Enter Program Outcome...</textarea>
 				<h6>Task Description:</h6>
 				<p class="error" th:if="${#fields.hasErrors('description')}"
 					th:errors="*{description}">Description Error</p>

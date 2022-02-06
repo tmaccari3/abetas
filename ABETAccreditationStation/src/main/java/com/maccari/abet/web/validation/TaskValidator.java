@@ -22,6 +22,10 @@ public class TaskValidator implements Validator {
 			errors.rejectValue("programs", "task.program.empty");
 		}
 		
+		if (task.getOutcomes().isEmpty() && !task.getPrograms().isEmpty()) {
+			errors.rejectValue("programs", "task.outcome.empty");
+		}
+		
 		if (task.getAssignees().isEmpty()) {
 			errors.rejectValue("assignees", "task.assignees.empty");
 		}

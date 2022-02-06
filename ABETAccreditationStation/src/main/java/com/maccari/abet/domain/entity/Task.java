@@ -19,8 +19,7 @@ public class Task {
 
 	private List<String> programs;
 
-	@NotEmpty(message = "*required")
-	private String outcome;
+	private List<String> outcomes;
 
 	@NotEmpty(message = "*required")
 	private String description;
@@ -33,6 +32,8 @@ public class Task {
 	
 	public Task() {
 		assignees = new ArrayList<String>();
+		programs = new ArrayList<String>();
+		outcomes = new ArrayList<String>();
 	}
 	
 	public Task(List<String> assignees) {
@@ -79,12 +80,12 @@ public class Task {
 		this.programs = programs;
 	}
 
-	public String getOutcome() {
-		return outcome;
+	public List<String> getOutcomes() {
+		return outcomes;
 	}
 
-	public void setOutcome(String outcome) {
-		this.outcome = outcome;
+	public void setOutcomes(List<String> outcomes) {
+		this.outcomes = outcomes;
 	}
 
 	public String getDescription() {

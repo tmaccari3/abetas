@@ -3,27 +3,27 @@ package com.maccari.abet.domain.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotEmpty;
+
 public class WebTask {
 	private int id;
 
 	private String coordinator;
 
+	@NotEmpty(message = "*required")
 	private String title;
 	
-	private List<WebUser> assignees;
+	private List<String> assignees;
 
 	private List<String> programs;
 
-	private String outcome;
+	private List<String> outcomes;
 
+	@NotEmpty(message = "*required")
 	private String description;
 	
 	public WebTask() {
-		assignees = new ArrayList<WebUser>();
-	}
-	
-	public WebTask(List<WebUser> assignees) {
-		this.assignees = assignees;
+		assignees = new ArrayList<String>();
 	}
 
 	public int getId() {
@@ -50,11 +50,11 @@ public class WebTask {
 		this.title = title;
 	}
 
-	public List<WebUser> getAssignees() {
+	public List<String> getAssignees() {
 		return assignees;
 	}
 
-	public void setAssignees(List<WebUser> assignees) {
+	public void setAssignees(List<String> assignees) {
 		this.assignees = assignees;
 	}
 
@@ -66,12 +66,12 @@ public class WebTask {
 		this.programs = programs;
 	}
 
-	public String getOutcome() {
-		return outcome;
+	public List<String> getOutcomes() {
+		return outcomes;
 	}
 
-	public void setOutcome(String outcome) {
-		this.outcome = outcome;
+	public void setOutcomes(List<String> outcome) {
+		this.outcomes = outcome;
 	}
 
 	public String getDescription() {
@@ -80,6 +80,18 @@ public class WebTask {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public Task convertToTask() {
+		Task task = new Task();
+		task.setId(this.getId());
+		task.setTitle(this.getTitle());
+		task.setDescription(this.getDescription());
+		task.setAssignees(this.getAssignees());
+		task.setPrograms(this.getPrograms());
+		task.setOutcomes(this.getOutcomes());
+		
+		return task;
 	}
 	
 	//for debugging

@@ -42,17 +42,16 @@ public class TaskDaoImpl implements TaskDao {
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
 		TransactionStatus status = transactionManager.getTransaction(def);
-		int taskId = -1;
 
 		try {
-			String SQL = "INSERT INTO task (coordinator, title, outcome, assign_date,"
-					+ "description, complete) VALUES (?, ?, ?, ?, ?, ?) RETURNING id";
+			String SQL = "INSERT INTO task (coordinator, title, assign_date,"
+					+ "description, complete) VALUES (?, ?, ?, ?, ?) RETURNING id";
 
 			Instant instant = Instant.now();
 			Timestamp ts = instant != null ? Timestamp.from(instant) : null;
 
 			task.setId(jdbcTemplate.query(SQL, new IdMapper(), task.getCoordinator(), task.getTitle(),
-					task.getOutcome(), ts.toLocalDateTime(), task.getDescription(), task.isComplete()).get(0));
+					ts.toLocalDateTime(), task.getDescription(), task.isComplete()).get(0));
 
 			insertRelations(task);
 
@@ -70,9 +69,14 @@ public class TaskDaoImpl implements TaskDao {
 			jdbcTemplate.update(SQL, task.getId(), assignee);
 		}
 
-		SQL = "INSERT INTO task_program (id, program) VALUES (?, ?)";
+		SQL = "INSERT INTO task_program (id, name) VALUES (?, ?)";
 		for (String program : task.getPrograms()) {
 			jdbcTemplate.update(SQL, task.getId(), program);
+		}
+		
+		SQL = "INSERT INTO task_outcome (id, name) VALUES (?, ?)";
+		for (String outcome: task.getOutcomes()) {
+			jdbcTemplate.update(SQL, task.getId(), outcome);
 		}
 
 		SQL = "INSERT INTO file (task_id) VALUES (?)";
@@ -86,16 +90,19 @@ public class TaskDaoImpl implements TaskDao {
 		TransactionStatus status = transactionManager.getTransaction(def);
 		System.out.println("ID: " + task.getId());
 		try {
-			String SQL = "UPDATE task set coordinator = ?, title = ?, outcome = "
-					+ "?, description = ?, complete = ? where id = ?";
+			String SQL = "UPDATE task set coordinator = ?, title = ?,"
+					+ " description = ?, complete = ? where id = ?";
 			jdbcTemplate.update(SQL, task.getCoordinator(), task.getTitle(), 
-					task.getOutcome(), task.getDescription(), task.isComplete(), 
+					task.getDescription(), task.isComplete(), 
 					task.getId());
 
 			SQL = "DELETE FROM assigned WHERE id = ?";
 			jdbcTemplate.update(SQL, task.getId());
 
 			SQL = "DELETE FROM task_program WHERE id = ?";
+			jdbcTemplate.update(SQL, task.getId());
+			
+			SQL = "DELETE FROM task_outcome WHERE id = ?";
 			jdbcTemplate.update(SQL, task.getId());
 
 			SQL = "DELETE FROM file WHERE task_id = ?";
@@ -151,17 +158,6 @@ public class TaskDaoImpl implements TaskDao {
 			Task task = jdbcTemplate.queryForObject(SQL, new FullTaskMapper(), id);
 
 			return task;
-		} catch (EmptyResultDataAccessException e) {
-			return null;
-		}
-	}
-
-	@Override
-	public List<String> getPrograms() {
-		try {
-			String sql = "select * from program";
-
-			return jdbcTemplate.query(sql, (rs, rowNum) -> (rs.getString("name")));
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
@@ -226,7 +222,6 @@ public class TaskDaoImpl implements TaskDao {
 			task.setId(rs.getInt("id"));
 			task.setTitle(rs.getString("title"));
 			task.setCoordinator(rs.getString("coordinator"));
-			task.setOutcome(rs.getString("outcome"));
 			task.setDescription(rs.getString("description"));
 			task.setAssignDate(rs.getObject("assign_date", Timestamp.class));
 			task.setComplete(rs.getBoolean("complete"));
@@ -240,13 +235,21 @@ public class TaskDaoImpl implements TaskDao {
 			}
 
 			try {
-				String SQL = "SELECT program FROM task_program WHERE id = ?";
+				String SQL = "SELECT name FROM task_program WHERE id = ?";
 				task.setPrograms(jdbcTemplate.query(SQL, new StringMapper(), task.getId()));
 
 			} catch (EmptyResultDataAccessException e) {
 				task.setPrograms(null);
 			}
 
+			try {
+				String SQL = "SELECT name FROM task_outcome WHERE id = ?";
+				task.setOutcomes(jdbcTemplate.query(SQL, new StringMapper(), task.getId()));
+
+			} catch (EmptyResultDataAccessException e) {
+				task.setPrograms(null);
+			}
+			
 			try {
 				String SQL = "SELECT * FROM file WHERE task_id = ?";
 				task.setFiles(jdbcTemplate.query(SQL, new FileMapper(), task.getId()));

@@ -14,13 +14,13 @@ public class Program {
 	
 	private List<StudentOutcome> outcomes;
 	
+	public Program() {
+		
+	}
+	
 	public Program(String name) {
 		this.name = name;
 		active = true;
-	}
-	
-	public Program() {
-		
 	}
 	
 	public int getId() {
@@ -46,5 +46,16 @@ public class Program {
 	}
 	public void setOutcomes(List<StudentOutcome> outcomes) {
 		this.outcomes = outcomes;
+	}
+	
+	//for testing
+	public String toString() {
+		String result = "";
+		result += name + "\n";
+		/*for(StudentOutcome outcome : outcomes) {
+			result += outcome.getName() + "\n";
+		}*/
+		
+		return result;
 	}
 }

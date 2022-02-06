@@ -59,8 +59,4 @@ public class TaskService implements Service<Task>{
 		
 		return -1;
 	}
-	
-	public List<String> getPrograms(){
-		return taskDao.getPrograms();
-	}
 }
