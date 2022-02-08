@@ -236,9 +236,4 @@ public class TaskController {
 	public ArrayList<Program> getPrograms() {
 		return (ArrayList<Program>) programService.getAll();
 	}
-	
-	@ModelAttribute("outcomeTypes")
-	public ArrayList<Program> getOutcomes() {
-		return (ArrayList<Program>) programService.getAll();
-	}
 }

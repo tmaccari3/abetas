@@ -3,7 +3,8 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout}">
 <head>
-<link href="/task.css" rel="stylesheet" />
+<link href="/css/task.css" rel="stylesheet" />
+<script type="text/javascript" th:src="@{/js/task.js}" /></script>
 <meta charset="ISO-8859-1">
 <title>Edit Task</title>
 </head>
@@ -63,20 +64,22 @@
 					<label class="error" th:if="${#fields.hasErrors('programs')}"
 						th:errors="*{programs}">Program Error</label>
 					<ul>
-						<li th:each="aProg : ${progTypes}"><input type="checkbox"
-							th:field="*{programs}" th:value="${aProg.name}" name="addProgram" />
+						<li th:each="aProg,rowIter : ${progTypes}"><input type="checkbox"
+							th:field="*{programs}" th:value="${aProg.name}" name="addProgram" 
+							onClick="disableChange(this)"/>
 							<!-- th:attr="onChange=|addProgram(${aProg.id}, this.id)|"
-							formnovalidate="formnovalidate"/>--> <label
-							th:for="${#ids.prev('programs')}" th:text="${aProg.name}">Default
+							formnovalidate="formnovalidate"/>--> 
+							<label th:for="${#ids.prev('programs')}" th:text="${aProg.name}">Default
 								Program</label>
 								
 							<label class="error" th:if="${#fields.hasErrors('outcomes')}"
-							th:errors="*{outcomes}">Outcome Error</label>
+								th:errors="*{outcomes}">Outcome Error</label>
 							<ul>
-								<li th:each="outcome : ${aProg.outcomes}"><input
-									type="checkbox" th:field="*{outcomes}"
-									th:value="${outcome.name}" /> <label
-									th:for="${#ids.prev('outcomes')}" th:text="${outcome.name}">Default
+								<li th:name="${'programs' + (rowIter.index + 1)}" th:each="outcome : ${aProg.outcomes}">
+									<input type="checkbox" th:field="*{outcomes}"
+										th:value="${outcome.name}" disabled/> 
+									<label th:for="${#ids.prev('outcomes')}" 
+										th:text="${outcome.name}">Default
 										Outcome</label></li>
 							</ul>
 						</li>

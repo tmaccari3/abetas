@@ -175,7 +175,7 @@ public class ProgramDaoImpl implements ProgramDao {
 					SQL, new StudentOutcomeMapper(), id);
 			
 			return outcomes;
-		} catch (EmptyResultDataAccessException e) {
+		} catch (Exception e) {
 			System.out.println("Error in getting outcomes for program.");
 			return null;
 		}
@@ -188,7 +188,7 @@ public class ProgramDaoImpl implements ProgramDao {
 			StudentOutcome outcome = jdbcTemplate.queryForObject(SQL, new StudentOutcomeMapper(), id);
 			
 			return outcome;
-		} catch (EmptyResultDataAccessException e) {
+		} catch (Exception e) {
 			System.out.println("Error in getting outcomes.");
 			return null;
 		}
@@ -201,7 +201,7 @@ public class ProgramDaoImpl implements ProgramDao {
 			Program program = jdbcTemplate.queryForObject(SQL, new ProgramMapper(), id);
 			
 			return program;
-		} catch (EmptyResultDataAccessException e) {
+		} catch (Exception e) {
 			return null;
 		}
 	}
