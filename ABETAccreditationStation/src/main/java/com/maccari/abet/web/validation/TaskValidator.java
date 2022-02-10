@@ -4,19 +4,19 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import com.maccari.abet.domain.entity.Task;
+import com.maccari.abet.domain.entity.WebTask;
 
 @Component
 public class TaskValidator implements Validator {
 	
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return Task.class.isAssignableFrom(clazz);
+		return WebTask.class.isAssignableFrom(clazz);
 	}
 	
 	@Override
 	public void validate(Object target, Errors errors) {
-		Task task = (Task) target;
+		WebTask task = (WebTask) target;
 
 		if (task.getPrograms().isEmpty()) {
 			errors.rejectValue("programs", "task.program.empty");

@@ -47,14 +47,14 @@ public class TaskController {
 	}
 
 	@GetMapping("/create")
-	public String createTask(Task task) {
+	public String createTask(WebTask webTask) {
 		return "task/create";
 	}
 
 	@RequestMapping(value = {"/create", "/edit"}, params = { "addRow" })
-	public String addAssignee(final Task task, final BindingResult bindingResult,
+	public String addAssignee(final WebTask webTask, final BindingResult bindingResult,
 			final HttpServletRequest req) {
-		task.getAssignees().add("");
+		webTask.getAssignees().add("");
 	    String mapping = (String) req.getAttribute(
                 HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
 	    if(mapping.contains("create")) {
@@ -67,9 +67,9 @@ public class TaskController {
 	}
 
 	@RequestMapping(value = {"/create", "/edit"}, params = { "removeRow" })
-	public String removeAssignee(final Task task, final HttpServletRequest req) {
+	public String removeAssignee(final WebTask webTask, final HttpServletRequest req) {
 		final Integer rowId = Integer.valueOf(req.getParameter("removeRow"));
-		task.getAssignees().remove(rowId.intValue());
+		webTask.getAssignees().remove(rowId.intValue());
 	    String mapping = (String) req.getAttribute(
                 HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
 	    if(mapping.contains("create")) {
@@ -83,11 +83,11 @@ public class TaskController {
 	
 	@RequestMapping(value = {"/create", "/edit"}, params = { "addProgram" })
 	public String addProgram(@RequestParam(value = "addProgram", required = true) 
-		int id, final Task task, final HttpServletRequest req) {
+		int id, final WebTask webTask, final HttpServletRequest req) {
 	    String mapping = (String) req.getAttribute(
                 HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
 	    
-	    System.out.println(task.getPrograms());
+	    System.out.println(webTask.getPrograms());
 	    if(mapping.contains("create")) {
 			return "task/create";
 	    }
@@ -99,11 +99,11 @@ public class TaskController {
 	
 	@RequestMapping(value = {"/create", "/edit"}, params = { "removeProgram" })
 	public String removeProgram(@RequestParam(value = "removeProgram", required = true) 
-		int id, final Task task, final HttpServletRequest req) {
+		int id, final WebTask webTask, final HttpServletRequest req) {
 	    String mapping = (String) req.getAttribute(
                 HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
 	    
-	    System.out.println(task.getPrograms());
+	    System.out.println(webTask.getPrograms());
 	    if(mapping.contains("create")) {
 			return "task/create";
 	    }
@@ -114,28 +114,26 @@ public class TaskController {
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String addTask(Principal principal, @Valid Task task, 
+	public String addTask(Principal principal, @Valid WebTask webTask, 
 			BindingResult bindingResult, Model model, final HttpServletRequest req) {
-		taskValidator.validate(task, bindingResult);
-		
-		int invalidEmail = taskService.userExists(task.getAssignees());
+		taskValidator.validate(webTask, bindingResult);
+		System.out.println(webTask.getPrograms());
+		System.out.println(webTask.getOutcomes());
+		int invalidEmail = taskService.userExists(webTask.getAssignees());
 		if(invalidEmail >= 0) {
 			bindingResult.rejectValue("assignees", "task.assignees.invalid");
 		}
-		
-		if (bindingResult.hasErrors()) {
-		    String mapping = (String) req.getAttribute(
-	                HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
-		    if(mapping.contains("create")) {
-				return "task/create";
-		    }
-		    else {
-				return "task/edit";
-		    }
+		programService.fillPrograms(webTask);
+		if(programService.checkOutcomes(webTask.getFullPrograms())) {
+			bindingResult.rejectValue("programs", "task.programs.invalid");
 		}
 		
-		task.setCoordinator(principal.getName());
-		taskService.create(task);
+		if (bindingResult.hasErrors()) {
+			return "task/create";
+		}
+		
+		webTask.setCoordinator(principal.getName());
+		taskService.create(taskService.webTaskToTask(webTask));
 
 		return "redirect:/";
 	}
@@ -163,17 +161,19 @@ public class TaskController {
 	@GetMapping("/edit")
 	public String editTaskDetails(@RequestParam(value = "id", required = true)
 			int id, Model model) {
-		model.addAttribute("task", taskService.getById(id));
+		WebTask webTask = taskService.taskToWebTask(taskService.getById(id));
+		//why don't the program picks get autofilled
+		model.addAttribute("webTask", webTask);
 		
 		return "task/edit";
 	}
 	
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
-	public String editTask(Principal principal, @Valid Task task, 
+	public String editTask(Principal principal, @Valid WebTask webTask, 
 			BindingResult bindingResult, Model model) {
-		taskValidator.validate(task, bindingResult);
+		taskValidator.validate(webTask, bindingResult);
 		
-		int invalidEmail = taskService.userExists(task.getAssignees());
+		int invalidEmail = taskService.userExists(webTask.getAssignees());
 		if(invalidEmail >= 0) {
 			bindingResult.rejectValue("assignees", "task.assignees.invalid");
 		}
@@ -182,8 +182,8 @@ public class TaskController {
 			return "task/create";
 		}
 		
-		task.setCoordinator(principal.getName());
-		taskService.update(task);
+		webTask.setCoordinator(principal.getName());
+		taskService.update(taskService.webTaskToTask(webTask));
 
 		return "redirect:/task/viewCreated";
 	}
@@ -216,7 +216,7 @@ public class TaskController {
 	
 	@RequestMapping(value = "/complete")
 	public String completeTask(@RequestParam(value = "id", required = true)
-			int id, Task task, Model model) {
+			int id, WebTask webTask, Model model) {
 		model.addAttribute("task", taskService.getById(id));
 		
 		return "task/complete";

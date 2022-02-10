@@ -51,6 +51,7 @@ public class Program {
 	//for testing
 	public String toString() {
 		String result = "";
+		result += id + " ";
 		result += name + "\n";
 		/*for(StudentOutcome outcome : outcomes) {
 			result += outcome.getName() + "\n";

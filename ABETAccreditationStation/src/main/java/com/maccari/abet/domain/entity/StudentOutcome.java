@@ -58,4 +58,13 @@ public class StudentOutcome {
 	public void setNewRow(boolean newRow) {
 		this.newRow = newRow;
 	}
+	
+	//for testing
+	public String toString() {
+		String result = "";
+		result += id + " ";
+		result += name + "\n";
+		
+		return result;
+	}
 }

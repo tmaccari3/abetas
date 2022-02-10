@@ -20,7 +20,10 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.maccari.abet.domain.entity.File;
+import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.StudentOutcome;
 import com.maccari.abet.domain.entity.Task;
+import com.maccari.abet.repository.ProgramDaoImpl.StudentOutcomeMapper;
 
 @Repository
 public class TaskDaoImpl implements TaskDao {
@@ -70,13 +73,13 @@ public class TaskDaoImpl implements TaskDao {
 		}
 
 		SQL = "INSERT INTO task_program (id, name) VALUES (?, ?)";
-		for (String program : task.getPrograms()) {
-			jdbcTemplate.update(SQL, task.getId(), program);
+		for (Program program : task.getPrograms()) {
+			jdbcTemplate.update(SQL, task.getId(), program.getName());
 		}
 		
 		SQL = "INSERT INTO task_outcome (id, name) VALUES (?, ?)";
-		for (String outcome: task.getOutcomes()) {
-			jdbcTemplate.update(SQL, task.getId(), outcome);
+		for (StudentOutcome outcome: task.getOutcomes()) {
+			jdbcTemplate.update(SQL, task.getId(), outcome.getName());
 		}
 
 		SQL = "INSERT INTO file (task_id) VALUES (?)";
@@ -235,16 +238,16 @@ public class TaskDaoImpl implements TaskDao {
 			}
 
 			try {
-				String SQL = "SELECT name FROM task_program WHERE id = ?";
-				task.setPrograms(jdbcTemplate.query(SQL, new StringMapper(), task.getId()));
+				String SQL = "SELECT * FROM task_program WHERE id = ?";
+				task.setPrograms(jdbcTemplate.query(SQL, new ProgramMapper(), task.getId()));
 
 			} catch (EmptyResultDataAccessException e) {
 				task.setPrograms(null);
 			}
 
 			try {
-				String SQL = "SELECT name FROM task_outcome WHERE id = ?";
-				task.setOutcomes(jdbcTemplate.query(SQL, new StringMapper(), task.getId()));
+				String SQL = "SELECT * FROM task_outcome WHERE id = ?";
+				task.setOutcomes(jdbcTemplate.query(SQL, new StudentOutcomeMapper(), task.getId()));
 
 			} catch (EmptyResultDataAccessException e) {
 				task.setPrograms(null);
@@ -259,6 +262,19 @@ public class TaskDaoImpl implements TaskDao {
 			}
 
 			return task;
+		}
+	}
+	
+	public List<StudentOutcome> getAllOutcomesForProgram(int id){
+		try {
+			String SQL = "SELECT * FROM student_outcome WHERE prog_id = ?";
+			ArrayList<StudentOutcome> outcomes = (ArrayList<StudentOutcome>) jdbcTemplate.query(
+					SQL, new StudentOutcomeMapper(), id);
+			
+			return outcomes;
+		} catch (Exception e) {
+			System.out.println("Error in getting outcomes for program.");
+			return null;
 		}
 	}
 
@@ -285,6 +301,27 @@ public class TaskDaoImpl implements TaskDao {
 			String result = rs.getString(1);
 
 			return result;
+		}
+	}
+	
+	class ProgramMapper implements RowMapper<Program> {
+		public Program mapRow(ResultSet rs, int rowNum) throws SQLException {
+			Program program = new Program();
+			program.setId(rs.getInt("id"));
+			program.setName(rs.getString("name"));
+			program.setOutcomes(getAllOutcomesForProgram(program.getId()));
+			
+			return program;
+		}
+	}
+	
+	class StudentOutcomeMapper implements RowMapper<StudentOutcome> {
+		public StudentOutcome mapRow(ResultSet rs, int rowNum) throws SQLException {
+			StudentOutcome outcome = new StudentOutcome();
+			outcome.setProgramId(rs.getInt("id"));
+			outcome.setName(rs.getString("name"));
+			
+			return outcome;
 		}
 	}
 }

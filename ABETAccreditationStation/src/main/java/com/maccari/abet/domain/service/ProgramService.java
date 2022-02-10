@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.StudentOutcome;
 import com.maccari.abet.domain.entity.WebProgram;
+import com.maccari.abet.domain.entity.WebTask;
 import com.maccari.abet.repository.ProgramDao;
 
 @Component
@@ -83,5 +84,32 @@ public class ProgramService implements Service<Program> {
 		program.setActive(webProgram.isActive());
 		
 		return program;
+	}
+	
+	public void fillPrograms(WebTask task) {
+		ArrayList<Program> programs = new ArrayList<Program>();
+		ArrayList<StudentOutcome> outcomes = new ArrayList<StudentOutcome>();
+		
+		for(Integer programId : task.getPrograms()) {
+			programs.add(programDao.getProgramById(programId));
+		}
+		for(Integer outcomeId : task.getOutcomes()) {
+			outcomes.add(programDao.getOutcomeById(outcomeId));
+		}
+		
+		task.setFullPrograms(programs);
+		task.setFullOutcomes(outcomes);
+	}
+	
+	public boolean checkOutcomes(List<Program> programs) {
+		for(Program program : programs) {
+			for(StudentOutcome outcome : program.getOutcomes()) {
+				if(outcome.getProgramId() != program.getId()) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 }

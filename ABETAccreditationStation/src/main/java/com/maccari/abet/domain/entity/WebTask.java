@@ -15,15 +15,28 @@ public class WebTask {
 	
 	private List<String> assignees;
 
-	private List<String> programs;
+	private List<Integer> programs;
 
-	private List<String> outcomes;
+	private List<Integer> outcomes;
+	
+	private List<Program> fullPrograms;
+
+	private List<StudentOutcome> fullOutcomes;
 
 	@NotEmpty(message = "*required")
 	private String description;
 	
 	public WebTask() {
 		assignees = new ArrayList<String>();
+	}
+	
+	public WebTask(Task task) {
+		this.id = task.getId();
+		this.coordinator = task.getCoordinator();
+		this.title = task.getTitle();
+		this.assignees = task.getAssignees();
+		this.fullPrograms = task.getPrograms();
+		this.fullOutcomes = task.getOutcomes();
 	}
 
 	public int getId() {
@@ -58,20 +71,20 @@ public class WebTask {
 		this.assignees = assignees;
 	}
 
-	public List<String> getPrograms() {
+	public List<Integer> getPrograms() {
 		return programs;
 	}
 
-	public void setPrograms(List<String> programs) {
+	public void setPrograms(List<Integer> programs) {
 		this.programs = programs;
 	}
 
-	public List<String> getOutcomes() {
+	public List<Integer> getOutcomes() {
 		return outcomes;
 	}
 
-	public void setOutcomes(List<String> outcome) {
-		this.outcomes = outcome;
+	public void setOutcomes(List<Integer> outcomes) {
+		this.outcomes = outcomes;
 	}
 
 	public String getDescription() {
@@ -81,19 +94,23 @@ public class WebTask {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	public Task convertToTask() {
-		Task task = new Task();
-		task.setId(this.getId());
-		task.setTitle(this.getTitle());
-		task.setDescription(this.getDescription());
-		task.setAssignees(this.getAssignees());
-		task.setPrograms(this.getPrograms());
-		task.setOutcomes(this.getOutcomes());
-		
-		return task;
+
+	public List<Program> getFullPrograms() {
+		return fullPrograms;
 	}
-	
+
+	public void setFullPrograms(List<Program> fullPrograms) {
+		this.fullPrograms = fullPrograms;
+	}
+
+	public List<StudentOutcome> getFullOutcomes() {
+		return fullOutcomes;
+	}
+
+	public void setFullOutcomes(List<StudentOutcome> fullOutcomes) {
+		this.fullOutcomes = fullOutcomes;
+	}
+
 	//for debugging
 	public String toString() {
 		String result = "";

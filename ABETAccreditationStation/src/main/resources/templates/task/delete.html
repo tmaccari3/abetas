@@ -45,7 +45,7 @@
 					<h6>Program(s)</h6>
 				</div>
 				<div th:each="program : *{task.programs}">
-					<p th:text="${program}"></p>
+					<p th:text="${program.name}"></p>
 				</div>
 			</div>
 			<div class="task-outcome">
@@ -53,7 +53,7 @@
 					<h6>Student Outcome:</h6>
 				</div>
 				<div th:each="outcome : *{task.outcomes}">
-					<p th:text="${outcome}"></p>
+					<p th:text="${outcome.name}"></p>
 				</div>
 			</div>
 		</div>

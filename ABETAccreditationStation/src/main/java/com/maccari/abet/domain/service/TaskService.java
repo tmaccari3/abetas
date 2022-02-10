@@ -1,11 +1,15 @@
 package com.maccari.abet.domain.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.StudentOutcome;
 import com.maccari.abet.domain.entity.Task;
+import com.maccari.abet.domain.entity.WebTask;
 import com.maccari.abet.repository.TaskDao;
 import com.maccari.abet.repository.UserDao;
 
@@ -48,6 +52,35 @@ public class TaskService implements Service<Task>{
 	
 	public List<Task> getCreated(String email){
 		return taskDao.getCreatedTasks(email);
+	}
+	
+	public Task webTaskToTask(WebTask webTask) {
+		Task task = new Task();
+		
+		task.setTitle(webTask.getTitle());
+		task.setAssignees(webTask.getAssignees());
+		task.setDescription(webTask.getDescription());
+		task.setCoordinator(webTask.getCoordinator());
+		task.setPrograms(webTask.getFullPrograms());
+		task.setOutcomes(webTask.getFullOutcomes());
+		
+		return task;
+	}
+	
+	public WebTask taskToWebTask(Task task) {
+		WebTask webTask = new WebTask(task);
+		
+		ArrayList<Integer> programIds = new ArrayList<Integer>();
+		ArrayList<Integer> outcomeIds = new ArrayList<Integer>();
+		
+		for(Program program : task.getPrograms()) {
+			programIds.add(program.getId());
+		}
+		for(StudentOutcome outcome : task.getOutcomes()) {
+			outcomeIds.add(outcome.getId());
+		}
+		
+		return webTask;
 	}
 	
 	public int userExists(List<String> emails) {

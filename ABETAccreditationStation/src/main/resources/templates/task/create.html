@@ -12,7 +12,7 @@
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<form action="#" id="task" th:action="@{/task/create}"
-		th:object="${task}" method="post">
+		th:object="${webTask}" method="post">
 		<div class="task-container">
 			<h3 style="text-align: center">Create a Task</h3>
 			<br>
@@ -64,7 +64,7 @@
 						th:errors="*{programs}">Program Error</label>
 					<ul>
 						<li th:each="aProg,rowIter : ${progTypes}"><input type="checkbox"
-							th:field="*{programs}" th:value="${aProg.name}" name="addProgram" 
+							th:field="*{programs}" th:value="${aProg.id}" name="addProgram" 
 							onClick="disableChange(this)"/>
 							<!-- th:attr="onChange=|addProgram(${aProg.id}, this.id)|"
 							formnovalidate="formnovalidate"/>--> 
@@ -76,7 +76,7 @@
 							<ul>
 								<li th:name="${'programs' + (rowIter.index + 1)}" th:each="outcome : ${aProg.outcomes}">
 									<input type="checkbox" th:field="*{outcomes}"
-										th:value="${outcome.name}" disabled/> 
+										th:value="${outcome.id}" disabled/> 
 									<label th:for="${#ids.prev('outcomes')}" 
 										th:text="${outcome.name}">Default
 										Outcome</label></li>
