@@ -163,6 +163,12 @@ public class TaskController {
 			int id, Model model) {
 		WebTask webTask = taskService.taskToWebTask(taskService.getById(id));
 		//why don't the program picks get autofilled
+		/*for(Program prog : taskService.getById(id).getPrograms()) {
+			System.out.println(prog);
+		}
+		for(Integer progId : webTask.getPrograms()) {
+			System.out.println(progId+", ");
+		}*/
 		model.addAttribute("webTask", webTask);
 		
 		return "task/edit";

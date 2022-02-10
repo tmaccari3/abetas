@@ -62,7 +62,7 @@ public class StudentOutcome {
 	//for testing
 	public String toString() {
 		String result = "";
-		result += id + " ";
+		result += programId + " ";
 		result += name + "\n";
 		
 		return result;

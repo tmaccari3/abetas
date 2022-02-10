@@ -72,14 +72,14 @@ public class TaskDaoImpl implements TaskDao {
 			jdbcTemplate.update(SQL, task.getId(), assignee);
 		}
 
-		SQL = "INSERT INTO task_program (id, name) VALUES (?, ?)";
+		SQL = "INSERT INTO task_program (task_id, program_id, name) VALUES (?, ?, ?)";
 		for (Program program : task.getPrograms()) {
-			jdbcTemplate.update(SQL, task.getId(), program.getName());
+			jdbcTemplate.update(SQL, task.getId(), program.getId(), program.getName());
 		}
 		
-		SQL = "INSERT INTO task_outcome (id, name) VALUES (?, ?)";
+		SQL = "INSERT INTO task_outcome (task_id, outcome_id, name) VALUES (?, ?, ?)";
 		for (StudentOutcome outcome: task.getOutcomes()) {
-			jdbcTemplate.update(SQL, task.getId(), outcome.getName());
+			jdbcTemplate.update(SQL, task.getId(), outcome.getId(), outcome.getName());
 		}
 
 		SQL = "INSERT INTO file (task_id) VALUES (?)";
@@ -238,7 +238,7 @@ public class TaskDaoImpl implements TaskDao {
 			}
 
 			try {
-				String SQL = "SELECT * FROM task_program WHERE id = ?";
+				String SQL = "SELECT * FROM task_program WHERE task_id = ?";
 				task.setPrograms(jdbcTemplate.query(SQL, new ProgramMapper(), task.getId()));
 
 			} catch (EmptyResultDataAccessException e) {
@@ -246,8 +246,9 @@ public class TaskDaoImpl implements TaskDao {
 			}
 
 			try {
-				String SQL = "SELECT * FROM task_outcome WHERE id = ?";
+				String SQL = "SELECT * FROM task_outcome WHERE task_id = ?";
 				task.setOutcomes(jdbcTemplate.query(SQL, new StudentOutcomeMapper(), task.getId()));
+				System.out.println(task.getOutcomes());
 
 			} catch (EmptyResultDataAccessException e) {
 				task.setPrograms(null);
@@ -307,7 +308,7 @@ public class TaskDaoImpl implements TaskDao {
 	class ProgramMapper implements RowMapper<Program> {
 		public Program mapRow(ResultSet rs, int rowNum) throws SQLException {
 			Program program = new Program();
-			program.setId(rs.getInt("id"));
+			program.setId(rs.getInt("program_id"));
 			program.setName(rs.getString("name"));
 			program.setOutcomes(getAllOutcomesForProgram(program.getId()));
 			
@@ -318,7 +319,7 @@ public class TaskDaoImpl implements TaskDao {
 	class StudentOutcomeMapper implements RowMapper<StudentOutcome> {
 		public StudentOutcome mapRow(ResultSet rs, int rowNum) throws SQLException {
 			StudentOutcome outcome = new StudentOutcome();
-			outcome.setProgramId(rs.getInt("id"));
+			outcome.setProgramId(rs.getInt("outcome_id"));
 			outcome.setName(rs.getString("name"));
 			
 			return outcome;

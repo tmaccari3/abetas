@@ -74,10 +74,12 @@ public class TaskService implements Service<Task>{
 		ArrayList<Integer> outcomeIds = new ArrayList<Integer>();
 		
 		for(Program program : task.getPrograms()) {
+			System.out.println(program.getId());
 			programIds.add(program.getId());
 		}
 		for(StudentOutcome outcome : task.getOutcomes()) {
-			outcomeIds.add(outcome.getId());
+			System.out.println(outcome.getProgramId());
+			outcomeIds.add(outcome.getProgramId());
 		}
 		
 		return webTask;
