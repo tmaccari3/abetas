@@ -25,7 +25,11 @@ public interface ProgramDao {
 	
 	List<Program> getAllPrograms();
 	
+	List<Program> getActivePrograms();
+	
 	List<StudentOutcome> getAllOutcomesForProgram(int id);
+	
+	List<StudentOutcome> getActiveOutcomesForProgram(int id);
 	
 	StudentOutcome getOutcomeById(int id);
 }

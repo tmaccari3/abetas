@@ -28,6 +28,8 @@ public class Task {
 	
 	private List<File> files;
 	
+	private boolean submitted = false;
+	
 	private boolean complete = false;
 	
 	public Task() {
@@ -127,6 +129,14 @@ public class Task {
 
 	public void setFiles(List<File> files) {
 		this.files = files;
+	}
+	
+	public boolean isSubmitted() {
+		return submitted;
+	}
+
+	public void setSubmitted(boolean submitted) {
+		this.submitted = submitted;
 	}
 	
 	public String getFormattedDate() {

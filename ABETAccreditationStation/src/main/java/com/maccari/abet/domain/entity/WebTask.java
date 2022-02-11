@@ -28,6 +28,8 @@ public class WebTask {
 	
 	public WebTask() {
 		assignees = new ArrayList<String>();
+		programs = new ArrayList<Integer>();
+		outcomes = new ArrayList<Integer>();
 	}
 	
 	public WebTask(Task task) {
@@ -37,6 +39,7 @@ public class WebTask {
 		this.assignees = task.getAssignees();
 		this.fullPrograms = task.getPrograms();
 		this.fullOutcomes = task.getOutcomes();
+		this.setDescription(task.getDescription());
 	}
 
 	public int getId() {

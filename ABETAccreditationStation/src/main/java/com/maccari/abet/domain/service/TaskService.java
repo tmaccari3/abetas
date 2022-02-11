@@ -57,6 +57,7 @@ public class TaskService implements Service<Task>{
 	public Task webTaskToTask(WebTask webTask) {
 		Task task = new Task();
 		
+		task.setId(webTask.getId());
 		task.setTitle(webTask.getTitle());
 		task.setAssignees(webTask.getAssignees());
 		task.setDescription(webTask.getDescription());
@@ -74,13 +75,14 @@ public class TaskService implements Service<Task>{
 		ArrayList<Integer> outcomeIds = new ArrayList<Integer>();
 		
 		for(Program program : task.getPrograms()) {
-			System.out.println(program.getId());
 			programIds.add(program.getId());
 		}
 		for(StudentOutcome outcome : task.getOutcomes()) {
-			System.out.println(outcome.getProgramId());
 			outcomeIds.add(outcome.getProgramId());
 		}
+		
+		webTask.setOutcomes(outcomeIds);
+		webTask.setPrograms(programIds);
 		
 		return webTask;
 	}

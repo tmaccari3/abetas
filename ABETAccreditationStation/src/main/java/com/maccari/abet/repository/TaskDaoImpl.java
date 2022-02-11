@@ -48,13 +48,14 @@ public class TaskDaoImpl implements TaskDao {
 
 		try {
 			String SQL = "INSERT INTO task (coordinator, title, assign_date,"
-					+ "description, complete) VALUES (?, ?, ?, ?, ?) RETURNING id";
+					+ "description, submitted, complete) VALUES (?, ?, ?, ?, ?, ?) RETURNING id";
 
 			Instant instant = Instant.now();
 			Timestamp ts = instant != null ? Timestamp.from(instant) : null;
 
-			task.setId(jdbcTemplate.query(SQL, new IdMapper(), task.getCoordinator(), task.getTitle(),
-					ts.toLocalDateTime(), task.getDescription(), task.isComplete()).get(0));
+			task.setId(jdbcTemplate.query(SQL, new IdMapper(), task.getCoordinator(), 
+					task.getTitle(), ts.toLocalDateTime(), task.getDescription(),
+					task.isSubmitted(), task.isComplete()).get(0));
 
 			insertRelations(task);
 
@@ -94,18 +95,18 @@ public class TaskDaoImpl implements TaskDao {
 		System.out.println("ID: " + task.getId());
 		try {
 			String SQL = "UPDATE task set coordinator = ?, title = ?,"
-					+ " description = ?, complete = ? where id = ?";
+					+ " description = ?, submitted = ?, complete = ? where id = ?";
 			jdbcTemplate.update(SQL, task.getCoordinator(), task.getTitle(), 
-					task.getDescription(), task.isComplete(), 
+					task.getDescription(), task.isSubmitted(), task.isComplete(), 
 					task.getId());
 
 			SQL = "DELETE FROM assigned WHERE id = ?";
 			jdbcTemplate.update(SQL, task.getId());
 
-			SQL = "DELETE FROM task_program WHERE id = ?";
+			SQL = "DELETE FROM task_program WHERE task_id = ?";
 			jdbcTemplate.update(SQL, task.getId());
 			
-			SQL = "DELETE FROM task_outcome WHERE id = ?";
+			SQL = "DELETE FROM task_outcome WHERE task_id = ?";
 			jdbcTemplate.update(SQL, task.getId());
 
 			SQL = "DELETE FROM file WHERE task_id = ?";
@@ -227,6 +228,7 @@ public class TaskDaoImpl implements TaskDao {
 			task.setCoordinator(rs.getString("coordinator"));
 			task.setDescription(rs.getString("description"));
 			task.setAssignDate(rs.getObject("assign_date", Timestamp.class));
+			task.setSubmitted(rs.getBoolean("submitted"));
 			task.setComplete(rs.getBoolean("complete"));
 
 			try {
@@ -248,7 +250,6 @@ public class TaskDaoImpl implements TaskDao {
 			try {
 				String SQL = "SELECT * FROM task_outcome WHERE task_id = ?";
 				task.setOutcomes(jdbcTemplate.query(SQL, new StudentOutcomeMapper(), task.getId()));
-				System.out.println(task.getOutcomes());
 
 			} catch (EmptyResultDataAccessException e) {
 				task.setPrograms(null);

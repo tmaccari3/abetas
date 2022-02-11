@@ -22,6 +22,10 @@ public class ProgramService implements Service<Program> {
 	public List<Program> getAll() {
 		return programDao.getAllPrograms();
 	}
+	
+	public List<Program> getActivePrograms(){
+		return programDao.getActivePrograms();
+	}
 
 	@Override
 	public Program getById(int id) {
@@ -101,12 +105,20 @@ public class ProgramService implements Service<Program> {
 		task.setFullOutcomes(outcomes);
 	}
 	
-	public boolean checkOutcomes(List<Program> programs) {
+	public boolean checkOutcomes(List<Program> programs, List<StudentOutcome> outcomes) {
+		for(StudentOutcome outcome : outcomes) {
+			if(!isInProgram(programs, outcome)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	private boolean isInProgram(List<Program> programs, StudentOutcome outcome) {
 		for(Program program : programs) {
-			for(StudentOutcome outcome : program.getOutcomes()) {
-				if(outcome.getProgramId() != program.getId()) {
-					return true;
-				}
+			if(program.getId() == outcome.getProgramId()) {
+				return true;
 			}
 		}
 		

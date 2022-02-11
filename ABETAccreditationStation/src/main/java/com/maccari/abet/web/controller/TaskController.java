@@ -2,7 +2,6 @@ package com.maccari.abet.web.controller;
 
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -20,9 +19,7 @@ import org.springframework.web.servlet.HandlerMapping;
 
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.Task;
-import com.maccari.abet.domain.entity.User;
 import com.maccari.abet.domain.entity.WebTask;
-import com.maccari.abet.domain.entity.WebUser;
 import com.maccari.abet.domain.service.ProgramService;
 import com.maccari.abet.domain.service.TaskService;
 import com.maccari.abet.web.validation.TaskValidator;
@@ -87,7 +84,6 @@ public class TaskController {
 	    String mapping = (String) req.getAttribute(
                 HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
 	    
-	    System.out.println(webTask.getPrograms());
 	    if(mapping.contains("create")) {
 			return "task/create";
 	    }
@@ -103,7 +99,6 @@ public class TaskController {
 	    String mapping = (String) req.getAttribute(
                 HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
 	    
-	    System.out.println(webTask.getPrograms());
 	    if(mapping.contains("create")) {
 			return "task/create";
 	    }
@@ -117,14 +112,12 @@ public class TaskController {
 	public String addTask(Principal principal, @Valid WebTask webTask, 
 			BindingResult bindingResult, Model model, final HttpServletRequest req) {
 		taskValidator.validate(webTask, bindingResult);
-		System.out.println(webTask.getPrograms());
-		System.out.println(webTask.getOutcomes());
 		int invalidEmail = taskService.userExists(webTask.getAssignees());
 		if(invalidEmail >= 0) {
 			bindingResult.rejectValue("assignees", "task.assignees.invalid");
 		}
 		programService.fillPrograms(webTask);
-		if(programService.checkOutcomes(webTask.getFullPrograms())) {
+		if(programService.checkOutcomes(webTask.getFullPrograms(), webTask.getFullOutcomes())) {
 			bindingResult.rejectValue("programs", "task.programs.invalid");
 		}
 		
@@ -162,13 +155,6 @@ public class TaskController {
 	public String editTaskDetails(@RequestParam(value = "id", required = true)
 			int id, Model model) {
 		WebTask webTask = taskService.taskToWebTask(taskService.getById(id));
-		//why don't the program picks get autofilled
-		/*for(Program prog : taskService.getById(id).getPrograms()) {
-			System.out.println(prog);
-		}
-		for(Integer progId : webTask.getPrograms()) {
-			System.out.println(progId+", ");
-		}*/
 		model.addAttribute("webTask", webTask);
 		
 		return "task/edit";
@@ -178,14 +164,17 @@ public class TaskController {
 	public String editTask(Principal principal, @Valid WebTask webTask, 
 			BindingResult bindingResult, Model model) {
 		taskValidator.validate(webTask, bindingResult);
-		
 		int invalidEmail = taskService.userExists(webTask.getAssignees());
 		if(invalidEmail >= 0) {
 			bindingResult.rejectValue("assignees", "task.assignees.invalid");
 		}
+		programService.fillPrograms(webTask);
+		if(programService.checkOutcomes(webTask.getFullPrograms(), webTask.getFullOutcomes())) {
+			bindingResult.rejectValue("programs", "task.programs.invalid");
+		}
 		
 		if (bindingResult.hasErrors()) {
-			return "task/create";
+			return "task/edit";
 		}
 		
 		webTask.setCoordinator(principal.getName());
@@ -222,24 +211,24 @@ public class TaskController {
 	
 	@RequestMapping(value = "/complete")
 	public String completeTask(@RequestParam(value = "id", required = true)
-			int id, WebTask webTask, Model model) {
+			int id, Model model) {
 		model.addAttribute("task", taskService.getById(id));
 		
 		return "task/complete";
 	}
 	
 	@RequestMapping(value = "/complete", method = RequestMethod.POST, params = "submit")
-	public String submitCompletedTask(@Valid Task task, BindingResult bindingResult) {
+	public String submitCompletedTask() {
 		return "redirect:/task/index";
 	}
 	
 	@RequestMapping(value = "/complete", method = RequestMethod.POST, params = "cancel")
-	public String cancelCompletedTask(@Valid Task task, BindingResult bindingResult) {
+	public String cancelCompletedTask() {
 		return "redirect:/task/index";
 	}
 
 	@ModelAttribute("progTypes")
 	public ArrayList<Program> getPrograms() {
-		return (ArrayList<Program>) programService.getAll();
+		return (ArrayList<Program>) programService.getActivePrograms();
 	}
 }

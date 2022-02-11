@@ -180,6 +180,36 @@ public class ProgramDaoImpl implements ProgramDao {
 			return null;
 		}
 	}
+	
+	@Override
+	public List<Program> getActivePrograms() {
+		try {
+			String SQL = "SELECT * FROM program WHERE active = true";
+			ArrayList<Program> programs = (ArrayList<Program>) jdbcTemplate.query(
+					SQL, new ProgramMapper());
+			
+			for(Program program: programs) {
+				program.setOutcomes(getActiveOutcomesForProgram(program.getId()));
+			}
+			return programs;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<StudentOutcome> getActiveOutcomesForProgram(int id) {
+		try {
+			String SQL = "SELECT * FROM student_outcome WHERE prog_id = ? and active = true";
+			ArrayList<StudentOutcome> outcomes = (ArrayList<StudentOutcome>) jdbcTemplate.query(
+					SQL, new StudentOutcomeMapper(), id);
+			
+			return outcomes;
+		} catch (Exception e) {
+			System.out.println("Error in getting outcomes for program.");
+			return null;
+		}
+	}
 
 	@Override
 	public StudentOutcome getOutcomeById(int id) {
