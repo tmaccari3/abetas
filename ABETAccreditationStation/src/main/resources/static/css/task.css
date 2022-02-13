@@ -21,12 +21,30 @@
 	min-width: 400px;
 }
 
+.task-middle-container {
+	position: relative;
+	margin: auto;
+	width: 100%;
+}
+
 .task-index-container {
 	position: relative;
 	margin: auto;
 	vertical-align: middle;
 	padding: 20px;
 	min-width: 400px;
+}
+
+.task-program-container {
+	display: inline-block;
+	vertical-align: top;
+	width: 49%;
+}
+
+.task-file-container {
+	display: inline-block;
+	vertical-align: top;
+	width: 49%;
 }
 
 div.area-container {

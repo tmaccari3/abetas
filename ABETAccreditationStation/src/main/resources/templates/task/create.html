@@ -57,32 +57,59 @@
 				</tbody>
 			</table>
 			<br>
-			<div class="inline">
-				<div>
-					<h5>Program(s)</h5>
-					<label class="error" th:if="${#fields.hasErrors('programs')}"
-						th:errors="*{programs}">Program Error</label>
-					<ul>
-						<li th:each="aProg,rowIter : ${progTypes}"><input type="checkbox"
-							th:field="*{programs}" th:value="${aProg.id}" name="addProgram" 
-							onClick="disableChange(this)"/>
-							<!-- th:attr="onChange=|addProgram(${aProg.id}, this.id)|"
-							formnovalidate="formnovalidate"/>--> 
-							<label th:for="${#ids.prev('programs')}" th:text="${aProg.name}">Default
-								Program</label>
-								
-							<label class="error" th:if="${#fields.hasErrors('outcomes')}"
-								th:errors="*{outcomes}">Outcome Error</label>
-							<ul>
-								<li th:name="${'programs' + (rowIter.index + 1)}" th:each="outcome : ${aProg.outcomes}">
-									<input type="checkbox" th:field="*{outcomes}"
-										th:value="${outcome.id}" disabled/> 
-									<label th:for="${#ids.prev('outcomes')}" 
-										th:text="${outcome.name}">Default
-										Outcome</label></li>
-							</ul>
-						</li>
-					</ul>
+			<div class="task-middle-container">
+				<div class="task-program-container">
+					<div>
+						<h5>Program(s)</h5>
+						<label class="error" th:if="${#fields.hasErrors('programs')}"
+							th:errors="*{programs}">Program Error</label>
+						<ul>
+							<li th:each="aProg,rowIter : ${progTypes}"><input
+								type="checkbox" th:field="*{programs}" th:value="${aProg.id}"
+								name="addProgram" onClick="disableChange(this)" /> <!-- th:attr="onChange=|addProgram(${aProg.id}, this.id)|"
+							formnovalidate="formnovalidate"/>--> <label
+								th:for="${#ids.prev('programs')}" th:text="${aProg.name}">Default
+									Program</label> <label class="error"
+								th:if="${#fields.hasErrors('outcomes')}" th:errors="*{outcomes}">Outcome
+									Error</label>
+								<ul>
+									<li th:name="${'programs' + (rowIter.index + 1)}"
+										th:each="outcome : ${aProg.outcomes}"><input
+										type="checkbox" th:field="*{outcomes}"
+										th:value="${outcome.id}" disabled /> <label
+										th:for="${#ids.prev('outcomes')}" th:text="${outcome.name}">Default
+											Outcome</label></li>
+								</ul></li>
+						</ul>
+					</div>
+				</div>
+				<div class="task-file-container">
+					<h5>File(s)</h5>
+					<table>
+						<tr>
+							<td>
+								<p th:text="${message}" th:if="${message ne null}"></p>
+								<p th:text="${file}" th:if="${file ne null}"></p>
+							</td>
+						</tr>
+						<tr>
+							<td><input type="file" th:field="*{uploadedFiles}" /></td>
+						</tr>
+						<tr>
+							<td><input type="file" th:field="*{uploadedFiles}" /></td>
+						</tr>
+						<tr>
+							<td><input type="file" th:field="*{uploadedFiles}" /></td>
+						</tr>
+						<tr>
+							<td>
+								<button type="submit" name="upload" value="download"
+									formnovalidate="formnovalidate">Upload File</button>
+								<button type="submit" name="upload" value="cancel"
+									formnovalidate="formnovalidate">Cancel upload</button>
+							</td>
+						</tr>
+					</table>
 				</div>
 			</div>
 			<br>
@@ -128,21 +155,8 @@
 				</tbody>
 			</table> -->
 			<br>
-			<div>
-				<p th:text="${message}" th:if="${message ne null}"></p>
-				<p th:text="${file}" th:if="${file ne null}"></p>
-				<input type="file" th:field="*{uploadedFiles}"/>
-				<input type="file" th:field="*{uploadedFiles}"/>
-				<!-- <input type="file" name="files"/>
-				<input type="file" name="files"/>
-				<input type="file" name="files"/>-->
-				<button type="submit" name="upload" value="download" 
-					formnovalidate="formnovalidate">Upload File</button>
-				<button type="submit" name="upload" value="cancel" 
-					formnovalidate="formnovalidate">Cancel upload</button>
-				<div th:each="file : ${webTask.uploadedFiles}">
-					<p th:text="${file.getName()}"></p>
-				</div>
+			<div th:each="file : ${webTask.uploadedFiles}">
+				<p th:text="${file.getName()}"></p>
 			</div>
 			<br>
 			<div style="float: right" class="inline">
