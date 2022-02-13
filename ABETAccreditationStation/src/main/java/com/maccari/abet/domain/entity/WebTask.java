@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class WebTask {
 	private int id;
 
@@ -22,6 +24,8 @@ public class WebTask {
 	private List<Program> fullPrograms;
 
 	private List<StudentOutcome> fullOutcomes;
+	
+	private List<MultipartFile> uploadedFiles;
 
 	@NotEmpty(message = "*required")
 	private String description;
@@ -30,6 +34,7 @@ public class WebTask {
 		assignees = new ArrayList<String>();
 		programs = new ArrayList<Integer>();
 		outcomes = new ArrayList<Integer>();
+		uploadedFiles = new ArrayList<MultipartFile>();
 	}
 	
 	public WebTask(Task task) {
@@ -112,6 +117,14 @@ public class WebTask {
 
 	public void setFullOutcomes(List<StudentOutcome> fullOutcomes) {
 		this.fullOutcomes = fullOutcomes;
+	}
+
+	public List<MultipartFile> getUploadedFiles() {
+		return uploadedFiles;
+	}
+
+	public void setUploadedFiles(List<MultipartFile> uploadedFiles) {
+		this.uploadedFiles = uploadedFiles;
 	}
 
 	//for debugging

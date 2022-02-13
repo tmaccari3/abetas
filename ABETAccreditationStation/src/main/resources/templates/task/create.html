@@ -12,7 +12,7 @@
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<form action="#" id="task" th:action="@{/task/create}"
-		th:object="${webTask}" method="post">
+		th:object="${webTask}" method="post" enctype="multipart/form-data">
 		<div class="task-container">
 			<h3 style="text-align: center">Create a Task</h3>
 			<br>
@@ -93,6 +93,56 @@
 				<textarea placeholder="Enter description..."
 					th:field="*{description}" rows="4" cols="50" maxlength="255">
            					Enter Program Outcome...</textarea>
+			</div>
+			<br>
+			<h5>File(s)</h5>
+			<label class="error" th:if="${#fields.hasErrors('uploadedFiles')}"
+				th:errors="*{uploadedFiles}">Files Error</label>
+			<p th:text="${message}" th:if="${message ne null}"></p>
+			<p th:text="${file}" th:if="${file ne null}"></p>
+			<!-- <input type="hidden" th:field="*{uploadedFiles}" th:value="${uploadedFiles}"></input> -->
+			<!-- <table>
+				<thead>
+					<tr>
+						<th>File</th>
+						<th></th>
+						<th class="create">
+							<button class="abetas-button" type="submit" name="addFile"
+								formnovalidate="formnovalidate">
+								<span class="fa fa-plus"></span> Add File
+							</button>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="file,rowIter : *{uploadedFiles}">
+						<td th:text="${rowIter.index + 1}" /></td>
+						<td><input type="file" name="files"/></td>
+						<td class="create">
+							<button class="abetas-button" type="submit" name="removeFile"
+								th:value="${rowIter.index}" formnovalidate="formnovalidate">
+								<span class="fa fa-minus"></span> Remove
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table> -->
+			<br>
+			<div>
+				<p th:text="${message}" th:if="${message ne null}"></p>
+				<p th:text="${file}" th:if="${file ne null}"></p>
+				<input type="file" th:field="*{uploadedFiles}"/>
+				<input type="file" th:field="*{uploadedFiles}"/>
+				<!-- <input type="file" name="files"/>
+				<input type="file" name="files"/>
+				<input type="file" name="files"/>-->
+				<button type="submit" name="upload" value="download" 
+					formnovalidate="formnovalidate">Upload File</button>
+				<button type="submit" name="upload" value="cancel" 
+					formnovalidate="formnovalidate">Cancel upload</button>
+				<div th:each="file : ${webTask.uploadedFiles}">
+					<p th:text="${file.getName()}"></p>
+				</div>
 			</div>
 			<br>
 			<div style="float: right" class="inline">

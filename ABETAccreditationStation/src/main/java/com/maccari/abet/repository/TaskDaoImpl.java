@@ -83,8 +83,8 @@ public class TaskDaoImpl implements TaskDao {
 			jdbcTemplate.update(SQL, task.getId(), outcome.getId(), outcome.getName());
 		}
 
-		SQL = "INSERT INTO file (task_id) VALUES (?)";
-		jdbcTemplate.update(SQL, task.getId());
+		/*SQL = "INSERT INTO task_file (task_id) VALUES (?)";
+		jdbcTemplate.update(SQL, task.getId());*/
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class TaskDaoImpl implements TaskDao {
 			SQL = "DELETE FROM task_outcome WHERE task_id = ?";
 			jdbcTemplate.update(SQL, task.getId());
 
-			SQL = "DELETE FROM file WHERE task_id = ?";
+			SQL = "DELETE FROM task_file WHERE task_id = ?";
 			jdbcTemplate.update(SQL, task.getId());
 
 			insertRelations(task);
@@ -255,13 +255,13 @@ public class TaskDaoImpl implements TaskDao {
 				task.setPrograms(null);
 			}
 			
-			try {
-				String SQL = "SELECT * FROM file WHERE task_id = ?";
+			/*try {
+				String SQL = "SELECT * FROM file WHERE id = ?";
 				task.setFiles(jdbcTemplate.query(SQL, new FileMapper(), task.getId()));
 
 			} catch (EmptyResultDataAccessException e) {
 				task.setFiles(null);
-			}
+			}*/
 
 			return task;
 		}
@@ -284,7 +284,11 @@ public class TaskDaoImpl implements TaskDao {
 		public File mapRow(ResultSet rs, int rowNum) throws SQLException {
 			File file = new File();
 			file.setId(rs.getInt("id"));
-			file.setTaskId(rs.getInt("task_id"));
+			file.setFileName(rs.getString("filename"));
+			file.setFileType(rs.getString("filetype"));
+			file.setFileSize(rs.getLong("fileSize"));
+			file.setAuthor(rs.getString("author"));
+			file.setData(rs.getBytes("data"));
 
 			return file;
 		}

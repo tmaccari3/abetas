@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.HandlerMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.Task;
@@ -48,7 +50,7 @@ public class TaskController {
 		return "task/create";
 	}
 
-	@RequestMapping(value = {"/create", "/edit"}, params = { "addRow" })
+	@RequestMapping(value = {"/create", "/edit"}, params = "addRow")
 	public String addAssignee(final WebTask webTask, final BindingResult bindingResult,
 			final HttpServletRequest req) {
 		webTask.getAssignees().add("");
@@ -63,7 +65,7 @@ public class TaskController {
 	    }
 	}
 
-	@RequestMapping(value = {"/create", "/edit"}, params = { "removeRow" })
+	@RequestMapping(value = {"/create", "/edit"}, params = "removeRow")
 	public String removeAssignee(final WebTask webTask, final HttpServletRequest req) {
 		final Integer rowId = Integer.valueOf(req.getParameter("removeRow"));
 		webTask.getAssignees().remove(rowId.intValue());
@@ -78,34 +80,12 @@ public class TaskController {
 	    }
 	}
 	
-	@RequestMapping(value = {"/create", "/edit"}, params = { "addProgram" })
-	public String addProgram(@RequestParam(value = "addProgram", required = true) 
-		int id, final WebTask webTask, final HttpServletRequest req) {
-	    String mapping = (String) req.getAttribute(
-                HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
-	    
-	    if(mapping.contains("create")) {
-			return "task/create";
-	    }
-
-	    else {
-	    	return "task/edit";
-	    }
-	}
-	
-	@RequestMapping(value = {"/create", "/edit"}, params = { "removeProgram" })
-	public String removeProgram(@RequestParam(value = "removeProgram", required = true) 
-		int id, final WebTask webTask, final HttpServletRequest req) {
-	    String mapping = (String) req.getAttribute(
-                HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
-	    
-	    if(mapping.contains("create")) {
-			return "task/create";
-	    }
-
-	    else {
-	    	return "task/edit";
-	    }
+	@RequestMapping(value = "/create", params = "upload")
+	public String uploadFile(final WebTask webTask) {
+		
+		System.out.println(webTask.getUploadedFiles());
+		
+		return "task/create";
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)

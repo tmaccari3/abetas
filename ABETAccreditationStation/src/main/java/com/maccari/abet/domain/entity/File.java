@@ -1,8 +1,8 @@
 package com.maccari.abet.domain.entity;
 
 public class File {
+	
 	private int id;
-	private int taskId;
 	private String fileName;
 	private String author;
 	private String fileType;
@@ -19,14 +19,6 @@ public class File {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-	
-	public int getTaskId() {
-		return taskId;
-	}
-
-	public void setTaskId(int taskId) {
-		this.taskId = taskId;
 	}
 
 	public String getFileName() {
