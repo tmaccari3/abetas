@@ -22,41 +22,51 @@
 				</div>
 			</div>
 			<br>
-					<div class="task-details">
-			<div class="task-assignees">
-				<div class="task-title">
-					<h6>Assignee List</h6>
+			<div class="task-details">
+				<div class="task-assignees">
+					<div class="task-title">
+						<h6>Assignee List</h6>
+					</div>
+					<div th:each="assignee : *{task.assignees}">
+						<p th:text="${assignee}"></p>
+					</div>
 				</div>
-				<div th:each="assignee : *{task.assignees}">
-					<p th:text="${assignee}"></p>
-				</div>
-			</div>
-			<div class="task-description">
-				<div class="task-title">
-					<h6>Description:</h6>
-				</div>
-				<p th:text="${task.description}"></p>
-			</div>
-		</div>
-		<br>
-		<div class="task-details">
-			<div class="task-programs">
-				<div class="task-title">
-					<h6>Program(s)</h6>
-				</div>
-				<div th:each="program : *{task.programs}">
-					<p th:text="${program.name}"></p>
+				<div class="task-description">
+					<div class="task-title">
+						<h6>Description:</h6>
+					</div>
+					<p th:text="${task.description}"></p>
 				</div>
 			</div>
-			<div class="task-outcome">
-				<div class="task-title">
-					<h6>Student Outcome:</h6>
+			<br>
+			<div class="task-details">
+				<div class="task-programs">
+					<div class="task-title">
+						<h6>Program(s)</h6>
+					</div>
+					<div th:each="program : *{task.programs}">
+						<p th:text="${program.name}"></p>
+					</div>
 				</div>
-				<div th:each="outcome : *{task.outcomes}">
-					<p th:text="${outcome.name}"></p>
+				<div class="task-outcome">
+					<div class="task-title">
+						<h6>Student Outcome:</h6>
+					</div>
+					<div th:each="outcome : *{task.outcomes}">
+						<p th:text="${outcome.name}"></p>
+					</div>
 				</div>
 			</div>
-		</div>
+			<div class="task-details">
+				<div class="task-file">
+					<div class="task-title">
+						<h6>File(s):</h6>
+					</div>
+					<p th:text="'Download file:'">Download file</p>
+					<a th:href="@{/download/} + ${task.file.id}"
+						th:text="${task.file.fileName}">file</a>
+				</div>
+			</div>
 			<br>
 			<div style="float: right" class="inline">
 				<button class="abetas-button" type="submit" name="cancel"

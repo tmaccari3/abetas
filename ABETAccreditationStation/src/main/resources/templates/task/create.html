@@ -66,11 +66,10 @@
 						<ul>
 							<li th:each="aProg,rowIter : ${progTypes}"><input
 								type="checkbox" th:field="*{programs}" th:value="${aProg.id}"
-								name="addProgram" onClick="disableChange(this)" /> <!-- th:attr="onChange=|addProgram(${aProg.id}, this.id)|"
-							formnovalidate="formnovalidate"/>--> <label
-								th:for="${#ids.prev('programs')}" th:text="${aProg.name}">Default
-									Program</label> <label class="error"
-								th:if="${#fields.hasErrors('outcomes')}" th:errors="*{outcomes}">Outcome
+								name="addProgram" onClick="disableChange(this)" /> 
+								<label th:for="${#ids.prev('programs')}" th:text="${aProg.name}">Default
+									Program</label> 
+								<label class="error" th:if="${#fields.hasErrors('outcomes')}" th:errors="*{outcomes}">Outcome
 									Error</label>
 								<ul>
 									<li th:name="${'programs' + (rowIter.index + 1)}"
@@ -84,29 +83,28 @@
 					</div>
 				</div>
 				<div class="task-file-container">
-					<h5>File(s)</h5>
+					<h5>Task File</h5>
+					<label class="error" th:if="${#fields.hasErrors('uploadedFile')}" th:errors="*{uploadedFile}">File
+						Error</label>
 					<table>
 						<tr>
+							<td style="border-bottom: none"><input type="file" name="file"/></td>
+						</tr>
+						<tr>
 							<td>
-								<p th:text="${message}" th:if="${message ne null}"></p>
-								<p th:text="${file}" th:if="${file ne null}"></p>
+								<button class="abetas-button" type="submit" name="upload" value="download"
+									formnovalidate="formnovalidate">Upload File</button>
+								<button class="abetas-button" type="submit" name="upload" value="cancel"
+									formnovalidate="formnovalidate">Cancel upload</button>
 							</td>
 						</tr>
 						<tr>
-							<td><input type="file" th:field="*{uploadedFiles}" /></td>
-						</tr>
-						<tr>
-							<td><input type="file" th:field="*{uploadedFiles}" /></td>
-						</tr>
-						<tr>
-							<td><input type="file" th:field="*{uploadedFiles}" /></td>
-						</tr>
-						<tr>
-							<td>
-								<button type="submit" name="upload" value="download"
-									formnovalidate="formnovalidate">Upload File</button>
-								<button type="submit" name="upload" value="cancel"
-									formnovalidate="formnovalidate">Cancel upload</button>
+							<td th:if="${uploadedFile ne null}">
+								<p th:text="${'Submitted file: ' + uploadedFile.getFileName()}"></p>
+							</td>
+							<td th:if="${uploadedFile == null}">
+								<p th:text="${message}" th:if="${message ne null}"></p>
+								<p th:text="${file}" th:if="${file ne null}"></p>
 							</td>
 						</tr>
 					</table>
@@ -120,43 +118,6 @@
 				<textarea placeholder="Enter description..."
 					th:field="*{description}" rows="4" cols="50" maxlength="255">
            					Enter Program Outcome...</textarea>
-			</div>
-			<br>
-			<h5>File(s)</h5>
-			<label class="error" th:if="${#fields.hasErrors('uploadedFiles')}"
-				th:errors="*{uploadedFiles}">Files Error</label>
-			<p th:text="${message}" th:if="${message ne null}"></p>
-			<p th:text="${file}" th:if="${file ne null}"></p>
-			<!-- <input type="hidden" th:field="*{uploadedFiles}" th:value="${uploadedFiles}"></input> -->
-			<!-- <table>
-				<thead>
-					<tr>
-						<th>File</th>
-						<th></th>
-						<th class="create">
-							<button class="abetas-button" type="submit" name="addFile"
-								formnovalidate="formnovalidate">
-								<span class="fa fa-plus"></span> Add File
-							</button>
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="file,rowIter : *{uploadedFiles}">
-						<td th:text="${rowIter.index + 1}" /></td>
-						<td><input type="file" name="files"/></td>
-						<td class="create">
-							<button class="abetas-button" type="submit" name="removeFile"
-								th:value="${rowIter.index}" formnovalidate="formnovalidate">
-								<span class="fa fa-minus"></span> Remove
-							</button>
-						</td>
-					</tr>
-				</tbody>
-			</table> -->
-			<br>
-			<div th:each="file : ${webTask.uploadedFiles}">
-				<p th:text="${file.getName()}"></p>
 			</div>
 			<br>
 			<div style="float: right" class="inline">

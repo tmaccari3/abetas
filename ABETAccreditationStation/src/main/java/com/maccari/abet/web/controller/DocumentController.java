@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/doc")
 public class DocumentController {
 	@GetMapping(value = "/index")
-	public String viewDocs() {
+	public String viewDocuments() {
 		return "documents/index";
 	}
 	
 	@GetMapping(value = "/create")
-	public String createDocs() {
+	public String createDocument() {
 		return "documents/create";
 	}
 }

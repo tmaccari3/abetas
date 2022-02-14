@@ -64,6 +64,7 @@ public class TaskService implements Service<Task>{
 		task.setCoordinator(webTask.getCoordinator());
 		task.setPrograms(webTask.getFullPrograms());
 		task.setOutcomes(webTask.getFullOutcomes());
+		task.setFile(webTask.getUploadedFile());
 		
 		return task;
 	}

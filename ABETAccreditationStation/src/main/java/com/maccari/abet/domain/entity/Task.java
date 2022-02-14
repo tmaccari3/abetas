@@ -26,7 +26,7 @@ public class Task {
 	
 	private Timestamp assignDate;
 	
-	private List<File> files;
+	private File file;
 	
 	private boolean submitted = false;
 	
@@ -123,14 +123,14 @@ public class Task {
 		this.assignDate = assignDate;
 	}
 	
-	public List<File> getFiles() {
-		return files;
+	public synchronized File getFile() {
+		return file;
 	}
 
-	public void setFiles(List<File> files) {
-		this.files = files;
+	public synchronized void setFile(File file) {
+		this.file = file;
 	}
-	
+
 	public boolean isSubmitted() {
 		return submitted;
 	}

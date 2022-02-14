@@ -56,8 +56,8 @@ public class TaskDaoImpl implements TaskDao {
 			task.setId(jdbcTemplate.query(SQL, new IdMapper(), task.getCoordinator(), 
 					task.getTitle(), ts.toLocalDateTime(), task.getDescription(),
 					task.isSubmitted(), task.isComplete()).get(0));
-
-			insertRelations(task);
+			
+			insertRelations(task, insertFile(task));
 
 			transactionManager.commit(status);
 		} catch (Exception e) {
@@ -67,7 +67,7 @@ public class TaskDaoImpl implements TaskDao {
 		}
 	}
 
-	public void insertRelations(Task task) {
+	public void insertRelations(Task task, int fileId) {
 		String SQL = "INSERT INTO assigned (id, assignee) VALUES (?, ?)";
 		for (String assignee : task.getAssignees()) {
 			jdbcTemplate.update(SQL, task.getId(), assignee);
@@ -83,8 +83,28 @@ public class TaskDaoImpl implements TaskDao {
 			jdbcTemplate.update(SQL, task.getId(), outcome.getId(), outcome.getName());
 		}
 
-		/*SQL = "INSERT INTO task_file (task_id) VALUES (?)";
-		jdbcTemplate.update(SQL, task.getId());*/
+		SQL = "INSERT INTO task_file (file_id, task_id) VALUES (?, ?)";
+		jdbcTemplate.update(SQL, fileId, task.getId());
+	}
+	
+	public int insertFile(Task task) {
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+		TransactionStatus status = transactionManager.getTransaction(def);
+		try {
+			String SQL = "INSERT INTO file (file_name, file_type, file_size, author, data)"
+					+ " VALUES (?, ?, ?, ?, ?) RETURNING id";
+			File file = task.getFile();
+			int fileId = jdbcTemplate.query(SQL, new IdMapper(), file.getFileName(),
+					file.getFileType(), file.getFileSize(), file.getAuthor(),
+					file.getData()).get(0);
+			
+			return fileId;
+		} catch (Exception e) {
+			System.out.println("Error in updating task file record, rolling back");
+			transactionManager.rollback(status);
+			throw e;
+		}
 	}
 
 	@Override
@@ -92,7 +112,7 @@ public class TaskDaoImpl implements TaskDao {
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
 		TransactionStatus status = transactionManager.getTransaction(def);
-		System.out.println("ID: " + task.getId());
+		
 		try {
 			String SQL = "UPDATE task set coordinator = ?, title = ?,"
 					+ " description = ?, submitted = ?, complete = ? where id = ?";
@@ -112,7 +132,7 @@ public class TaskDaoImpl implements TaskDao {
 			SQL = "DELETE FROM task_file WHERE task_id = ?";
 			jdbcTemplate.update(SQL, task.getId());
 
-			insertRelations(task);
+			insertRelations(task, insertFile(task));
 
 			transactionManager.commit(status);
 
@@ -255,13 +275,18 @@ public class TaskDaoImpl implements TaskDao {
 				task.setPrograms(null);
 			}
 			
-			/*try {
-				String SQL = "SELECT * FROM file WHERE id = ?";
-				task.setFiles(jdbcTemplate.query(SQL, new FileMapper(), task.getId()));
+			try {
+				String SQL = "SELECT * FROM task_file WHERE task_id = ?";
+				int fileId = jdbcTemplate.query(SQL, new IdMapper(), task.getId()).get(0);
+				
+				File file = new File();
+				file.setId(fileId);
+				task.setFile(file);
 
 			} catch (EmptyResultDataAccessException e) {
-				task.setFiles(null);
-			}*/
+				task.setPrograms(null);
+			}
+
 
 			return task;
 		}

@@ -120,6 +120,10 @@ input[type=email], input[type=text], input[type=password] {
 	min-width: 80px;
 }
 
+input[type=file] {
+	max-width: 250px;
+}
+
 .error { 
 	color: red;
 	font-weight: italic;

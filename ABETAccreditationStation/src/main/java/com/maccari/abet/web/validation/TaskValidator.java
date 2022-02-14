@@ -18,16 +18,20 @@ public class TaskValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		WebTask task = (WebTask) target;
 
-		if (task.getPrograms().isEmpty()) {
+		if(task.getPrograms().isEmpty()) {
 			errors.rejectValue("programs", "task.program.empty");
 		}
 		
-		if (task.getOutcomes().isEmpty() && !task.getPrograms().isEmpty()) {
+		if(task.getOutcomes().isEmpty() && !task.getPrograms().isEmpty()) {
 			errors.rejectValue("programs", "task.outcome.empty");
 		}
 		
-		if (task.getAssignees().isEmpty()) {
+		if(task.getAssignees().isEmpty()) {
 			errors.rejectValue("assignees", "task.assignees.empty");
+		}
+		
+		if(task.getUploadedFile() == null) {
+			errors.rejectValue("uploadedFile", "task.file.null");
 		}
 	}
 }

@@ -59,11 +59,10 @@
 		<div class="task-details">
 			<div class="task-file">
 				<div class="task-title">
-					<h6>File(s) (stubbed):</h6>
+					<h6>File(s):</h6>
 				</div>
-				<div th:each="file : *{task.files}">
-					<p th:text="${file.id}"></p>
-				</div>
+				<p th:text="'Download file:'">Download file</p>
+				<a th:href="@{/download/} + ${task.file.id}" th:text="${task.file.fileName}">file</a>
 			</div>
 		</div>
 		<br>

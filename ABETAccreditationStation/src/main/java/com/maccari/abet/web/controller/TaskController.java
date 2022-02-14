@@ -1,26 +1,42 @@
 package com.maccari.abet.web.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.HandlerMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.Task;
 import com.maccari.abet.domain.entity.WebTask;
+import com.maccari.abet.domain.service.FileService;
 import com.maccari.abet.domain.service.ProgramService;
 import com.maccari.abet.domain.service.TaskService;
+import com.maccari.abet.exception.IllegalDownloadException;
+import com.maccari.abet.exception.StorageFileNotFoundException;
 import com.maccari.abet.web.validation.TaskValidator;
 
 @Controller
@@ -28,6 +44,9 @@ import com.maccari.abet.web.validation.TaskValidator;
 public class TaskController {
 	@Autowired
 	private TaskService taskService;
+	
+	@Autowired
+	private FileService fileService;
 	
 	@Autowired
 	private ProgramService programService;
@@ -77,17 +96,47 @@ public class TaskController {
 	    }
 	}
 	
-	@RequestMapping(value = "/create", params = "upload")
-	public String uploadFile(final WebTask webTask) {
+	@RequestMapping(value = {"/create", "/edit"}, params = "upload")
+	public String uploadFile(final WebTask webTask, @RequestParam("file") MultipartFile file, 
+			RedirectAttributes attributes, String upload, Model model, HttpSession session,
+			final HttpServletRequest req) {
+		if (file.isEmpty() || upload.equals("cancel")) { // not file selected or cancelled. 
+			attributes.addFlashAttribute("message", "Please select a file.");
+			session.removeAttribute("UPLOADED_FILE");
+			model.addAttribute("uploadedFile", null);
+			
+			return "task/create";
+		}
 		
-		System.out.println(webTask.getUploadedFiles());
+		File uploadedFile = new File();
+		try {
+			uploadedFile.setFileName(StringUtils.cleanPath(file.getOriginalFilename()));
+			uploadedFile.setFileType(file.getContentType());
+			uploadedFile.setFileSize(file.getSize());
+			uploadedFile.setData(file.getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
-		return "task/create";
+		session.setAttribute("UPLOADED_FILE", uploadedFile);
+		model.addAttribute("uploadedFile", uploadedFile);
+		
+	    String mapping = (String) req.getAttribute(
+                HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
+	    if(mapping.contains("create")) {
+			return "task/create";
+	    }
+
+	    else {
+	    	return "task/edit";
+	    }
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public String addTask(Principal principal, @Valid WebTask webTask, 
-			BindingResult bindingResult, Model model, final HttpServletRequest req) {
+			BindingResult bindingResult, Model model, final HttpServletRequest req,
+			HttpSession session) {
+		webTask.setUploadedFile((File) session.getAttribute("UPLOADED_FILE"));
 		taskValidator.validate(webTask, bindingResult);
 		int invalidEmail = taskService.userExists(webTask.getAssignees());
 		if(invalidEmail >= 0) {
@@ -104,6 +153,8 @@ public class TaskController {
 		
 		webTask.setCoordinator(principal.getName());
 		taskService.create(taskService.webTaskToTask(webTask));
+		
+		session.removeAttribute("UPLOADED_FILE");
 
 		return "redirect:/";
 	}
@@ -120,14 +171,6 @@ public class TaskController {
 		return "task/viewCreated";
 	}
 	
-	@GetMapping("/details")
-	public String viewTaskDetails(@RequestParam(value = "id", required = true)
-			int id, Model model) {
-		model.addAttribute("task", taskService.getById(id));
-		
-		return "task/details";
-	}
-	
 	@GetMapping("/edit")
 	public String editTaskDetails(@RequestParam(value = "id", required = true)
 			int id, Model model) {
@@ -139,7 +182,8 @@ public class TaskController {
 	
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	public String editTask(Principal principal, @Valid WebTask webTask, 
-			BindingResult bindingResult, Model model) {
+			BindingResult bindingResult, Model model, HttpSession session) {
+		webTask.setUploadedFile((File) session.getAttribute("UPLOADED_FILE"));
 		taskValidator.validate(webTask, bindingResult);
 		int invalidEmail = taskService.userExists(webTask.getAssignees());
 		if(invalidEmail >= 0) {
@@ -156,6 +200,8 @@ public class TaskController {
 		
 		webTask.setCoordinator(principal.getName());
 		taskService.update(taskService.webTaskToTask(webTask));
+		
+		session.removeAttribute("UPLOADED_FILE");
 
 		return "redirect:/task/viewCreated";
 	}
@@ -168,7 +214,9 @@ public class TaskController {
 	@RequestMapping(value = "/delete")
 	public String displayTaskForRemoval(@RequestParam(value = "id", required = true) 
 		int id, Model model) {
-		model.addAttribute("task", taskService.getById(id));
+		Task task = taskService.getById(id);
+		task.setFile(fileService.getById(task.getFile().getId()));
+		model.addAttribute("task", task);
 		
 		return "task/delete";
 	}
@@ -186,10 +234,22 @@ public class TaskController {
 		return "redirect:/task/viewCreated";
 	}
 	
+	@GetMapping("/details")
+	public String viewTaskDetails(@RequestParam(value = "id", required = true)
+			int id, Model model) {
+		Task task = taskService.getById(id);
+		task.setFile(fileService.getById(task.getFile().getId()));
+		model.addAttribute("task", task);
+		
+		return "task/details";
+	}
+	
 	@RequestMapping(value = "/complete")
 	public String completeTask(@RequestParam(value = "id", required = true)
 			int id, Model model) {
-		model.addAttribute("task", taskService.getById(id));
+		Task task = taskService.getById(id);
+		task.setFile(fileService.getById(task.getFile().getId()));
+		model.addAttribute("task", task);
 		
 		return "task/complete";
 	}
@@ -207,5 +267,10 @@ public class TaskController {
 	@ModelAttribute("progTypes")
 	public ArrayList<Program> getPrograms() {
 		return (ArrayList<Program>) programService.getActivePrograms();
+	}
+	
+	@ModelAttribute("uploadedFile")
+	public File getUploadedFiles(HttpSession session) {
+		return (File) session.getAttribute("UPLOADED_FILE");
 	}
 }

@@ -12,7 +12,7 @@
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<form action="#" th:action="@{/task/edit}" th:object="${webTask}"
-		method="post">
+		method="post" enctype="multipart/form-data">
 		<div class="task-container">
 			<input type="hidden" th:field="*{id}" th:value="${id}"></input>
 			<h3 style="text-align: center">Edit Task</h3>
@@ -58,7 +58,7 @@
 				</tbody>
 			</table>
 			<br>
-						<div class="inline">
+			<div class="task-program-container">
 				<div>
 					<h5>Program(s)</h5>
 					<label class="error" th:if="${#fields.hasErrors('programs')}"
@@ -86,6 +86,33 @@
 					</ul>
 				</div>
 			</div>
+			<div class="task-file-container">
+					<h5>Task File</h5>
+					<label class="error" th:if="${#fields.hasErrors('uploadedFile')}" th:errors="*{uploadedFile}">File
+						Error</label>
+					<table>
+						<tr>
+							<td style="border-bottom: none"><input type="file" name="file"/></td>
+						</tr>
+						<tr>
+							<td>
+								<button class="abetas-button" type="submit" name="upload" value="download"
+									formnovalidate="formnovalidate">Upload File</button>
+								<button class="abetas-button" type="submit" name="upload" value="cancel"
+									formnovalidate="formnovalidate">Cancel upload</button>
+							</td>
+						</tr>
+						<tr>
+							<td th:if="${uploadedFile ne null}">
+								<p th:text="${'Submitted file: ' + uploadedFile.getFileName()}"></p>
+							</td>
+							<td th:if="${uploadedFile == null}">
+								<p th:text="${message}" th:if="${message ne null}"></p>
+								<p th:text="${file}" th:if="${file ne null}"></p>
+							</td>
+						</tr>
+					</table>
+				</div>
 			<br>
 			<div class="area-container">
 				<h6>Task Description:</h6>

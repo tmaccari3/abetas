@@ -1,7 +1,9 @@
 package com.maccari.abet.domain.entity;
 
-public class File {
-	
+import java.io.Serializable;
+
+public class File implements Serializable {
+	private static final long serialVersionUID = 129348938L;
 	private int id;
 	private String fileName;
 	private String author;
