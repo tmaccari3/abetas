@@ -62,6 +62,18 @@
 	border-bottom: 1px solid #bfbfbf;
 }
 
+.task-title-main {
+	display: inline-block;
+	vertical-align: top;
+	width: 49%;
+}
+
+.task-due {
+	display: inline-block;
+	vertical-align: top;
+	width: 49%;
+}
+
 .task-assignees {
 	display: inline-block;
 	vertical-align: top;

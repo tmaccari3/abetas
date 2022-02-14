@@ -30,8 +30,8 @@ public class TaskValidator implements Validator {
 			errors.rejectValue("assignees", "task.assignees.empty");
 		}
 		
-		if(task.getUploadedFile() == null) {
+		/*if(task.getUploadedFile() == null) {
 			errors.rejectValue("uploadedFile", "file.null");
-		}
+		}*/
 	}
 }

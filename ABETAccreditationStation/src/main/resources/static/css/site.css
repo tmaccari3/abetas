@@ -118,6 +118,7 @@ body {
 }
 
 .title-container {
+	display: inline-block;
 	font-weight: bold;
 }
 

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -48,14 +49,15 @@ public class TaskDaoImpl implements TaskDao {
 
 		try {
 			String SQL = "INSERT INTO task (coordinator, title, assign_date,"
-					+ "description, submitted, complete) VALUES (?, ?, ?, ?, ?, ?) RETURNING id";
+					+ "description, due_date, submitted, complete) VALUES (?, ?, "
+					+ "?, ?, ?, ?, ?) RETURNING id";
 
 			Instant instant = Instant.now();
 			Timestamp ts = instant != null ? Timestamp.from(instant) : null;
 
 			task.setId(jdbcTemplate.query(SQL, new IdMapper(), task.getCoordinator(), 
 					task.getTitle(), ts.toLocalDateTime(), task.getDescription(),
-					task.isSubmitted(), task.isComplete()).get(0));
+					task.getDueDate(), task.isSubmitted(), task.isComplete()).get(0));
 			
 			insertRelations(task, insertFile(task));
 
@@ -87,8 +89,10 @@ public class TaskDaoImpl implements TaskDao {
 				jdbcTemplate.update(SQL, task.getId(), outcome.getId(), outcome.getName());
 			}
 
-			SQL = "INSERT INTO task_file (file_id, task_id) VALUES (?, ?)";
-			jdbcTemplate.update(SQL, fileId, task.getId());
+			if(fileId >= 0) {
+				SQL = "INSERT INTO task_file (file_id, task_id) VALUES (?, ?)";
+				jdbcTemplate.update(SQL, fileId, task.getId());	
+			}
 
 		} catch (Exception e) {
 			System.out.println("Error in updating document record, rolling back");
@@ -105,11 +109,15 @@ public class TaskDaoImpl implements TaskDao {
 			String SQL = "INSERT INTO file (file_name, file_type, file_size, author, data)"
 					+ " VALUES (?, ?, ?, ?, ?) RETURNING id";
 			File file = task.getFile();
-			int fileId = jdbcTemplate.query(SQL, new IdMapper(), file.getFileName(),
-					file.getFileType(), file.getFileSize(), file.getAuthor(),
-					file.getData()).get(0);
+			if(file != null) {
+				int fileId = jdbcTemplate.query(SQL, new IdMapper(), file.getFileName(),
+						file.getFileType(), file.getFileSize(), file.getAuthor(),
+						file.getData()).get(0);
+				
+				return fileId;
+			}
 			
-			return fileId;
+			return -1;
 		} catch (Exception e) {
 			System.out.println("Error in updating task file record, rolling back");
 			transactionManager.rollback(status);
@@ -125,10 +133,10 @@ public class TaskDaoImpl implements TaskDao {
 		
 		try {
 			String SQL = "UPDATE task set coordinator = ?, title = ?,"
-					+ " description = ?, submitted = ?, complete = ? where id = ?";
+					+ " description = ?, submitted = ?, due_date = ?, complete = ? where id = ?";
 			jdbcTemplate.update(SQL, task.getCoordinator(), task.getTitle(), 
-					task.getDescription(), task.isSubmitted(), task.isComplete(), 
-					task.getId());
+					task.getDescription(), task.isSubmitted(), task.getDueDate(),
+					task.isComplete(), task.getId());
 
 			SQL = "DELETE FROM assigned WHERE id = ?";
 			jdbcTemplate.update(SQL, task.getId());
@@ -259,13 +267,14 @@ public class TaskDaoImpl implements TaskDao {
 			task.setDescription(rs.getString("description"));
 			task.setAssignDate(rs.getObject("assign_date", Timestamp.class));
 			task.setSubmitted(rs.getBoolean("submitted"));
+			task.setDueDate(rs.getDate("due_date"));
 			task.setComplete(rs.getBoolean("complete"));
 
 			try {
 				String SQL = "SELECT assignee FROM assigned WHERE id = ?";
 				task.setAssignees(jdbcTemplate.query(SQL, new StringMapper(), task.getId()));
 
-			} catch (EmptyResultDataAccessException e) {
+			} catch (Exception e) {
 				task.setAssignees(null);
 			}
 
@@ -273,7 +282,7 @@ public class TaskDaoImpl implements TaskDao {
 				String SQL = "SELECT * FROM task_program WHERE task_id = ?";
 				task.setPrograms(jdbcTemplate.query(SQL, new ProgramMapper(), task.getId()));
 
-			} catch (EmptyResultDataAccessException e) {
+			} catch (Exception e) {
 				task.setPrograms(null);
 			}
 
@@ -281,7 +290,7 @@ public class TaskDaoImpl implements TaskDao {
 				String SQL = "SELECT * FROM task_outcome WHERE task_id = ?";
 				task.setOutcomes(jdbcTemplate.query(SQL, new StudentOutcomeMapper(), task.getId()));
 
-			} catch (EmptyResultDataAccessException e) {
+			} catch (Exception e) {
 				task.setPrograms(null);
 			}
 			
@@ -293,7 +302,7 @@ public class TaskDaoImpl implements TaskDao {
 				file.setId(fileId);
 				task.setFile(file);
 
-			} catch (EmptyResultDataAccessException e) {
+			} catch (Exception e) {
 				task.setPrograms(null);
 			}
 

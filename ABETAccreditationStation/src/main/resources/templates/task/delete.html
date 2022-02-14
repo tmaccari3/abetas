@@ -14,11 +14,21 @@
 		<div class="task-details-container">
 			<h3>Task Details</h3>
 			<div class="task-title">
-				<div class="inline">
-					<h6>Title:</h6>
+				<div class="task-title-main">
+					<div class="inline">
+						<h6>Title:</h6>
+					</div>
+					<div class="inline">
+						<h6 th:text="${task.title}">Title</h6>
+					</div>
 				</div>
-				<div class="inline">
-					<h6 th:text="${task.title}">Title</h6>
+				<div class="task-due">
+					<div class="inline">
+						<h6>Due:</h6>
+					</div>
+					<div class="inline">
+						<h6 th:text="${task.dueDate}">Due Date</h6>
+					</div>
 				</div>
 			</div>
 			<br>
@@ -62,9 +72,11 @@
 					<div class="task-title">
 						<h6>File(s):</h6>
 					</div>
-					<p th:text="'Download file:'">Download file</p>
-					<a th:href="@{/download/} + ${task.file.id}"
-						th:text="${task.file.fileName}">file</a>
+					<div th:if="${task.file ne null}">
+						<p th:text="'Download file:'">Download file</p>
+						<a th:href="@{/download/} + ${task.file.id}"
+							th:text="${task.file.fileName}">file</a>
+					</div>
 				</div>
 			</div>
 			<br>

@@ -2,7 +2,9 @@ package com.maccari.abet.domain.entity;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.constraints.NotEmpty;
@@ -25,6 +27,8 @@ public class Task {
 	private String description;
 	
 	private Timestamp assignDate;
+	
+	private Date dueDate;
 	
 	private File file;
 	
@@ -105,15 +109,6 @@ public class Task {
 	public void setComplete(boolean complete) {
 		this.complete = complete;
 	}
-	
-	public String getStatus() {
-		String result = "incomplete";
-		if(complete) {
-			result = "complete";
-		}
-		
-		return result;
-	}
 
 	public Timestamp getAssignDate() {
 		return assignDate;
@@ -122,7 +117,15 @@ public class Task {
 	public void setAssignDate(Timestamp assignDate) {
 		this.assignDate = assignDate;
 	}
-	
+
+	public Date getDueDate() {
+		return dueDate;
+	}
+
+	public void setDueDate(Date dueDate) {
+		this.dueDate = dueDate;
+	}
+
 	public synchronized File getFile() {
 		return file;
 	}
@@ -137,6 +140,15 @@ public class Task {
 
 	public void setSubmitted(boolean submitted) {
 		this.submitted = submitted;
+	}
+	
+	public String getStatus() {
+		String result = "incomplete";
+		if(complete) {
+			result = "complete";
+		}
+		
+		return result;
 	}
 	
 	public String getFormattedDate() {

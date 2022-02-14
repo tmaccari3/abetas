@@ -1,10 +1,14 @@
 package com.maccari.abet.domain.entity;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class WebTask {
 	private int id;
@@ -23,6 +27,10 @@ public class WebTask {
 	private List<Program> fullPrograms;
 
 	private List<StudentOutcome> fullOutcomes;
+	
+	@NotNull(message = "*required")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date dueDate;
 	
 	private File uploadedFile;
 
@@ -123,6 +131,14 @@ public class WebTask {
 
 	public synchronized void setUploadedFile(File uploadedFile) {
 		this.uploadedFile = uploadedFile;
+	}
+
+	public Date getDueDate() {
+		return dueDate;
+	}
+
+	public void setDueDate(Date dueDate) {
+		this.dueDate = dueDate;
 	}
 
 	//for debugging

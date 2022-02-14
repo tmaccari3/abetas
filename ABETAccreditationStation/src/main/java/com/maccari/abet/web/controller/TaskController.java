@@ -208,7 +208,10 @@ public class TaskController {
 	public String displayTaskForRemoval(@RequestParam(value = "id", required = true) 
 		int id, Model model) {
 		Task task = taskService.getById(id);
-		task.setFile(fileService.getFileById(task.getFile().getId()));
+		File file = task.getFile();
+		if(file != null) {
+			task.setFile(fileService.getFileById(file.getId()));
+		}
 		model.addAttribute("task", task);
 		
 		return "task/delete";
@@ -231,7 +234,10 @@ public class TaskController {
 	public String viewTaskDetails(@RequestParam(value = "id", required = true)
 			int id, Model model) {
 		Task task = taskService.getById(id);
-		task.setFile(fileService.getFileById(task.getFile().getId()));
+		File file = task.getFile();
+		if(file != null) {
+			task.setFile(fileService.getFileById(file.getId()));
+		}
 		model.addAttribute("task", task);
 		
 		return "task/details";
@@ -241,7 +247,10 @@ public class TaskController {
 	public String completeTask(@RequestParam(value = "id", required = true)
 			int id, Model model) {
 		Task task = taskService.getById(id);
-		task.setFile(fileService.getFileById(task.getFile().getId()));
+		File file = task.getFile();
+		if(file != null) {
+			task.setFile(fileService.getFileById(file.getId()));
+		}
 		model.addAttribute("task", task);
 		
 		return "task/complete";
