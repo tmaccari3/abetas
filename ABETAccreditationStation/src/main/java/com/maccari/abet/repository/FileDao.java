@@ -1,7 +1,10 @@
 package com.maccari.abet.repository;
 
+import org.springframework.stereotype.Repository;
+
 import com.maccari.abet.domain.entity.File;
 
+@Repository
 public interface FileDao {
 	public int save(File file);
 	public int delete(File file);

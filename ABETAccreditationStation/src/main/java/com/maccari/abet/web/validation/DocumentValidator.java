@@ -4,33 +4,28 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import com.maccari.abet.domain.entity.WebTask;
+import com.maccari.abet.domain.entity.WebDocument;
 
 @Component
-public class TaskValidator implements Validator {
-	
+public class DocumentValidator implements Validator {
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return WebTask.class.isAssignableFrom(clazz);
+		return WebDocument.class.isAssignableFrom(clazz);
 	}
 	
 	@Override
 	public void validate(Object target, Errors errors) {
-		WebTask task = (WebTask) target;
+		WebDocument doc = (WebDocument) target;
 
-		if(task.getPrograms().isEmpty()) {
+		if(doc.getPrograms().isEmpty()) {
 			errors.rejectValue("programs", "program.empty");
 		}
 		
-		if(task.getOutcomes().isEmpty() && !task.getPrograms().isEmpty()) {
+		if(doc.getOutcomes().isEmpty() && !doc.getPrograms().isEmpty()) {
 			errors.rejectValue("programs", "outcome.empty");
 		}
 		
-		if(task.getAssignees().isEmpty()) {
-			errors.rejectValue("assignees", "task.assignees.empty");
-		}
-		
-		if(task.getUploadedFile() == null) {
+		if(doc.getUploadedFile() == null) {
 			errors.rejectValue("uploadedFile", "file.null");
 		}
 	}

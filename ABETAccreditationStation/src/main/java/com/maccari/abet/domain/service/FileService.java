@@ -9,34 +9,27 @@ import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.repository.FileDao;
 
 @Component
-public class FileService implements Service<File> {
+public class FileService {
 	@Autowired
 	private FileDao fileDao;
-	
-	@Override
-	public List<File> getAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	public File getById(int id) {
+	public File getFileById(int id) {
 		return fileDao.getFileById(id);
 	}
+	
+	public File getFileById(String tableName, int id) {
+		return fileDao.getFileById(tableName, id);
+	}
 
-	@Override
-	public void create(File item) {
+	public void save(File item) {
+		fileDao.save(item);
+	}
+
+	public void delete(File item) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
-	public void remove(File item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public File update(File item) {
 		// TODO Auto-generated method stub
 		return null;

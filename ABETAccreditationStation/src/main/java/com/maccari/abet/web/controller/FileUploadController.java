@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.maccari.abet.domain.entity.File;
+import com.maccari.abet.domain.service.FileService;
 import com.maccari.abet.exception.IllegalDownloadException;
 import com.maccari.abet.exception.StorageFileNotFoundException;
 import com.maccari.abet.repository.FileDao;
@@ -34,12 +35,9 @@ import com.maccari.abet.repository.FileDao;
 public class FileUploadController {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	private FileDao fileDao;
-	
 	@Autowired
-	public FileUploadController(FileDao fileDao) {
-		this.fileDao = fileDao;
-	}
+	private FileService fileDao;
+	
 
 	@GetMapping("/upload")
 	public String homepage(Model model) {

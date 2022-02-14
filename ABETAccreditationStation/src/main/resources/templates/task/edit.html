@@ -4,7 +4,7 @@
 	layout:decorate="~{layout}">
 <head>
 <link href="/css/task.css" rel="stylesheet" />
-<script type="text/javascript" th:src="@{/js/task.js}" /></script>
+<script type="text/javascript" th:src="@{/js/program.js}" /></script>
 <meta charset="ISO-8859-1">
 <title>Edit Task</title>
 </head>
@@ -114,13 +114,13 @@
 					</table>
 				</div>
 			<br>
-			<div class="area-container">
+			<div class="task-area-container">
 				<h6>Task Description:</h6>
 				<p class="error" th:if="${#fields.hasErrors('description')}"
 					th:errors="*{description}">Description Error</p>
 				<textarea placeholder="Enter description..."
 					th:field="*{description}" rows="4" cols="50" maxlength="255">
-           					Enter Program Outcome...</textarea>
+           					Enter description...</textarea>
 			</div>
 			<br>
 			<div style="float: right" class="inline">

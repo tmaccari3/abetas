@@ -23,8 +23,11 @@
 
 .task-middle-container {
 	position: relative;
+	/*background-color: #ecf2f9;*/
 	margin: auto;
 	width: 100%;
+	border-bottom: 1px solid black;
+	padding: 5px;
 }
 
 .task-index-container {
@@ -47,7 +50,7 @@
 	width: 49%;
 }
 
-div.area-container {
+.task-area-container {
 	text-align: center;
 }
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.StudentOutcome;
+import com.maccari.abet.domain.entity.WebDocument;
 import com.maccari.abet.domain.entity.WebProgram;
 import com.maccari.abet.domain.entity.WebTask;
 import com.maccari.abet.repository.ProgramDao;
@@ -103,6 +104,21 @@ public class ProgramService implements Service<Program> {
 		
 		task.setFullPrograms(programs);
 		task.setFullOutcomes(outcomes);
+	}
+	
+	public void fillPrograms(WebDocument document) {
+		ArrayList<Program> programs = new ArrayList<Program>();
+		ArrayList<StudentOutcome> outcomes = new ArrayList<StudentOutcome>();
+		
+		for(Integer programId : document.getPrograms()) {
+			programs.add(programDao.getProgramById(programId));
+		}
+		for(Integer outcomeId : document.getOutcomes()) {
+			outcomes.add(programDao.getOutcomeById(outcomeId));
+		}
+		
+		document.setFullPrograms(programs);
+		document.setFullOutcomes(outcomes);
 	}
 	
 	public boolean checkOutcomes(List<Program> programs, List<StudentOutcome> outcomes) {

@@ -67,27 +67,37 @@ public class TaskDaoImpl implements TaskDao {
 		}
 	}
 
-	public void insertRelations(Task task, int fileId) {
+	private void insertRelations(Task task, int fileId) {
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+		TransactionStatus status = transactionManager.getTransaction(def);
 		String SQL = "INSERT INTO assigned (id, assignee) VALUES (?, ?)";
-		for (String assignee : task.getAssignees()) {
-			jdbcTemplate.update(SQL, task.getId(), assignee);
-		}
+		try {
+			for (String assignee : task.getAssignees()) {
+				jdbcTemplate.update(SQL, task.getId(), assignee);
+			}
 
-		SQL = "INSERT INTO task_program (task_id, program_id, name) VALUES (?, ?, ?)";
-		for (Program program : task.getPrograms()) {
-			jdbcTemplate.update(SQL, task.getId(), program.getId(), program.getName());
-		}
-		
-		SQL = "INSERT INTO task_outcome (task_id, outcome_id, name) VALUES (?, ?, ?)";
-		for (StudentOutcome outcome: task.getOutcomes()) {
-			jdbcTemplate.update(SQL, task.getId(), outcome.getId(), outcome.getName());
-		}
+			SQL = "INSERT INTO task_program (task_id, program_id, name) VALUES (?, ?, ?)";
+			for (Program program : task.getPrograms()) {
+				jdbcTemplate.update(SQL, task.getId(), program.getId(), program.getName());
+			}
 
-		SQL = "INSERT INTO task_file (file_id, task_id) VALUES (?, ?)";
-		jdbcTemplate.update(SQL, fileId, task.getId());
+			SQL = "INSERT INTO task_outcome (task_id, outcome_id, name) VALUES (?, ?, ?)";
+			for (StudentOutcome outcome : task.getOutcomes()) {
+				jdbcTemplate.update(SQL, task.getId(), outcome.getId(), outcome.getName());
+			}
+
+			SQL = "INSERT INTO task_file (file_id, task_id) VALUES (?, ?)";
+			jdbcTemplate.update(SQL, fileId, task.getId());
+
+		} catch (Exception e) {
+			System.out.println("Error in updating document record, rolling back");
+			transactionManager.rollback(status);
+			throw e;
+		}
 	}
 	
-	public int insertFile(Task task) {
+	private int insertFile(Task task) {
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
 		TransactionStatus status = transactionManager.getTransaction(def);
@@ -287,12 +297,11 @@ public class TaskDaoImpl implements TaskDao {
 				task.setPrograms(null);
 			}
 
-
 			return task;
 		}
 	}
 	
-	public List<StudentOutcome> getAllOutcomesForProgram(int id){
+	private List<StudentOutcome> getAllOutcomesForProgram(int id){
 		try {
 			String SQL = "SELECT * FROM student_outcome WHERE prog_id = ?";
 			ArrayList<StudentOutcome> outcomes = (ArrayList<StudentOutcome>) jdbcTemplate.query(

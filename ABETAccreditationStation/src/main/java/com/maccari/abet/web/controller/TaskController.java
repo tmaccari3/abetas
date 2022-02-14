@@ -1,16 +1,13 @@
 package com.maccari.abet.web.controller;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,13 +15,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -35,8 +29,6 @@ import com.maccari.abet.domain.entity.WebTask;
 import com.maccari.abet.domain.service.FileService;
 import com.maccari.abet.domain.service.ProgramService;
 import com.maccari.abet.domain.service.TaskService;
-import com.maccari.abet.exception.IllegalDownloadException;
-import com.maccari.abet.exception.StorageFileNotFoundException;
 import com.maccari.abet.web.validation.TaskValidator;
 
 @Controller
@@ -100,9 +92,9 @@ public class TaskController {
 	public String uploadFile(final WebTask webTask, @RequestParam("file") MultipartFile file, 
 			RedirectAttributes attributes, String upload, Model model, HttpSession session,
 			final HttpServletRequest req) {
-		if (file.isEmpty() || upload.equals("cancel")) { // not file selected or cancelled. 
-			attributes.addFlashAttribute("message", "Please select a file.");
+		if (file.isEmpty() || upload.equals("cancel")) {
 			session.removeAttribute("UPLOADED_FILE");
+			model.addAttribute("message", "*Please select a file to upload.*");
 			model.addAttribute("uploadedFile", null);
 			
 			return "task/create";
@@ -138,6 +130,7 @@ public class TaskController {
 			HttpSession session) {
 		webTask.setUploadedFile((File) session.getAttribute("UPLOADED_FILE"));
 		taskValidator.validate(webTask, bindingResult);
+		
 		int invalidEmail = taskService.userExists(webTask.getAssignees());
 		if(invalidEmail >= 0) {
 			bindingResult.rejectValue("assignees", "task.assignees.invalid");
@@ -215,7 +208,7 @@ public class TaskController {
 	public String displayTaskForRemoval(@RequestParam(value = "id", required = true) 
 		int id, Model model) {
 		Task task = taskService.getById(id);
-		task.setFile(fileService.getById(task.getFile().getId()));
+		task.setFile(fileService.getFileById(task.getFile().getId()));
 		model.addAttribute("task", task);
 		
 		return "task/delete";
@@ -238,7 +231,7 @@ public class TaskController {
 	public String viewTaskDetails(@RequestParam(value = "id", required = true)
 			int id, Model model) {
 		Task task = taskService.getById(id);
-		task.setFile(fileService.getById(task.getFile().getId()));
+		task.setFile(fileService.getFileById(task.getFile().getId()));
 		model.addAttribute("task", task);
 		
 		return "task/details";
@@ -248,7 +241,7 @@ public class TaskController {
 	public String completeTask(@RequestParam(value = "id", required = true)
 			int id, Model model) {
 		Task task = taskService.getById(id);
-		task.setFile(fileService.getById(task.getFile().getId()));
+		task.setFile(fileService.getFileById(task.getFile().getId()));
 		model.addAttribute("task", task);
 		
 		return "task/complete";
