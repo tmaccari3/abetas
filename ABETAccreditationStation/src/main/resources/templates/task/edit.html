@@ -26,6 +26,15 @@
 						Error</p>
 				</div>
 			</div>
+			<div class="title-container">
+				<div class="inline center">
+					<label>Due Date:</label> <input type="date" th:field="*{dueDate}" />
+				</div>
+				<div class="inline center">
+					<p class="error" th:if="${#fields.hasErrors('dueDate')}"
+						th:errors="*{dueDate}">Title Error</p>
+				</div>
+			</div>
 			<br>
 			<h5>Assignee List</h5>
 			<label class="error" th:if="${#fields.hasErrors('assignees')}"

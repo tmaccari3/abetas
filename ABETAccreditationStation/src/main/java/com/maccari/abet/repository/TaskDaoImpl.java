@@ -273,24 +273,28 @@ public class TaskDaoImpl implements TaskDao {
 			try {
 				String SQL = "SELECT assignee FROM assigned WHERE id = ?";
 				task.setAssignees(jdbcTemplate.query(SQL, new StringMapper(), task.getId()));
-
 			} catch (Exception e) {
 				task.setAssignees(null);
 			}
 
 			try {
 				String SQL = "SELECT * FROM task_program WHERE task_id = ?";
+				System.out.println(SQL + task.getId());
 				task.setPrograms(jdbcTemplate.query(SQL, new ProgramMapper(), task.getId()));
-
 			} catch (Exception e) {
+				System.out.println("Error in getting programs for task.");
+				
 				task.setPrograms(null);
 			}
 
 			try {
 				String SQL = "SELECT * FROM task_outcome WHERE task_id = ?";
+				System.out.println(SQL + task.getId());
 				task.setOutcomes(jdbcTemplate.query(SQL, new StudentOutcomeMapper(), task.getId()));
-
+				System.out.println(task.getOutcomes());
 			} catch (Exception e) {
+				System.out.println("Error in getting outcomes for task.");
+				
 				task.setPrograms(null);
 			}
 			
@@ -303,7 +307,9 @@ public class TaskDaoImpl implements TaskDao {
 				task.setFile(file);
 
 			} catch (Exception e) {
-				task.setPrograms(null);
+				System.out.println("Error in getting file for task.");
+				
+				task.setFile(null);
 			}
 
 			return task;
@@ -319,7 +325,8 @@ public class TaskDaoImpl implements TaskDao {
 			return outcomes;
 		} catch (Exception e) {
 			System.out.println("Error in getting outcomes for program.");
-			return null;
+
+			return new ArrayList<StudentOutcome>();
 		}
 	}
 
@@ -367,7 +374,7 @@ public class TaskDaoImpl implements TaskDao {
 	class StudentOutcomeMapper implements RowMapper<StudentOutcome> {
 		public StudentOutcome mapRow(ResultSet rs, int rowNum) throws SQLException {
 			StudentOutcome outcome = new StudentOutcome();
-			outcome.setProgramId(rs.getInt("outcome_id"));
+			outcome.setId(rs.getInt("outcome_id"));
 			outcome.setName(rs.getString("name"));
 			
 			return outcome;

@@ -80,7 +80,7 @@ public class TaskService implements Service<Task>{
 			programIds.add(program.getId());
 		}
 		for(StudentOutcome outcome : task.getOutcomes()) {
-			outcomeIds.add(outcome.getProgramId());
+			outcomeIds.add(outcome.getId());
 		}
 		
 		webTask.setOutcomes(outcomeIds);

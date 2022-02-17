@@ -50,7 +50,9 @@ public class WebTask {
 		this.assignees = task.getAssignees();
 		this.fullPrograms = task.getPrograms();
 		this.fullOutcomes = task.getOutcomes();
-		this.setDescription(task.getDescription());
+		this.description = task.getDescription();
+		this.dueDate = task.getDueDate();
+		this.uploadedFile = task.getFile();
 	}
 
 	public int getId() {

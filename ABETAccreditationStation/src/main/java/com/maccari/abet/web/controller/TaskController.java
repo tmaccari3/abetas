@@ -92,12 +92,19 @@ public class TaskController {
 	public String uploadFile(final WebTask webTask, @RequestParam("file") MultipartFile file, 
 			RedirectAttributes attributes, String upload, Model model, HttpSession session,
 			final HttpServletRequest req) {
+	    String mapping = (String) req.getAttribute(
+                HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
+	    String result = "task/create";
+	    if(mapping.contains("edit")) {
+			result = "task/edit";
+	    }
+
 		if (file.isEmpty() || upload.equals("cancel")) {
 			session.removeAttribute("UPLOADED_FILE");
 			model.addAttribute("message", "*Please select a file to upload.*");
 			model.addAttribute("uploadedFile", null);
 			
-			return "task/create";
+			return result;
 		}
 		
 		File uploadedFile = new File();
@@ -113,15 +120,7 @@ public class TaskController {
 		session.setAttribute("UPLOADED_FILE", uploadedFile);
 		model.addAttribute("uploadedFile", uploadedFile);
 		
-	    String mapping = (String) req.getAttribute(
-                HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
-	    if(mapping.contains("create")) {
-			return "task/create";
-	    }
-
-	    else {
-	    	return "task/edit";
-	    }
+		return result;
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -168,7 +167,12 @@ public class TaskController {
 	public String editTaskDetails(@RequestParam(value = "id", required = true)
 			int id, Model model) {
 		WebTask webTask = taskService.taskToWebTask(taskService.getById(id));
+		File file = null;
+		if(webTask.getUploadedFile() != null) {
+			file = fileService.getFileById(webTask.getUploadedFile().getId());
+		}
 		model.addAttribute("webTask", webTask);
+		model.addAttribute("uploadedFile", file);
 		
 		return "task/edit";
 	}
