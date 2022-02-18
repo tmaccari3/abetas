@@ -23,10 +23,10 @@
 
 .task-middle-container {
 	position: relative;
-	/*background-color: #ecf2f9;*/
-	margin: auto;
+	background-color: #dae4f1;
 	width: 100%;
-	border-bottom: 1px solid black;
+	border-top: 1px solid #00004d;
+	border-bottom: 1px solid #00004d;
 	padding: 5px;
 }
 
@@ -80,7 +80,6 @@
 	width: 49%;
 }
 
-
 .task-programs {
 	display: inline-block;
 	vertical-align: top;
@@ -102,6 +101,10 @@
 table {
 	width: 100%;
 	border-collapse: collapse;
+}
+
+.assignee-list {
+	border-bottom: 3px solid #00004d;
 }
 
 textarea {

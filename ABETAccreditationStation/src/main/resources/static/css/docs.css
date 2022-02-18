@@ -23,10 +23,11 @@
 
 .doc-middle-container {
 	position: relative;
+	background-color: #dae4f1;
 	margin: auto;
 	width: 100%;
-	border-top: 1px solid black;
-	border-bottom: 1px solid black;
+	border-top: 1px solid #00004d;
+	border-bottom: 1px solid #00004d;
 	padding: 5px;
 }
 

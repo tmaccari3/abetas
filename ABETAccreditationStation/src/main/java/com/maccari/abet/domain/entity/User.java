@@ -11,6 +11,8 @@ public class User {
 	@Email(message = "Enter a valid email address")
 	private String email;
 	
+	private List<String> program;
+	
 	@Size(min=8, max=15, message = "Password must be between 8 and 15 characters.")
 	private String password;
 	
@@ -34,6 +36,14 @@ public class User {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	
+	public List<String> getProgram() {
+		return program;
+	}
+
+	public void setProgram(List<String> program) {
+		this.program = program;
 	}
 
 	public String getPassword() {

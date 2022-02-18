@@ -5,6 +5,7 @@
 <head>
 <link href="/css/docs.css" rel="stylesheet" />
 <script type="text/javascript" th:src="@{/js/program.js}" /></script>
+<script type="text/javascript" th:src="@{/js/file.js}" /></script>
 <meta charset="ISO-8859-1">
 <title>Submit a Document</title>
 </head>
@@ -57,7 +58,10 @@
 						Error</label>
 					<table>
 						<tr>
-							<td style="border-bottom: none"><input type="file" name="file"/></td>
+							<td style="border-bottom: none">
+								<!-- <label class="abetas-button label-button" for="uploadFile">Select a File</label> -->
+								<input id="uploadFile" class="abetas-file-button" type="file" name="file"/>
+							</td>
 						</tr>
 						<tr>
 							<td>
@@ -69,11 +73,10 @@
 						</tr>
 						<tr>
 							<td th:if="${uploadedFile ne null}">
-								<p th:text="${'Submitted file: ' + uploadedFile.getFileName()}"></p>
+								<div th:text="${'Submitted file: ' + uploadedFile.getFileName()}"></div>
 							</td>
 							<td th:if="${uploadedFile == null}">
-								<p th:text="${message}" th:if="${message ne null}"></p>
-								<p th:text="${file}" th:if="${file ne null}"></p>
+								<div th:text="${'Submitted file: none'}"></div>
 							</td>
 						</tr>
 					</table>

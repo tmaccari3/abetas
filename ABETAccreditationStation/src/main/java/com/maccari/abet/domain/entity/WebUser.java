@@ -2,8 +2,15 @@ package com.maccari.abet.domain.entity;
 
 import java.util.List;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
 public class WebUser {
+	@NotEmpty(message = "Required")
+	@Email(message = "Enter a valid email address")
 	private String email;
+	
+	private List<String> program;
 
 	private List<String> roles;
 

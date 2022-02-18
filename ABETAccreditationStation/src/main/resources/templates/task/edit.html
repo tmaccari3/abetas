@@ -22,8 +22,8 @@
 					<label>Title:</label> <input type="text" th:field="*{title}" />
 				</div>
 				<div class="inline center">
-					<p class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title
-						Error</p>
+					<p class="error" th:if="${#fields.hasErrors('title')}"
+						th:errors="*{title}">Title Error</p>
 				</div>
 			</div>
 			<div class="title-container">
@@ -39,7 +39,7 @@
 			<h5>Assignee List</h5>
 			<label class="error" th:if="${#fields.hasErrors('assignees')}"
 				th:errors="*{assignees}">Assignees Error</label>
-			<table>
+			<table class="assignee-list">
 				<thead>
 					<tr>
 						<th>Email</th>
@@ -67,61 +67,63 @@
 				</tbody>
 			</table>
 			<br>
-			<div class="task-program-container">
-				<div>
-					<h5>Program(s)</h5>
-					<label class="error" th:if="${#fields.hasErrors('programs')}"
-						th:errors="*{programs}">Program Error</label>
-					<ul>
-						<li th:each="aProg,rowIter : ${progTypes}"><input type="checkbox"
-							th:field="*{programs}" th:value="${aProg.id}" name="addProgram" 
-							onClick="disableChange(this)"/>
-							<!-- th:attr="onChange=|addProgram(${aProg.id}, this.id)|"
-							formnovalidate="formnovalidate"/>--> 
-							<label th:for="${#ids.prev('programs')}" th:text="${aProg.name}">Default
-								Program</label>
-								
-							<label class="error" th:if="${#fields.hasErrors('outcomes')}"
-								th:errors="*{outcomes}">Outcome Error</label>
-							<ul>
-								<li th:name="${'programs' + (rowIter.index + 1)}" th:each="outcome : ${aProg.outcomes}">
-									<input type="checkbox" th:field="*{outcomes}"
-										th:value="${outcome.id}" disabled/> 
-									<label th:for="${#ids.prev('outcomes')}" 
-										th:text="${outcome.name}">Default
-										Outcome</label></li>
-							</ul>
-						</li>
-					</ul>
+			<div class="task-middle-container">
+				<div class="task-program-container">
+					<div>
+						<h5>Program(s)</h5>
+						<label class="error" th:if="${#fields.hasErrors('programs')}"
+							th:errors="*{programs}">Program Error</label>
+						<ul>
+							<li th:each="aProg,rowIter : ${progTypes}"><input
+								type="checkbox" th:field="*{programs}" th:value="${aProg.id}"
+								name="addProgram" onClick="disableChange(this)" /> <!-- th:attr="onChange=|addProgram(${aProg.id}, this.id)|"
+							formnovalidate="formnovalidate"/>--> <label
+								th:for="${#ids.prev('programs')}" th:text="${aProg.name}">Default
+									Program</label> <label class="error"
+								th:if="${#fields.hasErrors('outcomes')}" th:errors="*{outcomes}">Outcome
+									Error</label>
+								<ul>
+									<li th:name="${'programs' + (rowIter.index + 1)}"
+										th:each="outcome : ${aProg.outcomes}"><input
+										type="checkbox" th:field="*{outcomes}"
+										th:value="${outcome.id}" disabled /> <label
+										th:for="${#ids.prev('outcomes')}" th:text="${outcome.name}">Default
+											Outcome</label></li>
+								</ul></li>
+						</ul>
+					</div>
 				</div>
-			</div>
-			<div class="task-file-container">
+				<div class="task-file-container">
 					<h5>Task File</h5>
-					<label class="error" th:if="${#fields.hasErrors('uploadedFile')}" th:errors="*{uploadedFile}">File
-						Error</label>
+					<label class="error" th:if="${#fields.hasErrors('uploadedFile')}"
+						th:errors="*{uploadedFile}">File Error</label>
 					<table>
 						<tr>
-							<td style="border-bottom: none"><input type="file" name="file"/></td>
+							<td style="border-bottom: none"><input id="uploadFile"
+								class="abetas-file-button" type="file" name="file" /></td>
 						</tr>
 						<tr>
 							<td>
-								<button class="abetas-button" type="submit" name="upload" value="download"
-									formnovalidate="formnovalidate">Upload File</button>
-								<button class="abetas-button" type="submit" name="upload" value="cancel"
-									formnovalidate="formnovalidate">Cancel upload</button>
+								<button class="abetas-button" type="submit" name="upload"
+									value="download" formnovalidate="formnovalidate">Upload
+									File</button>
+								<button class="abetas-button" type="submit" name="upload"
+									value="cancel" formnovalidate="formnovalidate">Cancel
+									upload</button>
 							</td>
 						</tr>
 						<tr>
 							<td th:if="${uploadedFile ne null}">
-								<p th:text="${'Submitted file: ' + uploadedFile.getFileName()}"></p>
+								<div
+									th:text="${'Submitted file: ' + uploadedFile.getFileName()}"></div>
 							</td>
 							<td th:if="${uploadedFile == null}">
-								<p th:text="${message}" th:if="${message ne null}"></p>
-								<p th:text="${file}" th:if="${file ne null}"></p>
+								<div th:text="${'Submitted file: none'}"></div>
 							</td>
 						</tr>
 					</table>
 				</div>
+			</div>
 			<br>
 			<div class="task-area-container">
 				<h6>Task Description:</h6>
@@ -137,7 +139,8 @@
 					formnovalidate="formnovalidate" value="cancel">Return</button>
 			</div>
 			<div class="inline">
-				<button class="abetas-button" type="submit" name="submit" value="Submit">Submit</button>
+				<button class="abetas-button" type="submit" name="submit"
+					value="Submit">Submit</button>
 			</div>
 		</div>
 	</form>
