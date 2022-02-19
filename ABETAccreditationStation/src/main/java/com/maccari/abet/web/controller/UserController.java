@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +22,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.HandlerMapping;
 
 import com.maccari.abet.domain.entity.WebEmail;
+import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.User;
 import com.maccari.abet.domain.entity.WebUser;
 import com.maccari.abet.domain.service.EmailServiceImpl;
+import com.maccari.abet.domain.service.ProgramService;
 import com.maccari.abet.domain.service.UserService;
 import com.maccari.abet.web.validation.UserValidator;
 import com.maccari.abet.web.validation.WebUserValidator;
@@ -34,6 +38,9 @@ import com.maccari.abet.web.validation.WebUserValidator;
 public class UserController {
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private ProgramService programService;
 	
 	@Autowired
 	private UserValidator userValidator;
@@ -133,28 +140,52 @@ public class UserController {
 		return "redirect:/manage";
 	}
 	
-	@RequestMapping(value = "/user/edit")
+	@RequestMapping(value = {"/user/edit", "/user/edit/programs"})
 	public String editUser(@RequestParam(value = "email", required = true) 
-		String email, WebUser webUser, Model model) {
+		String email, WebUser webUser, Model model, final HttpServletRequest req) {
 		User user = userService.getUserByEmail(email);
-		model.addAttribute("webUser", new WebUser(user.getEmail(), user.getRoles()));
-		
+		model.addAttribute("webUser", new WebUser(user.getEmail(), user.getRoles(), 
+				user.getPrograms()));
+	    String mapping = (String) req.getAttribute(
+                HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
+		if(mapping.contains("programs")) {
+			return "user/editPrograms";
+		}
 		return "user/edit";
 	}
 	
-	@RequestMapping(value = "/user/edit", method = RequestMethod.POST, params = "submit")
-	public String editUser(@Valid WebUser webUser, BindingResult bindingResult) {
+	@RequestMapping(value = {"/user/edit", "/user/edit/programs"}, method = RequestMethod.POST, params = "submit")
+	public String editUser(@Valid WebUser webUser, BindingResult bindingResult,
+			final HttpServletRequest req) {
 		webUserValidator.validate(webUser, bindingResult);
+	    String mapping = (String) req.getAttribute(
+                HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
 		if(bindingResult.hasErrors()) {
+			if(mapping.contains("programs")) {
+				return "user/editPrograms";
+			}
 			return "user/edit";
 		}
+		programService.fillPrograms(webUser);
 		userService.update(userService.convertWebUser(webUser));
+		
+		if(mapping.contains("programs")) {
+			return "redirect:/manage/programs";
+		}
 		
 		return "redirect:/manage";
 	}
 	
-	@RequestMapping(value = "/user/edit", method = RequestMethod.POST, params = "cancel")
-	public String cancelUserEdit(@Valid WebUser webUser, BindingResult bindingResult) {
+	@RequestMapping(value = {"/user/edit", "/user/edit/programs"}, 
+			method = RequestMethod.POST, params = "cancel")
+	public String cancelUserEdit(@Valid WebUser webUser, BindingResult bindingResult,
+			final HttpServletRequest req) {
+		String mapping = (String) req.getAttribute(
+                HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
+		if(mapping.contains("programs")) {
+			return "redirect:/manage/programs";
+		}
+		
 		return "redirect:/manage";
 	}
 	
@@ -165,6 +196,11 @@ public class UserController {
 		UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
 			user.getEmail(), null, authorities);
 		SecurityContextHolder.getContext().setAuthentication(auth);
+	}
+	
+	@ModelAttribute("progTypes")
+	public ArrayList<Program> getPrograms() {
+		return (ArrayList<Program>) programService.getActivePrograms();
 	}
 	
 	@ModelAttribute("roleTypes")

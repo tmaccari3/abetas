@@ -27,6 +27,8 @@ public interface ProgramDao {
 	
 	List<Program> getActivePrograms();
 	
+	List<Program> getActivePrograms(String userEmail);
+	
 	List<StudentOutcome> getAllOutcomesForProgram(int id);
 	
 	List<StudentOutcome> getActiveOutcomesForProgram(int id);

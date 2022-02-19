@@ -25,6 +25,8 @@ import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.StudentOutcome;
 import com.maccari.abet.domain.entity.Task;
 import com.maccari.abet.repository.ProgramDaoImpl.StudentOutcomeMapper;
+import com.maccari.abet.repository.mapper.IdMapper;
+import com.maccari.abet.repository.mapper.StringMapper;
 
 @Repository
 public class TaskDaoImpl implements TaskDao {
@@ -341,22 +343,6 @@ public class TaskDaoImpl implements TaskDao {
 			file.setData(rs.getBytes("data"));
 
 			return file;
-		}
-	}
-
-	class IdMapper implements RowMapper<Integer> {
-		public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
-			int id = rs.getInt(1);
-
-			return id;
-		}
-	}
-
-	class StringMapper implements RowMapper<String> {
-		public String mapRow(ResultSet rs, int rowNum) throws SQLException {
-			String result = rs.getString(1);
-
-			return result;
 		}
 	}
 	

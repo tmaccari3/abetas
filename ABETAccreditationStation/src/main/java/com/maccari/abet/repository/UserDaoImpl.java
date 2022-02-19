@@ -17,6 +17,7 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.User;
 
 @Repository
@@ -86,10 +87,18 @@ public class UserDaoImpl implements UserDao {
 			String SQL = "DELETE FROM authority WHERE email = ?";
 			jdbcTemplate.update(SQL, user.getEmail());
 			
+			SQL = "DELETE FROM user_program WHERE email = ?";
+			jdbcTemplate.update(SQL, user.getEmail());
+			
 			SQL = "INSERT INTO authority (email, role) VALUES (?, ?)";
 			for(String role : user.getRoles()) {
-				System.out.println(role);
 				jdbcTemplate.update(SQL, user.getEmail(), role);
+			}
+			
+			SQL = "INSERT INTO user_program (email, prog_id, program) VALUES (?, ?, ?)";
+			for(Program program : user.getPrograms()) {
+				jdbcTemplate.update(SQL, user.getEmail(), program.getId(), 
+						program.getName());
 			}
 			
 			transactionManager.commit(status);
@@ -127,14 +136,16 @@ public class UserDaoImpl implements UserDao {
 		}
 	}
 	
-	private List<String> getUserPrograms(String email) {
+	private List<Program> getUserPrograms(String email) {
 		try {
-			String SQL = "SELECT program FROM user_program WHERE email=?";
-			ArrayList<String> programs = new ArrayList<>();
-			programs = (ArrayList<String>) jdbcTemplate.query(SQL, new ProgramMapper(), email);
+			String SQL = "SELECT * FROM user_program WHERE email=?";
+			ArrayList<Program> programs = new ArrayList<>();
+			programs = (ArrayList<Program>) jdbcTemplate.query(SQL, new ProgramMapper(), email);
 			
 			return programs;
 		} catch (EmptyResultDataAccessException e) {
+			System.out.println("Error getting programs assigned to user.");
+			
 			return null;
 		}
 	}
@@ -181,9 +192,11 @@ public class UserDaoImpl implements UserDao {
 		}
 	}
 	
-	class ProgramMapper implements RowMapper<String> {
-		public String mapRow(ResultSet rs, int rowNum) throws SQLException {
-			String program = rs.getString("program");
+	class ProgramMapper implements RowMapper<Program> {
+		public Program mapRow(ResultSet rs, int rowNum) throws SQLException {
+			Program program = new Program();
+			program.setId(rs.getInt("prog_id"));
+			program.setName(rs.getString("program"));
 			
 			return program;
 		}

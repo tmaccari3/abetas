@@ -19,6 +19,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.StudentOutcome;
+import com.maccari.abet.repository.mapper.IdMapper;
 
 @Repository
 public class ProgramDaoImpl implements ProgramDao {
@@ -198,6 +199,40 @@ public class ProgramDaoImpl implements ProgramDao {
 			return programs;
 		} catch (EmptyResultDataAccessException e) {
 			return null;
+		}
+	}
+	
+	@Override
+	public List<Program> getActivePrograms(String userEmail) {
+		ArrayList<Integer> programIds = new ArrayList<Integer>();
+		try {
+			String SQL = "SELECT * FROM user_program WHERE email=?";
+			programIds = (ArrayList<Integer>) jdbcTemplate.query(
+					SQL, new IdMapper(), userEmail);
+		} catch (Exception e) {
+			System.out.println("Error finding user.");
+		}
+		ArrayList<Program> programs = new ArrayList<Program>();
+		try {
+			String SQL = "SELECT * FROM program WHERE active = true";
+			programs = (ArrayList<Program>) jdbcTemplate.query(
+					SQL, new ProgramMapper());
+			System.out.println(programIds);
+			System.out.println(programs);
+			for(Program program : programs) {
+				if(!programIds.contains(program.getId())) {
+					programs.remove(program);
+				}
+			}
+			
+			for(Program program: programs) {
+				program.setOutcomes(getActiveOutcomesForProgram(program.getId()));
+			}
+			return programs;
+		} catch (Exception e) {
+			System.out.println("Error getting Programs.");
+			
+			return programs;
 		}
 	}
 

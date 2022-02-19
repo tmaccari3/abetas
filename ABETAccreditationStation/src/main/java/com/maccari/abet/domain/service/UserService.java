@@ -1,10 +1,12 @@
 package com.maccari.abet.domain.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.User;
 import com.maccari.abet.domain.entity.WebUser;
 import com.maccari.abet.repository.UserDao;
@@ -48,6 +50,6 @@ public class UserService implements Service<User> {
 	}
 	
 	public User convertWebUser(WebUser webUser) {
-		return new User(webUser.getEmail(), webUser.getRoles());
+		return new User(webUser.getEmail(), webUser.getRoles(), webUser.getPrograms());
 	}
 }

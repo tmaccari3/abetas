@@ -19,7 +19,7 @@
 			<table>
 				<tr>
 					<th>Email</th>
-					<th>Programs(s)</th>
+					<th>Program(s)</th>
 					<th>Options</th>
 				</tr>
 				<tr th:each="user : ${users}">
@@ -27,7 +27,7 @@
 					<td th:text="${user.programs}"></td>
 					<td>
 						<div class="option">
-							<form action="/user/program/edit">
+							<form action="/user/edit/programs">
 								<button class="abetas-button" name="email" th:value="${user.email}"
 									type="submit">
 									<span class="fa fa-edit"></span> Edit

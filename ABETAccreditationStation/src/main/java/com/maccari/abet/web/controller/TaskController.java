@@ -271,8 +271,8 @@ public class TaskController {
 	}
 
 	@ModelAttribute("progTypes")
-	public ArrayList<Program> getPrograms() {
-		return (ArrayList<Program>) programService.getActivePrograms();
+	public ArrayList<Program> getPrograms(Principal principal) {
+		return (ArrayList<Program>) programService.getActivePrograms(principal.getName());
 	}
 	
 	@ModelAttribute("uploadedFile")

@@ -1,5 +1,6 @@
 package com.maccari.abet.domain.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.Email;
@@ -10,7 +11,9 @@ public class WebUser {
 	@Email(message = "Enter a valid email address")
 	private String email;
 	
-	private List<String> program;
+	private List<Integer> programIds;
+	
+	private List<Program> programs;
 
 	private List<String> roles;
 
@@ -18,9 +21,20 @@ public class WebUser {
 		
 	}
 	
-	public WebUser(String email, List<String> roles) {
+	public WebUser(String email, List<String> roles, List<Program> programs) {
 		this.email = email;
 		this.roles = roles;
+		this.programs = programs;
+		this.programIds = new ArrayList<Integer>();
+		for(Program program : this.programs) {
+			this.programIds.add(program.getId());
+		}
+	}
+	
+	public WebUser(List<String> roles, String email, List<Integer> programIds) {
+		this.email = email;
+		this.roles = roles;
+		this.programIds = programIds;
 	}
 	
 	public String getEmail() {
@@ -37,5 +51,21 @@ public class WebUser {
 
 	public void setRoles(List<String> roles) {
 		this.roles = roles;
+	}
+
+	public List<Program> getPrograms() {
+		return programs;
+	}
+
+	public void setPrograms(List<Program> programs) {
+		this.programs = programs;
+	}
+
+	public List<Integer> getProgramIds() {
+		return programIds;
+	}
+
+	public void setProgramIds(List<Integer> programIds) {
+		this.programIds = programIds;
 	}
 }

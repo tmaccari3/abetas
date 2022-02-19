@@ -12,6 +12,7 @@ import com.maccari.abet.domain.entity.StudentOutcome;
 import com.maccari.abet.domain.entity.WebDocument;
 import com.maccari.abet.domain.entity.WebProgram;
 import com.maccari.abet.domain.entity.WebTask;
+import com.maccari.abet.domain.entity.WebUser;
 import com.maccari.abet.repository.ProgramDao;
 
 @Component
@@ -26,6 +27,10 @@ public class ProgramService implements Service<Program> {
 	
 	public List<Program> getActivePrograms(){
 		return programDao.getActivePrograms();
+	}
+	
+	public List<Program> getActivePrograms(String userEmail){
+		return programDao.getActivePrograms(userEmail);
 	}
 
 	@Override
@@ -119,6 +124,15 @@ public class ProgramService implements Service<Program> {
 		
 		document.setFullPrograms(programs);
 		document.setFullOutcomes(outcomes);
+	}
+	
+	public void fillPrograms(WebUser user) {
+		ArrayList<Program> programs = new ArrayList<Program>();
+		for(Integer id : user.getProgramIds()) {
+			programs.add(programDao.getProgramById(id));
+		}
+		
+		user.setPrograms(programs);
 	}
 	
 	public boolean checkOutcomes(List<Program> programs, List<StudentOutcome> outcomes) {

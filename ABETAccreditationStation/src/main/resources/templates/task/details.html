@@ -76,6 +76,9 @@
 					<a th:href="@{/download/} + ${task.file.id}"
 						th:text="${task.file.fileName}">file</a>
 				</div>
+				<div th:if="${task.file == null}">
+					N/A
+				</div>
 			</div>
 		</div>
 		<br>

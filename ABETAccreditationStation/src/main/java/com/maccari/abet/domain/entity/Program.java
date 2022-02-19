@@ -2,9 +2,6 @@ package com.maccari.abet.domain.entity;
 
 import java.util.List;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
-
 public class Program {
 	private int id;
 	
@@ -51,8 +48,8 @@ public class Program {
 	//for testing
 	public String toString() {
 		String result = "";
-		result += id + " ";
-		result += name + "\n";
+		//result += id + " ";
+		result += name;
 		/*for(StudentOutcome outcome : outcomes) {
 			result += outcome.getName() + "\n";
 		}*/
