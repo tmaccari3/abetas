@@ -57,6 +57,13 @@ public class UserController {
 		return "user/manage";
 	}
 	
+	@RequestMapping(value = "/manage/programs")
+	public String managePrograms(Model model) {
+		model.addAttribute("users", userService.getAll());
+		
+		return "user/managePrograms";
+	}
+	
 	@RequestMapping(value = "/register/request")
 	public String registerRequest(WebEmail webEmail) {
 		return "user/request";

@@ -127,6 +127,18 @@ public class UserDaoImpl implements UserDao {
 		}
 	}
 	
+	private List<String> getUserPrograms(String email) {
+		try {
+			String SQL = "SELECT program FROM user_program WHERE email=?";
+			ArrayList<String> programs = new ArrayList<>();
+			programs = (ArrayList<String>) jdbcTemplate.query(SQL, new ProgramMapper(), email);
+			
+			return programs;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+	
 	@Override
 	public User getUserByEmail(String email) {
 		try {
@@ -155,6 +167,7 @@ public class UserDaoImpl implements UserDao {
 			User user = new User();
 			user.setEmail(rs.getString("email"));
 			user.setRoles(getUserRoles(user.getEmail()));
+			user.setPrograms(getUserPrograms(user.getEmail()));
 			
 			return user;
 		}
@@ -165,6 +178,14 @@ public class UserDaoImpl implements UserDao {
 			String role = rs.getString("role");
 			
 			return role;
+		}
+	}
+	
+	class ProgramMapper implements RowMapper<String> {
+		public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+			String program = rs.getString("program");
+			
+			return program;
 		}
 	}
 }

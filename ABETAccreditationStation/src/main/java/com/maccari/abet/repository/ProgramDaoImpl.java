@@ -49,7 +49,7 @@ public class ProgramDaoImpl implements ProgramDao {
 		} catch(Exception e) {
 			System.out.println("Error in creating program record, rolling back");
 			transactionManager.rollback(status);
-			throw e;
+			//throw e;
 		}
 	}
 	
@@ -128,7 +128,9 @@ public class ProgramDaoImpl implements ProgramDao {
 		} catch(Exception e) {
 			System.out.println("Error in updating program record, rolling back");
 			transactionManager.rollback(status);
-			throw e;
+			
+			return null;
+			//throw e;
 		}
 	}
 	
@@ -147,7 +149,9 @@ public class ProgramDaoImpl implements ProgramDao {
 		} catch(Exception e) {
 			System.out.println("Error in updating student outcome record, rolling back");
 			transactionManager.rollback(status);
-			throw e;
+			
+			return null;
+			//throw e;
 		}
 	}
 
