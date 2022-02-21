@@ -135,8 +135,9 @@ public class TaskController {
 			bindingResult.rejectValue("assignees", "task.assignees.invalid");
 		}
 		programService.fillPrograms(webTask);
-		if(programService.checkOutcomes(webTask.getFullPrograms(), webTask.getFullOutcomes())) {
-			bindingResult.rejectValue("programs", "task.programs.invalid");
+		if(programService.checkPrograms(webTask.getFullPrograms(), 
+				webTask.getFullOutcomes(), principal.getName())) {
+			bindingResult.rejectValue("programs", "programs.invalid");
 		}
 		
 		if (bindingResult.hasErrors()) {
@@ -187,8 +188,9 @@ public class TaskController {
 			bindingResult.rejectValue("assignees", "task.assignees.invalid");
 		}
 		programService.fillPrograms(webTask);
-		if(programService.checkOutcomes(webTask.getFullPrograms(), webTask.getFullOutcomes())) {
-			bindingResult.rejectValue("programs", "task.programs.invalid");
+		if(programService.checkPrograms(webTask.getFullPrograms(), 
+				webTask.getFullOutcomes(), principal.getName())) {
+			bindingResult.rejectValue("programs", "programs.invalid");
 		}
 		
 		if (bindingResult.hasErrors()) {

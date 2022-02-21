@@ -45,6 +45,16 @@ public class Program {
 		this.outcomes = outcomes;
 	}
 	
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof Program) {
+			Program program = (Program) other;
+			return this.id == program.getId();
+		}
+		
+		return false;
+	}
+	
 	//for testing
 	public String toString() {
 		String result = "";

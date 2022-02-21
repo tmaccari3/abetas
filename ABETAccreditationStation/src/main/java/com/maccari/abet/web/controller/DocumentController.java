@@ -97,7 +97,8 @@ public class DocumentController {
 		docValidator.validate(webDoc, bindingResult);
 		programService.fillPrograms(webDoc);
 		
-		if(programService.checkOutcomes(webDoc.getFullPrograms(), webDoc.getFullOutcomes())) {
+		if(programService.checkPrograms(webDoc.getFullPrograms(), 
+				webDoc.getFullOutcomes(), principal.getName())) {
 			bindingResult.rejectValue("programs", "programs.invalid");
 		}
 		

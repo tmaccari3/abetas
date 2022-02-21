@@ -59,10 +59,21 @@ public class StudentOutcome {
 		this.newRow = newRow;
 	}
 	
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof StudentOutcome) {
+			StudentOutcome outcome = (StudentOutcome) other;
+			return this.id == outcome.getId();
+		}
+		
+		return false;
+	}
+	
+	
 	//for testing
 	public String toString() {
 		String result = "";
-		result += programId + " ";
+		//result += programId + " ";
 		result += name + "\n";
 		
 		return result;

@@ -135,7 +135,25 @@ public class ProgramService implements Service<Program> {
 		user.setPrograms(programs);
 	}
 	
-	public boolean checkOutcomes(List<Program> programs, List<StudentOutcome> outcomes) {
+	public boolean checkPrograms(List<Program> programs, List<StudentOutcome> outcomes,
+			String userEmail) {
+		List<Program> validPrograms = programDao.getActivePrograms(userEmail);
+		System.out.println(validPrograms);
+		for(Program program : programs) {
+			if(!validPrograms.contains(program)) {
+				System.out.println("prog invalid");
+				return true;
+			}
+			
+			for(StudentOutcome outcome : outcomes) {
+				List<StudentOutcome> validOutcomes = programDao
+						.getActiveOutcomesForProgram(program.getId());
+				if(!validOutcomes.contains(outcome)) {
+					System.out.println("OC invalid");
+					return true;
+				}
+			}
+		}
 		for(StudentOutcome outcome : outcomes) {
 			if(!isInProgram(programs, outcome)) {
 				return true;
