@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import com.maccari.abet.domain.entity.WebDocument;
+import com.maccari.abet.domain.entity.web.WebDocument;
 
 @Component
 public class DocumentValidator implements Validator {

@@ -59,19 +59,19 @@
 					<span class="fas fa-home"></span> Home
 				</button>
 			</form>
-			<div sec:authorize="hasAnyRole('ADMIN')" class="dropdown">
+			<div class="dropdown">
 				<button class="btn btn-default dropdown-toggle admin-menu"
 					type="button" id="menu1" data-toggle="dropdown">
-					Admin Menu <span class="caret"></span>
+					User Menu<span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-					<li role="presentation">
+					<li sec:authorize="hasAnyRole('ADMIN')" role="presentation">
 						<form action="/manage">
 							<button type="submit" class="menu-item-button" role="menuitem"
 								tabindex="-1">Manage Users</button>
 						</form>
 					</li>
-					<li role="presentation">
+					<li sec:authorize="hasAnyRole('ASSESSMENT_COORD')" role="presentation">
 						<form action="/manage/programs">
 							<button type="submit" class="menu-item-button" role="menuitem"
 								tabindex="-1">Manage User Programs</button>

@@ -25,7 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.Task;
-import com.maccari.abet.domain.entity.WebTask;
+import com.maccari.abet.domain.entity.web.WebTask;
 import com.maccari.abet.domain.service.FileService;
 import com.maccari.abet.domain.service.ProgramService;
 import com.maccari.abet.domain.service.TaskService;

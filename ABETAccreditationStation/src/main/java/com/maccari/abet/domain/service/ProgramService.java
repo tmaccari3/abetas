@@ -9,11 +9,12 @@ import org.springframework.stereotype.Component;
 
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.StudentOutcome;
-import com.maccari.abet.domain.entity.WebDocument;
-import com.maccari.abet.domain.entity.WebProgram;
-import com.maccari.abet.domain.entity.WebTask;
-import com.maccari.abet.domain.entity.WebUser;
+import com.maccari.abet.domain.entity.web.WebDocument;
+import com.maccari.abet.domain.entity.web.WebProgram;
+import com.maccari.abet.domain.entity.web.WebTask;
+import com.maccari.abet.domain.entity.web.WebUser;
 import com.maccari.abet.repository.ProgramDao;
+import com.maccari.abet.utility.WebProgramOrderById;
 
 @Component
 public class ProgramService implements Service<Program> {

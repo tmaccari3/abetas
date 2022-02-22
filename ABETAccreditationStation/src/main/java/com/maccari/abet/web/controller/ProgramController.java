@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.maccari.abet.domain.entity.Program;
-import com.maccari.abet.domain.entity.WebProgram;
+import com.maccari.abet.domain.entity.web.WebProgram;
 import com.maccari.abet.domain.service.ProgramService;
 
 @Controller

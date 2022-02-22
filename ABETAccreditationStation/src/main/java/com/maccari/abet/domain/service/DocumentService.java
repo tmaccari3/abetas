@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.maccari.abet.domain.entity.Document;
-import com.maccari.abet.domain.entity.WebDocument;
+import com.maccari.abet.domain.entity.web.WebDocument;
 import com.maccari.abet.repository.DocumentDao;
 
 @Component

@@ -1,8 +1,8 @@
-package com.maccari.abet.domain.service;
+package com.maccari.abet.utility;
 
 import java.util.Comparator;
 
-import com.maccari.abet.domain.entity.WebProgram;
+import com.maccari.abet.domain.entity.web.WebProgram;
 
 public class WebProgramOrderById implements Comparator<WebProgram> {
 	@Override

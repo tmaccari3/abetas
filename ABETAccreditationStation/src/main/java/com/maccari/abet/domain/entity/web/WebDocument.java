@@ -1,10 +1,14 @@
-package com.maccari.abet.domain.entity;
+package com.maccari.abet.domain.entity.web;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.NotEmpty;
+
+import com.maccari.abet.domain.entity.File;
+import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.StudentOutcome;
 
 public class WebDocument {
 	private int id;

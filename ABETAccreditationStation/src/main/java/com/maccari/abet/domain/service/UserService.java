@@ -1,14 +1,12 @@
 package com.maccari.abet.domain.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.User;
-import com.maccari.abet.domain.entity.WebUser;
+import com.maccari.abet.domain.entity.web.WebUser;
 import com.maccari.abet.repository.UserDao;
 
 @Component

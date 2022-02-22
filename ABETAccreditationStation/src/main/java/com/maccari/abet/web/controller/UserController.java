@@ -24,10 +24,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.HandlerMapping;
 
-import com.maccari.abet.domain.entity.WebEmail;
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.User;
-import com.maccari.abet.domain.entity.WebUser;
+import com.maccari.abet.domain.entity.web.WebEmail;
+import com.maccari.abet.domain.entity.web.WebUser;
 import com.maccari.abet.domain.service.EmailServiceImpl;
 import com.maccari.abet.domain.service.ProgramService;
 import com.maccari.abet.domain.service.UserService;

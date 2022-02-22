@@ -9,7 +9,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
-import com.maccari.abet.domain.entity.WebEmail;
+import com.maccari.abet.domain.entity.web.WebEmail;
 
 @Component
 public class EmailServiceImpl implements EmailService {

@@ -1,4 +1,4 @@
-package com.maccari.abet.domain.entity;
+package com.maccari.abet.domain.entity.web;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;

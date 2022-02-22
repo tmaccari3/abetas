@@ -1,10 +1,12 @@
-package com.maccari.abet.domain.entity;
+package com.maccari.abet.domain.entity.web;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+
+import com.maccari.abet.domain.entity.Program;
 
 public class WebUser {
 	@NotEmpty(message = "Required")

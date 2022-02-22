@@ -1,7 +1,9 @@
-package com.maccari.abet.domain.entity;
+package com.maccari.abet.domain.entity.web;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+
+import com.maccari.abet.domain.entity.StudentOutcome;
 
 public class WebStudentOutcome {
 	private int id;

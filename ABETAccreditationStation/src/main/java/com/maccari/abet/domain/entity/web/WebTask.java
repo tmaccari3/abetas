@@ -1,4 +1,4 @@
-package com.maccari.abet.domain.entity;
+package com.maccari.abet.domain.entity.web;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -9,6 +9,11 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.maccari.abet.domain.entity.File;
+import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.StudentOutcome;
+import com.maccari.abet.domain.entity.Task;
 
 public class WebTask {
 	private int id;

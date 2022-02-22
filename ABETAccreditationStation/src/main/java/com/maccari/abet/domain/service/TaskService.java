@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.StudentOutcome;
 import com.maccari.abet.domain.entity.Task;
-import com.maccari.abet.domain.entity.WebTask;
+import com.maccari.abet.domain.entity.web.WebTask;
 import com.maccari.abet.repository.TaskDao;
 import com.maccari.abet.repository.UserDao;
 

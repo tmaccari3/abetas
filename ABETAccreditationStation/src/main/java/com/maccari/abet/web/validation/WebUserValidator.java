@@ -5,7 +5,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import com.maccari.abet.domain.entity.User;
-import com.maccari.abet.domain.entity.WebUser;
+import com.maccari.abet.domain.entity.web.WebUser;
 
 @Component
 public class WebUserValidator implements Validator {
