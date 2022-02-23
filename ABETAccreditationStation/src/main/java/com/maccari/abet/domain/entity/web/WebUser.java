@@ -5,11 +5,12 @@ import java.util.List;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 import com.maccari.abet.domain.entity.Program;
 
 public class WebUser {
-	@NotEmpty(message = "Required")
+	@NotEmpty(message = "*Email required")
 	@Email(message = "Enter a valid email address")
 	private String email;
 	
@@ -18,9 +19,15 @@ public class WebUser {
 	private List<Program> programs;
 
 	private List<String> roles;
+	
+	@Size(min=8, max=15, message = "Password must be between 8 and 15 characters.")
+	private String password;
+	
+	@Size(min=8, max=15, message = "Password must be between 8 and 15 characters.")
+	private String confPassword;
 
 	public WebUser() {
-		
+		this.programIds = new ArrayList<Integer>();
 	}
 	
 	public WebUser(String email, List<String> roles, List<Program> programs) {
@@ -69,5 +76,21 @@ public class WebUser {
 
 	public void setProgramIds(List<Integer> programIds) {
 		this.programIds = programIds;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getConfPassword() {
+		return confPassword;
+	}
+
+	public void setConfPassword(String confPassword) {
+		this.confPassword = confPassword;
 	}
 }

@@ -50,4 +50,13 @@ public class UserService implements Service<User> {
 	public User convertWebUser(WebUser webUser) {
 		return new User(webUser.getEmail(), webUser.getRoles(), webUser.getPrograms());
 	}
+	
+	public boolean userExists(String email) {
+		if(userDao.getUserByEmail(email) == null) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
 }

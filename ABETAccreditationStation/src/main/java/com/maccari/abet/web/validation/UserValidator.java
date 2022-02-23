@@ -4,18 +4,18 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import com.maccari.abet.domain.entity.User;
+import com.maccari.abet.domain.entity.web.WebUser;
 
 @Component
 public class UserValidator implements Validator {
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return User.class.isAssignableFrom(clazz);
+		return WebUser.class.isAssignableFrom(clazz);
 	}
 	
 	@Override
 	public void validate(Object target, Errors errors) {
-		User user = (User) target;
+		WebUser user = (WebUser) target;
 
 		String password = user.getPassword();
 		String confPassword = user.getConfPassword();

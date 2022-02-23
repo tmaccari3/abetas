@@ -183,8 +183,8 @@ public class TaskController {
 			BindingResult bindingResult, Model model, HttpSession session) {
 		webTask.setUploadedFile((File) session.getAttribute("UPLOADED_FILE"));
 		taskValidator.validate(webTask, bindingResult);
-		int invalidEmail = taskService.userExists(webTask.getAssignees());
-		if(invalidEmail >= 0) {
+		
+		if(taskService.userExists(webTask.getAssignees()) >= 0) {
 			bindingResult.rejectValue("assignees", "task.assignees.invalid");
 		}
 		programService.fillPrograms(webTask);

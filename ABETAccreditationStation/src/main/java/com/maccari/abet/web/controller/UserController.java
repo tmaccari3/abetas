@@ -97,18 +97,22 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/register")
-	public String displayForm(User user) {
+	public String displayForm(WebUser user) {
 		return "user/register";
 	}
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String addUser(@Valid User user, BindingResult bindingResult) {
-		userValidator.validate(user, bindingResult);
+	public String addUser(@Valid WebUser webUser, BindingResult bindingResult) {
+		userValidator.validate(webUser, bindingResult);
+		if(userService.userExists(webUser.getEmail())) {
+			bindingResult.rejectValue("email", "user.already.exists");
+		}
 		if(bindingResult.hasErrors()) {
 			return "user/register";
 		}
 		
-		String encodedPswd = passwordEncoder.encode(user.getPassword());
+		String encodedPswd = passwordEncoder.encode(webUser.getPassword());
+		User user = userService.convertWebUser(webUser);
 		user.setPassword(encodedPswd);
 		
 		userService.create(user);
@@ -144,8 +148,8 @@ public class UserController {
 	public String editUser(@RequestParam(value = "email", required = true) 
 		String email, WebUser webUser, Model model, final HttpServletRequest req) {
 		User user = userService.getUserByEmail(email);
-		model.addAttribute("webUser", new WebUser(user.getEmail(), user.getRoles(), 
-				user.getPrograms()));
+		model.addAttribute("webUser", new WebUser(user.getEmail(), user.getRoles().getList(), 
+				user.getPrograms().getList()));
 	    String mapping = (String) req.getAttribute(
                 HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
 		if(mapping.contains("programs")) {

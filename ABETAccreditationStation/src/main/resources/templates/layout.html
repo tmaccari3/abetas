@@ -59,7 +59,7 @@
 					<span class="fas fa-home"></span> Home
 				</button>
 			</form>
-			<div class="dropdown">
+			<div class="dropdown" sec:authorize="hasAnyRole('ASSESSMENT_COORD, ADMIN')">
 				<button class="btn btn-default dropdown-toggle admin-menu"
 					type="button" id="menu1" data-toggle="dropdown">
 					User Menu<span class="caret"></span>
@@ -80,8 +80,7 @@
 					<li role="presentation" class="divider"></li>
 				</ul>
 			</div>
-			<div sec:authorize="hasAnyRole('FACULTY, ASSESSMENT_COORD, ADMIN')"
-				class="dropdown">
+			<div class="dropdown" sec:authorize="hasAnyRole('FACULTY, ASSESSMENT_COORD, ADMIN')">
 				<button class="btn btn-default dropdown-toggle admin-menu"
 					type="button" id="menu1" data-toggle="dropdown">
 					Task Menu <span class="caret"></span>

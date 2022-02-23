@@ -1,34 +1,30 @@
 package com.maccari.abet.domain.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import com.maccari.abet.utility.WebList;
 
 public class User {
-	@NotEmpty(message = "Required")
-	@Email(message = "Enter a valid email address")
 	private String email;
 	
-	private List<Program> programs;
+	private WebList<Program> programs;
 	
-	@Size(min=8, max=15, message = "Password must be between 8 and 15 characters.")
 	private String password;
 	
-	@Size(min=8, max=15, message = "Password must be between 8 and 15 characters.")
 	private String confPassword;
 	
-	private List<String> roles;
+	private WebList<String> roles;
 	
 	public User() {
-		
+		roles = new WebList<String>();
+		programs = new WebList<Program>();
 	}
 	
 	public User(String email, List<String> roles, List<Program> programs) {
 		this.email = email;
-		this.roles = roles;
-		this.programs = programs;
+		this.roles = new WebList<String>((ArrayList<String>) roles);
+		this.programs = new WebList<Program>((ArrayList<Program>) programs);
 	}
 
 	public String getEmail() {
@@ -39,11 +35,11 @@ public class User {
 		this.email = email;
 	}
 	
-	public List<Program> getPrograms() {
+	public WebList<Program> getPrograms() {
 		return programs;
 	}
 
-	public void setPrograms(List<Program> programs) {
+	public void setPrograms(WebList<Program> programs) {
 		this.programs = programs;
 	}
 
@@ -63,11 +59,11 @@ public class User {
 		this.confPassword = confPassword;
 	}
 
-	public List<String> getRoles() {
+	public WebList<String> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(List<String> roles) {
+	public void setRoles(WebList<String> roles) {
 		this.roles = roles;
 	}
 }

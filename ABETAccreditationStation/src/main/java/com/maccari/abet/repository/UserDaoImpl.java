@@ -19,6 +19,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.User;
+import com.maccari.abet.utility.WebList;
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -47,7 +48,7 @@ public class UserDaoImpl implements UserDao {
 			
 			
 			SQL = "INSERT INTO authority (email, role) VALUES (?, ?)";
-			for(String role : user.getRoles()) {
+			for(String role : user.getRoles().getList()) {
 				jdbcTemplate.update(SQL, user.getEmail(), role);
 			}
 			
@@ -91,12 +92,12 @@ public class UserDaoImpl implements UserDao {
 			jdbcTemplate.update(SQL, user.getEmail());
 			
 			SQL = "INSERT INTO authority (email, role) VALUES (?, ?)";
-			for(String role : user.getRoles()) {
+			for(String role : user.getRoles().getList()) {
 				jdbcTemplate.update(SQL, user.getEmail(), role);
 			}
 			
 			SQL = "INSERT INTO user_program (email, prog_id, program) VALUES (?, ?, ?)";
-			for(Program program : user.getPrograms()) {
+			for(Program program : user.getPrograms().getList()) {
 				jdbcTemplate.update(SQL, user.getEmail(), program.getId(), 
 						program.getName());
 			}
@@ -177,8 +178,12 @@ public class UserDaoImpl implements UserDao {
 		public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 			User user = new User();
 			user.setEmail(rs.getString("email"));
-			user.setRoles(getUserRoles(user.getEmail()));
-			user.setPrograms(getUserPrograms(user.getEmail()));
+			ArrayList<String> roles = (ArrayList<String>) 
+					getUserRoles(user.getEmail());
+			user.setRoles(new WebList<String>(roles));
+			ArrayList<Program> programs = (ArrayList<Program>) 
+					getUserPrograms(user.getEmail());
+			user.setPrograms(new WebList<Program>(programs));
 			
 			return user;
 		}

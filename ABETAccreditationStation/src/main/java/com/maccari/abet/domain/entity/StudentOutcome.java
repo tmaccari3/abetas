@@ -63,14 +63,13 @@ public class StudentOutcome {
 	public boolean equals(Object other) {
 		if (other instanceof StudentOutcome) {
 			StudentOutcome outcome = (StudentOutcome) other;
+			
 			return this.id == outcome.getId();
 		}
 		
 		return false;
 	}
 	
-	
-	//for testing
 	public String toString() {
 		String result = "";
 		//result += programId + " ";
