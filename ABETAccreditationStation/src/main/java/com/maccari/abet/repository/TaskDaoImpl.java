@@ -199,10 +199,23 @@ public class TaskDaoImpl implements TaskDao {
 	public Task getTaskById(int id) {
 		try {
 			String SQL = "SELECT * FROM task WHERE id = ?";
+			/*SQL = "SELECT * FROM task t " +
+					"INNER JOIN assigned a " +
+					"ON t.id = a.id " +
+					"INNER JOIN task_program p " +
+					"ON t.id = p.task_id " + 
+					"INNER JOIN task_outcome o " +
+					"ON t.id = o.task_id " +
+					"INNER JOIN task_file f " +
+					"ON t.id = f.task_id " +
+					"WHERE t.id = ?";*/
+
 			Task task = jdbcTemplate.queryForObject(SQL, new FullTaskMapper(), id);
 
 			return task;
-		} catch (EmptyResultDataAccessException e) {
+		} catch (Exception e) {
+			System.out.println("Error getting task record.");
+			
 			return null;
 		}
 	}
@@ -271,7 +284,7 @@ public class TaskDaoImpl implements TaskDao {
 			task.setSubmitted(rs.getBoolean("submitted"));
 			task.setDueDate(rs.getDate("due_date"));
 			task.setComplete(rs.getBoolean("complete"));
-
+			
 			try {
 				String SQL = "SELECT assignee FROM assigned WHERE id = ?";
 				task.setAssignees(jdbcTemplate.query(SQL, new StringMapper(), task.getId()));
@@ -281,7 +294,6 @@ public class TaskDaoImpl implements TaskDao {
 
 			try {
 				String SQL = "SELECT * FROM task_program WHERE task_id = ?";
-				System.out.println(SQL + task.getId());
 				task.setPrograms(jdbcTemplate.query(SQL, new ProgramMapper(), task.getId()));
 			} catch (Exception e) {
 				System.out.println("Error in getting programs for task.");
@@ -291,9 +303,7 @@ public class TaskDaoImpl implements TaskDao {
 
 			try {
 				String SQL = "SELECT * FROM task_outcome WHERE task_id = ?";
-				System.out.println(SQL + task.getId());
 				task.setOutcomes(jdbcTemplate.query(SQL, new StudentOutcomeMapper(), task.getId()));
-				System.out.println(task.getOutcomes());
 			} catch (Exception e) {
 				System.out.println("Error in getting outcomes for task.");
 				

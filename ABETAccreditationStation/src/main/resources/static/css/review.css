@@ -1,0 +1,39 @@
+@charset "ISO-8859-1";
+
+.review-container {
+	position: absolute;
+	margin: 0 auto;
+	width: 100%;
+	min-height: 540px;
+	height: 90%;
+    padding: 15px;
+}
+
+.recent-container {
+	display: inline-block;
+	width: 30%;
+	height: 95%;
+	border: 2px solid #00004d;
+}
+
+	.recent-title {
+		background-color: #00004d;
+		color: white;
+		font-weight: bold;
+		vertical-align: middle;
+		width: 100%;
+		padding: 5px;
+	}
+
+.middle-container {
+	display: inline-block;
+	width: 5%;
+}
+
+.search-container {
+	display: inline-block;
+	width: 64%;
+	height: 95%;
+	border: 2px solid #00004d;
+	padding: 5px;
+}

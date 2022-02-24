@@ -44,7 +44,7 @@ public class DocumentController {
 	private DocumentValidator docValidator;
 	
 	@GetMapping(value = "/index")
-	public String viewDocuments() {
+	public String viewDocuments(Model model) {
 		return "document/index";
 	}
 	

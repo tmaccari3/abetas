@@ -4,10 +4,20 @@
 	layout:decorate="~{layout}">
 <head>
 <link href="/css/docs.css" rel="stylesheet" />
+<link href="/css/review.css" rel="stylesheet" />
 <meta charset="ISO-8859-1">
 <title>Improvement Documentation</title>
 </head>
 <body layout:fragment="content">
-	Improvement docs
+	<div class="review-container">
+		<div class="recent-container">
+			<div class="recent-title">Recent Submissions</div>
+			<div th:each="doc : ${documents}">
+				
+			</div>
+		</div>
+		<div class="middle-container"></div>
+		<div class="search-container">Search Documentation</div>
+	</div>
 </body>
 </html>
