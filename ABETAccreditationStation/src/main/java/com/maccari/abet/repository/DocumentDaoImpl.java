@@ -45,13 +45,14 @@ public class DocumentDaoImpl implements DocumentDao {
 
 		try {
 			String SQL = "INSERT INTO document (author, title, description, "
-					+ "submit_date) VALUES (?, ?, ?, ?) RETURNING id";
+					+ "submit_date, task) VALUES (?, ?, ?, ?, ?) RETURNING id";
 
 			Instant instant = Instant.now();
 			Timestamp ts = instant != null ? Timestamp.from(instant) : null;
 
 			document.setId(jdbcTemplate.query(SQL, new IdMapper(), document.getAuthor(), 
-					document.getTitle(), document.getDescription(), ts.toLocalDateTime()).get(0));
+					document.getTitle(), document.getDescription(), 
+					document.isTask(), ts.toLocalDateTime()).get(0));
 
 			insertRelations(document, insertFile(document));
 

@@ -24,6 +24,8 @@ public class Document {
 	
 	private File file;
 	
+	private boolean task;
+	
 	public Document() {
 		
 	}
@@ -90,5 +92,13 @@ public class Document {
 
 	public void setSubmitDate(Timestamp submitDate) {
 		this.submitDate = submitDate;
+	}
+
+	public boolean isTask() {
+		return task;
+	}
+
+	public void setTask(boolean task) {
+		this.task = task;
 	}
 }

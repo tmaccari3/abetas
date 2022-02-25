@@ -19,15 +19,54 @@
 	background-color: #edf2f7;
 	padding: 20px;
 	min-width: 400px;
+	width: 100%;
+}
+
+.task-complete-equal {
+	display: table;
+	width: 100%;
+}
+
+.task-complete-row {
+	display: table-row;
+	vertical-align: middle;
+	background-color: #edf2f7;
+	min-width: 400px;
+	width: 100%
+}
+
+.task-complete-row #cell {
+	display: table-cell;
+}
+
+.task-complete-details-container {
+	display: inline-block;
+	position: relative;
+	margin: auto;
+	vertical-align: middle;
+	background-color: #edf2f7;
+	padding: 20px;
+	min-width: 400px;
+	width: 100%;
 }
 
 .task-middle-container {
+	display: inline-block;
 	position: relative;
 	background-color: #dae4f1;
 	width: 100%;
 	border-top: 1px solid #00004d;
 	border-bottom: 1px solid #00004d;
 	padding: 5px;
+}
+
+.task-document-container {
+	display: inline-block;
+	vertical-align: top;
+	background-color: #edf2f7;
+	padding: 20px;
+	min-width: 400px;
+	width: 49%;
 }
 
 .task-index-container {

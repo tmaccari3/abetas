@@ -83,7 +83,6 @@ public class DocumentController {
 	    if(mapping.contains("create")) {
 			return "document/create";
 	    }
-
 	    else {
 	    	return "document/edit";
 	    }
