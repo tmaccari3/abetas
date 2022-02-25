@@ -4,6 +4,7 @@
 	layout:decorate="~{layout}">
 <head>
 <link href="/css/task.css" rel="stylesheet" />
+<link href="/css/docs.css" rel="stylesheet" />
 <meta charset="ISO-8859-1">
 <title>Complete Task</title>
 </head>
@@ -13,8 +14,8 @@
 	<form action="#" th:action="@{/task/complete}" method="post"
 		th:object="${webDocument}" enctype="multipart/form-data">
 		<div class="task-complete-equal">
-			<div id="cell" class="task-complete-row">
-				<div class="task-complete-details-container">
+			<div class="task-complete-row">
+				<div class="task-complete-details-container cell">
 					<h3>Task Details</h3>
 					<div class="task-title">
 						<div class="task-title-main">
@@ -83,30 +84,88 @@
 							<div th:if="${task.file == null}">N/A</div>
 						</div>
 					</div>
-					<br>
-					<div style="float: right" class="inline">
-						<button class="abetas-button" type="submit" name="cancel"
-							value="cancel">Return</button>
-					</div>
-					<div class="inline">
-						<button class="abetas-button" type="submit" name="submit"
-							value="Submit">Submit Task</button>
-					</div>
 				</div>
-				<div id="cell" class="separator"></div>
-				<div id="cell" class="task-document-container">
+				<div class="separator cell"></div>
+				<div class="task-document-container cell">
 					<h3>Submit Task</h3>
 					<div class="title-container">
 						<div class="inline center">
-							<label>Title:</label> <input type="text" th:field="*{title}" />
+							<label>Submission Title:</label> <input type="text"
+								th:field="*{title}" />
 						</div>
 						<div class="inline center">
 							<p class="error" th:if="${#fields.hasErrors('title')}"
 								th:errors="*{title}">Title Error</p>
 						</div>
 					</div>
+					<br>
+					<div class="doc-middle-container">
+						<div class="doc-file-container">
+							<h5>File Upload</h5>
+							<label class="error" th:if="${#fields.hasErrors('uploadedFile')}"
+								th:errors="*{uploadedFile}">File Error</label>
+							<table>
+								<tr>
+									<td style="border-bottom: none">
+										<!-- <label class="abetas-button label-button" for="uploadFile">Select a File</label> -->
+										<input id="uploadFile" class="abetas-file-button" type="file"
+										name="file" />
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<button class="abetas-button" type="submit" name="upload"
+											th:value="${task.id}" formnovalidate="formnovalidate">Upload
+											File</button>
+										<button class="abetas-button" type="submit" name="upload"
+											value="cancel" formnovalidate="formnovalidate">Cancel
+											upload</button>
+									</td>
+								</tr>
+								<tr>
+									<td th:if="${uploadedFile ne null}">
+										<div
+											th:text="${'Submitted file: ' + uploadedFile.getFileName()}"></div>
+									</td>
+									<td th:if="${uploadedFile == null}">
+										<div th:text="${'Submitted file: none'}"></div>
+									</td>
+								</tr>
+							</table>
+						</div>
+						<br>
+						<div class="doc-area-container">
+							<h6>Description:</h6>
+							<p class="error" th:if="${#fields.hasErrors('description')}"
+								th:errors="*{description}">Description Error</p>
+							<textarea placeholder="Enter description..."
+								th:field="*{description}" rows="4" cols="50" maxlength="255">
+           					Enter description...</textarea>
+						</div>
+					</div>
+					<br>
+					<div style="float: right" class="inline">
+						<button class="abetas-button" type="submit" name="cancel"
+							formnovalidate="formnovalidate" value="cancel">Return</button>
+					</div>
+					<div class="inline">
+						<button class="abetas-button" type="submit" name="btnSubmit"
+							value="Submit">Submit</button>
+					</div>
+					<br>
 				</div>
 			</div>
+			<!-- <div class="task-complete-row">
+				<div class="task-submit-button cell" style="float: left">
+					<button class="abetas-button" type="submit" name="cancel"
+						value="cancel">Return</button>
+				</div>
+				<div class="separator cell"></div>
+				<div class="task-submit-button cell" style="float: right">
+					<button class="abetas-button" type="submit" name="submit"
+						value="Submit">Submit Task</button>
+				</div>
+			</div> -->
 		</div>
 	</form>
 </body>

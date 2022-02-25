@@ -57,12 +57,18 @@ public class DocumentController {
 	public String uploadFile(final WebDocument webDoc, @RequestParam("file") MultipartFile file, 
 			RedirectAttributes attributes, String upload, Model model, HttpSession session,
 			final HttpServletRequest req) {
+	    String mapping = (String) req.getAttribute(
+                HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
+	    String result = "task/create";
+	    if(mapping.contains("edit")) {
+			result = "task/edit";
+	    }
 		if (file.isEmpty() || upload.equals("cancel")) {
 			session.removeAttribute("UPLOADED_FILE");
 			model.addAttribute("message", "*Please select a file to upload.*");
 			model.addAttribute("uploadedFile", null);
 			
-			return "document/create";
+		    return result;
 		}
 		
 		File uploadedFile = new File();
@@ -78,14 +84,7 @@ public class DocumentController {
 		session.setAttribute("UPLOADED_FILE", uploadedFile);
 		model.addAttribute("uploadedFile", uploadedFile);
 		
-	    String mapping = (String) req.getAttribute(
-                HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
-	    if(mapping.contains("create")) {
-			return "document/create";
-	    }
-	    else {
-	    	return "document/edit";
-	    }
+	    return result;
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)

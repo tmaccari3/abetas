@@ -35,7 +35,7 @@
 	width: 100%
 }
 
-.task-complete-row #cell {
+.task-complete-row .cell {
 	display: table-cell;
 }
 
@@ -43,11 +43,10 @@
 	display: inline-block;
 	position: relative;
 	margin: auto;
-	vertical-align: middle;
 	background-color: #edf2f7;
 	padding: 20px;
 	min-width: 400px;
-	width: 100%;
+	width: 54%;
 }
 
 .task-middle-container {
@@ -66,7 +65,7 @@
 	background-color: #edf2f7;
 	padding: 20px;
 	min-width: 400px;
-	width: 49%;
+	width: 45%;
 }
 
 .task-index-container {
@@ -135,6 +134,11 @@
 	display: inline-block;
 	vertical-align:top;
 	width: 49%;
+}
+
+.task-submit-button {
+	vertical-align: middle;
+	padding: 5px;
 }
 
 table {
