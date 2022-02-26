@@ -33,6 +33,10 @@ public class WebDocument {
 	
 	private File uploadedFile;
 	
+	private int taskId;
+	
+	private boolean task;
+	
 	public WebDocument() {
 		programs = new ArrayList<Integer>();
 		outcomes = new ArrayList<Integer>();
@@ -116,5 +120,21 @@ public class WebDocument {
 
 	public void setUploadedFile(File uploadedFile) {
 		this.uploadedFile = uploadedFile;
+	}
+
+	public boolean isTask() {
+		return task;
+	}
+
+	public void setTask(boolean task) {
+		this.task = task;
+	}
+
+	public int getTaskId() {
+		return taskId;
+	}
+
+	public void setTaskId(int taskId) {
+		this.taskId = taskId;
 	}
 }

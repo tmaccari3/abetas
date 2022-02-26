@@ -24,6 +24,8 @@ public class Document {
 	
 	private File file;
 	
+	private int taskId;
+	
 	private boolean task;
 	
 	public Document() {
@@ -100,5 +102,13 @@ public class Document {
 
 	public void setTask(boolean task) {
 		this.task = task;
+	}
+
+	public int getTaskId() {
+		return taskId;
+	}
+
+	public void setTaskId(int taskId) {
+		this.taskId = taskId;
 	}
 }

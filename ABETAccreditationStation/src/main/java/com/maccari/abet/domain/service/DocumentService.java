@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.maccari.abet.domain.entity.Document;
+import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.StudentOutcome;
 import com.maccari.abet.domain.entity.web.WebDocument;
 import com.maccari.abet.repository.DocumentDao;
 
@@ -54,7 +56,18 @@ public class DocumentService implements Service<Document> {
 		document.setSubmitDate(webDoc.getSubmitDate());
 		document.setDescription(webDoc.getDescription());
 		document.setFile(webDoc.getUploadedFile());
+		document.setTask(webDoc.isTask());
+		document.setTaskId(webDoc.getTaskId());
 		
 		return document;
+	}
+	
+	public void fillDocIds(WebDocument webDoc) {
+		for(Program program : webDoc.getFullPrograms()) {
+			webDoc.getPrograms().add(program.getId());
+		}
+		for(StudentOutcome outcome : webDoc.getFullOutcomes()) {
+			webDoc.getOutcomes().add(outcome.getId());
+		}
 	}
 }

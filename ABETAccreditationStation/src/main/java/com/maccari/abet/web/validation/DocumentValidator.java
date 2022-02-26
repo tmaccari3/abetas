@@ -17,15 +17,19 @@ public class DocumentValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		WebDocument doc = (WebDocument) target;
 
-		if(doc.getPrograms().isEmpty()) {
+		if(doc.getPrograms().isEmpty() && doc.getFullPrograms().isEmpty()) {
+			System.out.println("no prog");
 			errors.rejectValue("programs", "program.empty");
 		}
 		
-		if(doc.getOutcomes().isEmpty() && !doc.getPrograms().isEmpty()) {
+		if(doc.getOutcomes().isEmpty() && !doc.getPrograms().isEmpty() &&
+				doc.getFullOutcomes().isEmpty() && !doc.getFullPrograms().isEmpty()) {
+			System.out.println("no outcome");
 			errors.rejectValue("programs", "outcome.empty");
 		}
 		
 		if(doc.getUploadedFile() == null) {
+			System.out.println("no file");
 			errors.rejectValue("uploadedFile", "file.null");
 		}
 	}

@@ -29,10 +29,10 @@
 					<td th:text="${task.status}"></td>
 					<td>
 						<div class="option">
-							<form action="/task/details">
+							<form action="/task/review">
 								<button class="abetas-button" name="id" th:value="${task.id}"
 									type="submit">
-									<span class="fa fa-plus"></span> Details
+									<span class="fa fa-edit"></span> Review
 								</button>
 							</form>
 						</div>
@@ -49,6 +49,14 @@
 								<button class="abetas-button" name="id" th:value="${task.id}"
 									type="submit">
 									<span class="fa fa-times"></span> Delete
+								</button>
+							</form>
+						</div>
+						<div class="option">
+							<form action="/task/details">
+								<button class="abetas-button" name="id" th:value="${task.id}"
+									type="submit">
+									<span class="fa fa-plus"></span> Details
 								</button>
 							</form>
 						</div>

@@ -11,7 +11,7 @@
 <body layout:fragment="content">
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<form action="#" th:action="@{/task/complete}" method="post"
+	<form action="#" th:action="@{/task/doc/complete}" method="post"
 		th:object="${webDocument}" enctype="multipart/form-data">
 		<div class="task-complete-equal">
 			<div class="task-complete-row">
@@ -101,16 +101,18 @@
 					<br>
 					<div class="doc-middle-container">
 						<div class="doc-file-container">
-							<h5>File Upload</h5>
-							<label class="error" th:if="${#fields.hasErrors('uploadedFile')}"
-								th:errors="*{uploadedFile}">File Error</label>
+							<div class="inline">
+								<h5>File Upload</h5>
+							</div>
+							<div class="inline">
+								<label class="error"
+									th:if="${#fields.hasErrors('uploadedFile')}"
+									th:errors="*{uploadedFile}">File Error</label>
+							</div>
 							<table>
 								<tr>
-									<td style="border-bottom: none">
-										<!-- <label class="abetas-button label-button" for="uploadFile">Select a File</label> -->
-										<input id="uploadFile" class="abetas-file-button" type="file"
-										name="file" />
-									</td>
+									<td style="border-bottom: none"><input id="uploadFile"
+										class="abetas-file-button" type="file" name="file" /></td>
 								</tr>
 								<tr>
 									<td>
@@ -133,11 +135,18 @@
 								</tr>
 							</table>
 						</div>
-						<br>
+						<br> <br>
 						<div class="doc-area-container">
-							<h6>Description:</h6>
-							<p class="error" th:if="${#fields.hasErrors('description')}"
-								th:errors="*{description}">Description Error</p>
+							<div>
+								<div class="inline">
+									<h6>Description:</h6>
+								</div>
+								<div class="inline">
+									<label class="error"
+										th:if="${#fields.hasErrors('description')}"
+										th:errors="*{description}">Description Error</label>
+								</div>
+							</div>
 							<textarea placeholder="Enter description..."
 								th:field="*{description}" rows="4" cols="50" maxlength="255">
            					Enter description...</textarea>
@@ -149,8 +158,8 @@
 							formnovalidate="formnovalidate" value="cancel">Return</button>
 					</div>
 					<div class="inline">
-						<button class="abetas-button" type="submit" name="btnSubmit"
-							value="Submit">Submit</button>
+						<button class="abetas-button" type="submit" name="submit"
+							value="submit">Submit</button>
 					</div>
 					<br>
 				</div>

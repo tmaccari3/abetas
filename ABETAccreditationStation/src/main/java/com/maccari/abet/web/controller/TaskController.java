@@ -90,7 +90,7 @@ public class TaskController {
 	}
 	
 	@RequestMapping(value = {"/create", "/edit"}, params = "upload")
-	public String uploadFile(final WebTask webTask, @RequestParam("file") MultipartFile file, 
+	public String uploadFile(Principal principal, final WebTask webTask, @RequestParam("file") MultipartFile file, 
 			RedirectAttributes attributes, String upload, Model model, HttpSession session,
 			final HttpServletRequest req) {
 	    String mapping = (String) req.getAttribute(
@@ -110,6 +110,7 @@ public class TaskController {
 		
 		File uploadedFile = new File();
 		try {
+			uploadedFile.setAuthor(principal.getName());
 			uploadedFile.setFileName(StringUtils.cleanPath(file.getOriginalFilename()));
 			uploadedFile.setFileType(file.getContentType());
 			uploadedFile.setFileSize(file.getSize());
@@ -248,60 +249,6 @@ public class TaskController {
 		model.addAttribute("task", task);
 		
 		return "task/details";
-	}
-	
-	@RequestMapping(value = "/complete")
-	public String completeTask(@RequestParam(value = "id", required = true)
-			int id, WebDocument webDocument, Model model, HttpSession session) {
-		Task task = taskService.getById(id);
-		File file = task.getFile();
-		if(file != null) {
-			task.setFile(fileService.getFileById(file.getId()));
-		}
-		model.addAttribute("task", task);
-		session.setAttribute("TASK_ID", task.getId());
-		
-		return "task/complete";
-	}
-	
-	@RequestMapping(value = {"/complete"}, params = "upload")
-	public String uploadFile(final WebDocument webDocument, @RequestParam("file") MultipartFile file, 
-			RedirectAttributes attributes, String upload, Model model, HttpSession session) {
-		int id = (int) session.getAttribute("TASK_ID");
-		if (file.isEmpty() || upload.equals("cancel")) {
-			session.removeAttribute("UPLOADED_FILE");
-			model.addAttribute("message", "*Please select a file to upload.*");
-			model.addAttribute("uploadedFile", null);
-			
-			return "redirect:/task/complete?id=" + id;
-		}
-		
-		File uploadedFile = new File();
-		try {
-			uploadedFile.setFileName(StringUtils.cleanPath(file.getOriginalFilename()));
-			uploadedFile.setFileType(file.getContentType());
-			uploadedFile.setFileSize(file.getSize());
-			uploadedFile.setData(file.getBytes());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		session.setAttribute("UPLOADED_FILE", uploadedFile);
-		model.addAttribute("uploadedFile", uploadedFile);
-		
-	    return "redirect:/task/complete?id=" + id;
-	}
-	
-	@RequestMapping(value = "/complete", method = RequestMethod.POST, params = "submit")
-	public String submitCompletedTask(HttpSession session) {
-		session.removeAttribute("TASK_ID");
-		
-		return "redirect:/task/index";
-	}
-	
-	@RequestMapping(value = "/complete", method = RequestMethod.POST, params = "cancel")
-	public String cancelCompletedTask() {
-		return "redirect:/task/index";
 	}
 
 	@ModelAttribute("progTypes")

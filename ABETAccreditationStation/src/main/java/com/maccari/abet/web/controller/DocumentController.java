@@ -22,11 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.maccari.abet.domain.entity.Document;
 import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.web.WebDocument;
-import com.maccari.abet.domain.entity.web.WebTask;
 import com.maccari.abet.domain.service.DocumentService;
 import com.maccari.abet.domain.service.ProgramService;
 import com.maccari.abet.web.validation.DocumentValidator;
@@ -88,15 +86,15 @@ public class DocumentController {
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String addDoc(Principal principal, @Valid WebDocument webDoc, 
+	public String addDoc(Principal principal, @Valid WebDocument webDocument, 
 			BindingResult bindingResult, Model model, final HttpServletRequest req,
 			HttpSession session) {
-		webDoc.setUploadedFile((File) session.getAttribute("UPLOADED_FILE"));
-		docValidator.validate(webDoc, bindingResult);
-		programService.fillPrograms(webDoc);
+		webDocument.setUploadedFile((File) session.getAttribute("UPLOADED_FILE"));
+		docValidator.validate(webDocument, bindingResult);
+		programService.fillPrograms(webDocument);
 		
-		if(programService.checkPrograms(webDoc.getFullPrograms(), 
-				webDoc.getFullOutcomes(), principal.getName())) {
+		if(programService.checkPrograms(webDocument.getFullPrograms(), 
+				webDocument.getFullOutcomes(), principal.getName())) {
 			bindingResult.rejectValue("programs", "programs.invalid");
 		}
 		
@@ -104,8 +102,8 @@ public class DocumentController {
 			return "document/create";
 		}
 		
-		webDoc.setAuthor(principal.getName());
-		docService.create(docService.webDoctoDoc(webDoc));
+		webDocument.setAuthor(principal.getName());
+		docService.create(docService.webDoctoDoc(webDocument));
 		
 		session.removeAttribute("UPLOADED_FILE");
 
