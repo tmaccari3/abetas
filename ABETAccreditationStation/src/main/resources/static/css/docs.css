@@ -55,6 +55,22 @@
 	text-align: center;
 }
 
+.document-file {
+	display: inline-block;
+	vertical-align:top;
+	width: 100%;
+}
+
+.document-description {
+	display: inline-block;
+	vertical-align:top;
+	width: 49%;
+}
+
+.document-title {
+	border-bottom: 1px solid #bfbfbf;
+}
+
 table {
 	width: 100%
 }

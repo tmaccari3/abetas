@@ -2,6 +2,7 @@ package com.maccari.abet.web.controller;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.maccari.abet.domain.entity.Document;
 import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.Task;
 import com.maccari.abet.domain.entity.web.WebDocument;
@@ -102,6 +104,8 @@ public class TaskCompleteController {
 		webDocument.setTask(true);
 		webDocument.setTaskId(taskId);
 		docService.create(docService.webDoctoDoc(webDocument));
+		task.setSubmitted(true);
+		taskService.updateSubmit(task);
 		
 		session.removeAttribute("TASK_ID");
 		
@@ -121,6 +125,18 @@ public class TaskCompleteController {
 	@RequestMapping(value = "/complete", method = RequestMethod.POST, params = "cancel")
 	public String cancelCompletedTask() {
 		return "redirect:/task/index";
+	}
+	
+	@RequestMapping(value = "/review")
+	public String completeTask(@RequestParam(value = "id", required = true)
+		int id, Model model, HttpSession session) {
+		Task task = taskService.getById(id);
+		ArrayList<Document> documents = (ArrayList<Document>) docService.getDocsForTask(id);
+		fileService.fillFiles(documents);
+		model.addAttribute("documents", documents);
+		model.addAttribute("task", task);
+		
+		return "task/review";
 	}
 	
 	@ModelAttribute("uploadedFile")

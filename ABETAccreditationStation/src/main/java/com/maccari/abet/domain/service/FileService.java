@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.maccari.abet.domain.entity.Document;
 import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.repository.FileDao;
 
@@ -35,4 +36,9 @@ public class FileService {
 		return null;
 	}
 
+	public void fillFiles(List<Document> documents) {
+		for(Document document : documents) {
+			document.setFile(fileDao.getFileById(document.getFile().getId()));
+		}
+	}
 }

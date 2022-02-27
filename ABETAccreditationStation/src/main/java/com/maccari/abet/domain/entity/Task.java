@@ -28,6 +28,8 @@ public class Task {
 	
 	private Timestamp assignDate;
 	
+	private Timestamp submitDate;
+	
 	private Date dueDate;
 	
 	private File file;
@@ -141,9 +143,19 @@ public class Task {
 	public void setSubmitted(boolean submitted) {
 		this.submitted = submitted;
 	}
+	public Timestamp getSubmitDate() {
+		return submitDate;
+	}
+
+	public void setSubmitDate(Timestamp submitDate) {
+		this.submitDate = submitDate;
+	}
 	
 	public String getStatus() {
 		String result = "incomplete";
+		if(submitted) {
+			result = "submitted";
+		}
 		if(complete) {
 			result = "complete";
 		}

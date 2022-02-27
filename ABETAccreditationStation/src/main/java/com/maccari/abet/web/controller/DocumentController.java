@@ -57,9 +57,9 @@ public class DocumentController {
 			final HttpServletRequest req) {
 	    String mapping = (String) req.getAttribute(
                 HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
-	    String result = "task/create";
+	    String result = "document/create";
 	    if(mapping.contains("edit")) {
-			result = "task/edit";
+			result = "document/edit";
 	    }
 		if (file.isEmpty() || upload.equals("cancel")) {
 			session.removeAttribute("UPLOADED_FILE");

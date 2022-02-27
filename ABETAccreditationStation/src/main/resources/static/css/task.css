@@ -52,14 +52,24 @@
 .task-middle-container {
 	display: inline-block;
 	position: relative;
-	background-color: #dae4f1;
+	background-color: #eff2f5;
 	width: 100%;
 	border-top: 1px solid #00004d;
 	border-bottom: 1px solid #00004d;
 	padding: 5px;
 }
 
-.task-document-container {
+.task-doc-middle-container {
+	position: relative;
+	background-color: #dae4f1;
+	margin: auto;
+	width: 100%;
+	border-top: 1px solid #00004d;
+	border-bottom: 1px solid #00004d;
+	padding: 5px;
+}
+
+.task-submission-container {
 	display: inline-block;
 	vertical-align: top;
 	background-color: #edf2f7;
@@ -88,6 +98,19 @@
 	width: 49%;
 }
 
+.task-document-container {
+	border: 2px solid black;
+	padding: 2px;
+	background-color: #edf2f7;
+	width: 100%;
+}
+
+.task-document {
+	background-color: #e8f1fd;
+	border-top: 3px solid #00004d;
+	padding-top: 5px;
+}
+
 .task-area-container {
 	text-align: center;
 }
@@ -97,7 +120,7 @@
 }
 
 .task-title {
-	border-bottom: 1px solid #bfbfbf;
+	border-bottom: 1px solid  #bfbfbf;
 }
 
 .task-title-main {

@@ -1,6 +1,5 @@
 package com.maccari.abet.domain.entity.web;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

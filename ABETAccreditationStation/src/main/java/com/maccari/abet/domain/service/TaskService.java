@@ -46,6 +46,14 @@ public class TaskService implements Service<Task>{
 		return taskDao.updateTask(item);
 	}
 	
+	public void updateSubmit(Task item) {
+		taskDao.updateSubmitted(item);
+	}
+	
+	public void updateComnplete(Task item) {
+		taskDao.updateComplete(item);
+	}
+	
 	public List<Task> getAssigned(String email) {
 		return taskDao.getAssignedTasks(email);
 	}

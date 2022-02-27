@@ -163,6 +163,42 @@ public class TaskDaoImpl implements TaskDao {
 			throw e;
 		}
 	}
+	
+	@Override
+	public void updateSubmitted(Task task) {
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+		TransactionStatus status = transactionManager.getTransaction(def);
+		
+		try {
+			String SQL = "UPDATE task set submitted = ? where id = ?";
+			jdbcTemplate.update(SQL, task.isSubmitted(), task.getId());
+
+			transactionManager.commit(status);
+		} catch (Exception e) {
+			System.out.println("Error in updating task submitted record, rolling back");
+			transactionManager.rollback(status);
+			throw e;
+		}
+	}
+	
+	@Override
+	public void updateComplete(Task task) {
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+		TransactionStatus status = transactionManager.getTransaction(def);
+		
+		try {
+			String SQL = "UPDATE task set complete = ? where id = ?";
+			jdbcTemplate.update(SQL, task.isComplete(), task.getId());
+
+			transactionManager.commit(status);
+		} catch (Exception e) {
+			System.out.println("Error in updating task submitted record, rolling back");
+			transactionManager.rollback(status);
+			throw e;
+		}
+	}
 
 	@Override
 	public void removeTask(Task task) {
@@ -267,7 +303,9 @@ public class TaskDaoImpl implements TaskDao {
 			task.setTitle(rs.getString("title"));
 			task.setCoordinator(rs.getString("coordinator"));
 			task.setAssignDate(rs.getObject("assign_date", Timestamp.class));
+			task.setSubmitted(rs.getBoolean("submitted"));
 			task.setComplete(rs.getBoolean("complete"));
+			task.setSubmitDate(rs.getObject("submit_date", Timestamp.class));
 
 			return task;
 		}
@@ -284,6 +322,7 @@ public class TaskDaoImpl implements TaskDao {
 			task.setSubmitted(rs.getBoolean("submitted"));
 			task.setDueDate(rs.getDate("due_date"));
 			task.setComplete(rs.getBoolean("complete"));
+			task.setSubmitDate(rs.getObject("submit_date", Timestamp.class));
 			
 			try {
 				String SQL = "SELECT assignee FROM assigned WHERE id = ?";

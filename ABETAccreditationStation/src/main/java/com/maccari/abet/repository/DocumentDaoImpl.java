@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -21,6 +23,8 @@ import com.maccari.abet.domain.entity.Document;
 import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.StudentOutcome;
+import com.maccari.abet.domain.entity.Task;
+import com.maccari.abet.repository.TaskDaoImpl.SimpleTaskMapper;
 
 @Repository
 public class DocumentDaoImpl implements DocumentDao {
@@ -111,18 +115,48 @@ public class DocumentDaoImpl implements DocumentDao {
 		}
 	}
 	
-	class FullTaskMapper implements RowMapper<Document> {
+	@Override
+	public List<Document> getDocsForTask(int taskId) {
+		ArrayList<Document> docs = new ArrayList<>();
+		try {
+			String SQL = "SELECT * from document";
+			docs = (ArrayList<Document>) jdbcTemplate.query(SQL, new FullDocMapper());
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+
+		return docs;
+	}
+	
+	class SimpleDocMapper implements RowMapper<Document> {
 		public Document mapRow(ResultSet rs, int rowNum) throws SQLException {
 			Document document = new Document();
 			document.setId(rs.getInt("id"));
+			document.setTaskId(rs.getInt("task_id"));
 			document.setTitle(rs.getString("title"));
 			document.setAuthor(rs.getString("author"));
 			document.setDescription(rs.getString("description"));
 			document.setSubmitDate(rs.getObject("submit_date", Timestamp.class));
+			document.setTask(rs.getBoolean("task"));
+
+			return document;
+		}
+	}
+	
+	class FullDocMapper implements RowMapper<Document> {
+		public Document mapRow(ResultSet rs, int rowNum) throws SQLException {
+			Document document = new Document();
+			document.setId(rs.getInt("id"));
+			document.setTaskId(rs.getInt("task_id"));
+			document.setTitle(rs.getString("title"));
+			document.setAuthor(rs.getString("author"));
+			document.setDescription(rs.getString("description"));
+			document.setSubmitDate(rs.getObject("submit_date", Timestamp.class));
+			document.setTask(rs.getBoolean("task"));
 
 
 			try {
-				String SQL = "SELECT * FROM document_program WHERE task_id = ?";
+				String SQL = "SELECT * FROM document_program WHERE doc_id = ?";
 				document.setPrograms(jdbcTemplate.query(SQL, new ProgramMapper(), 
 						document.getId()));
 
@@ -131,7 +165,7 @@ public class DocumentDaoImpl implements DocumentDao {
 			}
 
 			try {
-				String SQL = "SELECT * FROM document_outcome WHERE task_id = ?";
+				String SQL = "SELECT * FROM document_outcome WHERE doc_id = ?";
 				document.setOutcomes(jdbcTemplate.query(SQL, new StudentOutcomeMapper(), 
 						document.getId()));
 
@@ -140,7 +174,7 @@ public class DocumentDaoImpl implements DocumentDao {
 			}
 			
 			try {
-				String SQL = "SELECT * FROM document_file WHERE task_id = ?";
+				String SQL = "SELECT * FROM document_file WHERE doc_id = ?";
 				int fileId = jdbcTemplate.query(SQL, new IdMapper(), document.getId()).get(0);
 				
 				File file = new File();

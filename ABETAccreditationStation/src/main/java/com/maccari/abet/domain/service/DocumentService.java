@@ -44,6 +44,10 @@ public class DocumentService implements Service<Document> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public List<Document> getDocsForTask(int taskId){
+		return docDao.getDocsForTask(taskId);
+	}
 
 	public Document webDoctoDoc(WebDocument webDoc) {
 		Document document = new Document();
