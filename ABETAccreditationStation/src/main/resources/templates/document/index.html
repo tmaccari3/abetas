@@ -10,14 +10,61 @@
 </head>
 <body layout:fragment="content">
 	<div class="review-container">
-		<div class="recent-container">
-			<div class="recent-title">Recent Submissions</div>
-			<div th:each="doc : ${documents}">
-				
+			<div class="recent-container">
+				<div class="recent-title">Recent Submissions</div>
+				<div class="recent-document" th:each="document : ${documents}">
+					<div class="task-title">
+						<div class="task-title-main">
+							<div>
+								<div class="inline">
+									<h6>Title:</h6>
+								</div>
+								<div class="inline" th:text="${document.title}">Title</div>
+								<div class="inline document-date"
+									th:text="${document.getFormattedDate}"></div>
+							</div>
+							<div>
+								<div class="inline">
+									<h6>Submitted by:</h6>
+								</div>
+								<div class="inline">
+									<div th:text="${document.author}">author</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="review-middle-container">
+						<div class="doc-info-container">
+							<div class="doc-info">
+								<div class="title">
+									<h6>Program(s):</h6>
+								</div>
+								<div th:each="program : *{document.programs}">
+									<p th:text="${program.name}"></p>
+								</div>
+							</div>
+							<div class="doc-info">
+								<div class="title">
+									<h6>Submitted for a Task:</h6>
+								</div>
+								<div th:if="${document.taskId == 0}">Yes</div>
+								<div th:if="${document.taskId ne 0}">N/A</div>
+							</div>
+						</div>
+					</div>
+					<div class="review-middle-container">
+						<div class="doc-info-container">
+							<div class="title">
+								<h6>Description:</h6>
+							</div>
+							<div th:text="${document.description}">description</div>
+						</div>
+					</div>
+					<br>
+				</div>
 			</div>
+			<div class="middle-container"></div>
+			<div class="search-container">Search Documentation</div>
 		</div>
-		<div class="middle-container"></div>
-		<div class="search-container">Search Documentation</div>
-	</div>
 </body>
 </html>

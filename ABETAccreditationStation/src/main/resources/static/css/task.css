@@ -119,10 +119,6 @@
 	width: 100%;
 }
 
-.task-title {
-	border-bottom: 1px solid  #bfbfbf;
-}
-
 .task-title-main {
 	display: inline-block;
 	vertical-align: top;

@@ -1,6 +1,7 @@
 package com.maccari.abet.domain.entity;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.validation.constraints.NotEmpty;
@@ -110,5 +111,15 @@ public class Document {
 
 	public void setTaskId(int taskId) {
 		this.taskId = taskId;
+	}
+	
+	public String getFormattedDate() {
+		if(submitDate == null) {
+			return "";
+		}
+		
+		else {
+			return new SimpleDateFormat("yyyy-MM-dd").format(submitDate);
+		}
 	}
 }

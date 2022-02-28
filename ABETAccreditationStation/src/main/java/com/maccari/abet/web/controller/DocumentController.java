@@ -43,6 +43,8 @@ public class DocumentController {
 	
 	@GetMapping(value = "/index")
 	public String viewDocuments(Model model) {
+		model.addAttribute("documents", docService.getRecentDocuments(10));
+		
 		return "document/index";
 	}
 	

@@ -114,13 +114,32 @@ public class DocumentDaoImpl implements DocumentDao {
 			throw e;
 		}
 	}
+
+	@Override
+	public List<Document> getAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Document> getRecentDocuments(int amount) {
+		ArrayList<Document> docs = new ArrayList<>();
+		try {
+			String SQL = "SELECT * FROM document ORDER BY submit_date DESC LIMIT ?";
+			docs = (ArrayList<Document>) jdbcTemplate.query(SQL, new FullDocMapper(), amount);
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+
+		return docs;
+	}
 	
 	@Override
 	public List<Document> getDocsForTask(int taskId) {
 		ArrayList<Document> docs = new ArrayList<>();
 		try {
-			String SQL = "SELECT * from document";
-			docs = (ArrayList<Document>) jdbcTemplate.query(SQL, new FullDocMapper());
+			String SQL = "SELECT * FROM document WHERE task_id = ?";
+			docs = (ArrayList<Document>) jdbcTemplate.query(SQL, new FullDocMapper(), taskId);
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}

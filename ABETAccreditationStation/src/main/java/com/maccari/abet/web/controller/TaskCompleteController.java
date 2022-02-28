@@ -103,6 +103,7 @@ public class TaskCompleteController {
 		webDocument.setAuthor(principal.getName());
 		webDocument.setTask(true);
 		webDocument.setTaskId(taskId);
+		System.out.println(taskId);
 		docService.create(docService.webDoctoDoc(webDocument));
 		task.setSubmitted(true);
 		taskService.updateSubmit(task);
@@ -130,7 +131,7 @@ public class TaskCompleteController {
 	@RequestMapping(value = "/review")
 	public String completeTask(@RequestParam(value = "id", required = true)
 		int id, Model model, HttpSession session) {
-		Task task = taskService.getById(id);
+		Task task = getTaskById(id);
 		ArrayList<Document> documents = (ArrayList<Document>) docService.getDocsForTask(id);
 		fileService.fillFiles(documents);
 		model.addAttribute("documents", documents);

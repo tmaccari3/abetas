@@ -1,7 +1,12 @@
 @charset "ISO-8859-1";
 
+html {
+    height: 100%;
+}
+
 body {
 	background-color: #e6eeff;
+    height: 100%;
 }
 
 .container {
@@ -127,6 +132,10 @@ body {
 .label-button {
 	padding: 2px;
 	border: 2px solid #a3a3c2;;
+}
+
+.title {
+	border-bottom: 1px solid  #bfbfbf;
 }
 
 .title-container {

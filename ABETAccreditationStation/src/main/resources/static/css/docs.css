@@ -31,6 +31,18 @@
 	padding: 5px;
 }
 
+.doc-info-container {
+	display: inline-block;
+    vertical-align: top;
+    width: 100%;
+}
+
+.doc-info {
+	display: inline-block;
+    vertical-align: top;
+    width: 49%;
+}
+
 .doc-index-container {
 	position: relative;
 	margin: auto;
@@ -69,6 +81,11 @@
 
 .document-title {
 	border-bottom: 1px solid #bfbfbf;
+}
+
+.document-date {
+	font-weight: bold;
+	float: right;
 }
 
 table {

@@ -18,8 +18,11 @@ public class DocumentService implements Service<Document> {
 	
 	@Override
 	public List<Document> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return docDao.getAll();
+	}
+	
+	public List<Document> getRecentDocuments(int amount) {
+		return docDao.getRecentDocuments(amount);
 	}
 
 	@Override

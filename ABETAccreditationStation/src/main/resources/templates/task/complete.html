@@ -17,7 +17,7 @@
 			<div class="task-complete-row">
 				<div class="task-complete-details-container cell">
 					<h3>Task Details</h3>
-					<div class="task-title">
+					<div class="title">
 						<div class="task-title-main">
 							<div class="inline">
 								<h6>Title:</h6>
@@ -38,7 +38,7 @@
 					<br>
 					<div class="task-details">
 						<div class="task-assignees">
-							<div class="task-title">
+							<div class="title">
 								<h6>Assignee List</h6>
 							</div>
 							<div th:each="assignee : ${task.assignees}">
@@ -46,7 +46,7 @@
 							</div>
 						</div>
 						<div class="task-description">
-							<div class="task-title">
+							<div class="title">
 								<h6>Description:</h6>
 							</div>
 							<p th:text="${task.description}"></p>
@@ -55,7 +55,7 @@
 					<br>
 					<div class="task-details">
 						<div class="task-programs">
-							<div class="task-title">
+							<div class="title">
 								<h6>Program(s)</h6>
 							</div>
 							<div th:each="program : ${task.programs}">
@@ -63,7 +63,7 @@
 							</div>
 						</div>
 						<div class="task-outcome">
-							<div class="task-title">
+							<div class="title">
 								<h6>Student Outcome:</h6>
 							</div>
 							<div th:each="outcome : ${task.outcomes}">
@@ -73,7 +73,7 @@
 					</div>
 					<div class="task-details">
 						<div class="task-file">
-							<div class="task-title">
+							<div class="title">
 								<h6>File(s):</h6>
 							</div>
 							<div th:if="${task.file ne null}">
