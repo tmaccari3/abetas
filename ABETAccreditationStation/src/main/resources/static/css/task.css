@@ -1,5 +1,9 @@
 @charset "ISO-8859-1";
 
+li {
+	overflow-x: auto;
+}
+
 .task-container {
 	position: relative;
 	margin: auto;

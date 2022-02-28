@@ -261,6 +261,7 @@ public class TaskDaoImpl implements TaskDao {
 		try {
 			List<Task> tasks = new ArrayList<Task>();
 			List<Integer> taskIds = getAssignedTaskIds(email);
+			System.out.println(taskIds);
 			String SQL = "SELECT * FROM task WHERE id = ?";
 
 			for (Integer id : taskIds) {

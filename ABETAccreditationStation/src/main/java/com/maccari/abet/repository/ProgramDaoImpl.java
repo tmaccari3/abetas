@@ -61,6 +61,7 @@ public class ProgramDaoImpl implements ProgramDao {
 		TransactionStatus status = transactionManager.getTransaction(def);
 		
 		try {
+			System.out.println(outcome);
 			String SQL = "INSERT INTO student_outcome (name, prog_id, active) VALUES (?, ?, ?)";
 			jdbcTemplate.update(SQL, outcome.getName(), outcome.getProgramId(), true);
 			
@@ -218,10 +219,12 @@ public class ProgramDaoImpl implements ProgramDao {
 			programs = (ArrayList<Program>) jdbcTemplate.query(
 					SQL, new ProgramMapper());
 			System.out.println(programIds);
-			System.out.println(programs);
-			for(Program program : programs) {
+			System.out.println("what: "+programs);
+			for(int i  = 0; i < programs.size(); i++) {
+				Program program = programs.get(i);
 				if(!programIds.contains(program.getId())) {
 					programs.remove(program);
+					i--;
 				}
 			}
 			
@@ -232,7 +235,7 @@ public class ProgramDaoImpl implements ProgramDao {
 		} catch (Exception e) {
 			System.out.println("Error getting Programs.");
 			
-			return programs;
+			return null;
 		}
 	}
 

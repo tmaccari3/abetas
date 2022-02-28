@@ -9,7 +9,7 @@ public class StudentOutcome {
 	private int programId;
 	
 	@NotEmpty(message = "Required")
-	@Size(min=1, max=100, message = "Name must be between 1 and 100 characters.")
+	@Size(min=1, max=252, message = "Name must be between 1 and 252 characters.")
 	private String name;
 	
 	private boolean active;
