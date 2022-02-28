@@ -268,7 +268,7 @@ public class TaskDaoImpl implements TaskDao {
 			}
 
 			return tasks;
-		} catch (EmptyResultDataAccessException e) {
+		} catch (Exception e) {
 			return null;
 		}
 	}
