@@ -50,7 +50,7 @@ public class TaskService implements Service<Task>{
 		taskDao.updateSubmitted(item);
 	}
 	
-	public void updateComnplete(Task item) {
+	public void updateComplete(Task item) {
 		taskDao.updateComplete(item);
 	}
 	

@@ -103,7 +103,7 @@ public class TaskCompleteController {
 		webDocument.setAuthor(principal.getName());
 		webDocument.setTask(true);
 		webDocument.setTaskId(taskId);
-		System.out.println(taskId);
+		
 		docService.create(docService.webDoctoDoc(webDocument));
 		task.setSubmitted(true);
 		taskService.updateSubmit(task);
@@ -128,7 +128,7 @@ public class TaskCompleteController {
 		return "redirect:/task/index";
 	}
 	
-	@RequestMapping(value = "/review")
+	@RequestMapping(value = "/submit")
 	public String completeTask(@RequestParam(value = "id", required = true)
 		int id, Model model, HttpSession session) {
 		Task task = getTaskById(id);
@@ -137,7 +137,31 @@ public class TaskCompleteController {
 		model.addAttribute("documents", documents);
 		model.addAttribute("task", task);
 		
-		return "task/review";
+		return "task/submit";
+	}
+	
+	@RequestMapping(value = "/submit", method = RequestMethod.POST)
+	public String verifyTaskSubmission(@RequestParam(value = "id", required = true)
+		int id, Model model, HttpSession session) {
+		ArrayList<Document> documents = (ArrayList<Document>) docService.getDocsForTask(id);
+		Task task = getTaskById(id);
+		
+		if(documents.isEmpty()) {
+			model.addAttribute("invalid_submit", "No submission has been made, "
+					+ "cannot submit Task as complete.");
+			model.addAttribute("documents", documents);
+			model.addAttribute("task", task);
+		}
+		
+		task.setComplete(true);
+		taskService.updateComplete(task);
+		
+		return "task/viewCreated";
+	}
+	
+	@RequestMapping(value = "/submit", method = RequestMethod.POST, params = "cancel")
+	public String cancelVerifyTaskComplete() {
+		return "redirect:/task/viewCreated";
 	}
 	
 	@ModelAttribute("uploadedFile")

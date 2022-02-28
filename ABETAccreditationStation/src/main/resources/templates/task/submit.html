@@ -11,8 +11,7 @@
 <body layout:fragment="content">
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<form action="#" th:action="@{/task/doc/complete}" method="post"
-		th:object="${webDocument}">
+	<form action="#" th:action="@{/task/doc/submit}" method="post">
 		<div class="task-complete-equal">
 			<div class="task-complete-row">
 				<div class="task-complete-details-container cell">
@@ -88,7 +87,8 @@
 				<div class="separator cell"></div>
 				<div class="task-submission-container cell">
 					<h3>Submissions</h3>
-					<div class="task-document-container">
+					<div th:if="${invalid_submit ne null}" th:text="${invalid_submit}"></div>
+					<div th:if="${!documents.isEmpty}" class="task-document-container">
 						<div class="task-document" th:each="document : ${documents}">
 							<div class="title">
 								<div class="task-title-main">
@@ -137,17 +137,21 @@
 							<br>
 						</div>
 						<br>
-						<div style="float: right" class="inline">
-							<button class="abetas-button" type="submit" name="cancel"
-								formnovalidate="formnovalidate" value="cancel">Return</button>
-						</div>
-						<div class="inline">
-							<button class="abetas-button" type="submit" name="submit"
-								value="submit">Submit</button>
-						</div>
-						<br>
+					</div>
+					<div th:if="${documents.isEmpty}" class="task-document-container">
+						No documents submitted.
 					</div>
 				</div>
+			</div>
+		</div>
+		<div class="task-submit">
+			<div style="float: left" class="task-submit-button inline">
+				<button class="abetas-button" type="submit" name="cancel"
+					formnovalidate="formnovalidate" value="cancel">Return</button>
+			</div>
+			<div style="float: right" class="task-submit-button inline">
+				<button class="abetas-button" type="submit" name="id" th:value="${task.id}"
+					value="submit">Submit</button>
 			</div>
 		</div>
 	</form>
