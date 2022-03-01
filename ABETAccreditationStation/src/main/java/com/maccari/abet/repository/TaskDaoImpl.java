@@ -262,7 +262,7 @@ public class TaskDaoImpl implements TaskDao {
 			List<Task> tasks = new ArrayList<Task>();
 			List<Integer> taskIds = getAssignedTaskIds(email);
 			System.out.println(taskIds);
-			String SQL = "SELECT * FROM task WHERE id = ?";
+			String SQL = "SELECT * FROM task WHERE id = ? and complete = false";
 
 			for (Integer id : taskIds) {
 				tasks.add(jdbcTemplate.queryForObject(SQL, new SimpleTaskMapper(), id));
@@ -270,6 +270,8 @@ public class TaskDaoImpl implements TaskDao {
 
 			return tasks;
 		} catch (Exception e) {
+			System.out.println("Error getting assigned tasks.");
+			
 			return null;
 		}
 	}
