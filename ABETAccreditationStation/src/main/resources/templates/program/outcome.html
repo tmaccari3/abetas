@@ -11,6 +11,8 @@
 	<form action="#" th:action="@{/outcome/create}"
 		th:object="${studentOutcome}" method="post">
 		<br>
+		<div class="error" th:if="${#fields.hasErrors('name')}"
+			th:errors="*{name}"> name error</div>
 		<div class="container">
 			<div class="options-container">
 				<div class="option">

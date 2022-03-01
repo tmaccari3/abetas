@@ -1,9 +1,5 @@
 @charset "ISO-8859-1";
 
-li {
-	overflow-x: auto;
-}
-
 .task-container {
 	position: relative;
 	margin: auto;
@@ -57,7 +53,7 @@ li {
 .task-middle-container {
 	display: inline-block;
 	position: relative;
-	background-color: #eff2f5;
+	background-color: #dae4f1;
 	width: 100%;
 	border-top: 1px solid #00004d;
 	border-bottom: 1px solid #00004d;
@@ -92,13 +88,11 @@ li {
 }
 
 .task-program-container {
-	display: inline-block;
 	vertical-align: top;
-	width: 49%;
+	width: 100%;
 }
 
 .task-file-container {
-	display: inline-block;
 	vertical-align: top;
 	width: 49%;
 }
@@ -172,6 +166,11 @@ li {
 	padding: 5px;
 }
 
+.task-outcome-title {
+	font-size: 14px; 
+	text-decoration: underline;
+}
+
 table {
 	width: 100%;
 	border-collapse: collapse;
@@ -184,6 +183,10 @@ table {
 textarea {
 	width: 60%;
 	min-width: 300px;
+}
+
+li {
+	overflow-x: auto;
 }
 
 th, td {

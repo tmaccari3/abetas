@@ -81,29 +81,24 @@
 									Program</label> <label class="error"
 								th:if="${#fields.hasErrors('outcomes')}" th:errors="*{outcomes}">Outcome
 									Error</label>
+								<div class="task-outcome-title" th:if="${!aProg.outcomes.isEmpty}">Outcome(s):</div>
 								<ul>
 									<li th:name="${'programs' + (rowIter.index + 1)}"
-										th:each="outcome : ${aProg.outcomes}"><input
-										type="checkbox" th:field="*{outcomes}"
-										th:value="${outcome.id}" disabled /> <label
-										th:for="${#ids.prev('outcomes')}" th:text="${outcome.name}">Default
-											Outcome</label></li>
+										th:each="outcome,rowIter1 : ${aProg.outcomes}">
+										<label th:name="${'programs' + (rowIter.index + 1)}" th:inline="text"> 
+										<input type="checkbox" th:field="*{outcomes}"
+											th:value="${outcome.id}" disabled />
+										[[${outcome.name}]]
+										</label>
+									</li>
 								</ul></li>
 						</ul>
 					</div>
 				</div>
 			</div>
 			<br>
-			<div class="task-area-container">
-				<h6>Task Description:</h6>
-				<p class="error" th:if="${#fields.hasErrors('description')}"
-					th:errors="*{description}">Description Error</p>
-				<textarea placeholder="Enter description..."
-					th:field="*{description}" rows="4" cols="50" maxlength="255">
-           					Enter description...</textarea>
-			</div>
 			<div class="task-file-container">
-				<h5>Task File</h5>
+				<h5>Task File:</h5>
 				<label class="error" th:if="${#fields.hasErrors('uploadedFile')}"
 					th:errors="*{uploadedFile}">File Error</label>
 				<table>
@@ -130,6 +125,15 @@
 						</td>
 					</tr>
 				</table>
+			</div>
+			<br>
+			<div class="task-area-container">
+				<h6>Task Description:</h6>
+				<p class="error" th:if="${#fields.hasErrors('description')}"
+					th:errors="*{description}">Description Error</p>
+				<textarea placeholder="Enter description..."
+					th:field="*{description}" rows="4" cols="50" maxlength="255">
+           					Enter description...</textarea>
 			</div>
 			<br>
 			<div style="float: right" class="inline">

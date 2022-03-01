@@ -52,13 +52,11 @@
 }
 
 .doc-program-container {
-	display: inline-block;
 	vertical-align: top;
-	width: 49%;
+	width: 100%;
 }
 
 .doc-file-container {
-	display: inline-block;
 	vertical-align: top;
 	width: 49%;
 }
@@ -87,6 +85,15 @@
 .document-date {
 	font-weight: bold;
 	float: right;
+}
+
+.document-outcome-title {
+	font-size: 14px; 
+	text-decoration: underline;
+}
+
+li {
+	overflow-x: auto;
 }
 
 table {

@@ -156,7 +156,7 @@ public class TaskCompleteController {
 		task.setComplete(true);
 		taskService.updateComplete(task);
 		
-		return "task/viewCreated";
+		return "redirect:/task/viewCreated";
 	}
 	
 	@RequestMapping(value = "/submit", method = RequestMethod.POST, params = "cancel")

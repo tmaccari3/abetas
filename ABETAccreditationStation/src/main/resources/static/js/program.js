@@ -32,6 +32,7 @@ function disableChange(input) {
         for(var i = 0; i < outcomes.length; i++) {
             if(outcomes[i].parentNode.getAttribute("name") == clicked.id) {
                 outcomes[i].disabled = false;
+                //outcomes[i].style.display = 'block';
             }
         }
     }
@@ -41,6 +42,7 @@ function disableChange(input) {
             if(outcomes[i].parentNode.getAttribute("name") == clicked.id) {
                 outcomes[i].disabled = true;
                 outcomes[i].checked = false;
+                //outcomes[i].style.display = 'none';
             }
         }
     }
