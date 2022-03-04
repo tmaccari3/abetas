@@ -40,6 +40,8 @@ public class WebDocument {
 	public WebDocument() {
 		programs = new ArrayList<Integer>();
 		outcomes = new ArrayList<Integer>();
+		fullPrograms = new ArrayList<Program>();
+		fullOutcomes = new ArrayList<StudentOutcome>();
 	}
 
 	public int getId() {

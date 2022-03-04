@@ -26,12 +26,11 @@ function addProgram(id, inputId) {
 function disableChange(input) {
     var clicked = document.getElementById(input.id);
     var outcomes = document.getElementsByName("outcome");	
-    var outcomeChecks = document.getElementsByName("outcomes");	
+    var checkedOutcomes = document.getElementsByName("outcomes");	
     
     if(clicked.checked) {
         for(var i = 0; i < outcomes.length; i++) {
             if(outcomes[i].parentNode.getAttribute("name") == clicked.id) {
-            	outcomeChecks[i].disabled = false;
                 outcomes[i].style.display = 'block';
             }
         }
@@ -40,8 +39,7 @@ function disableChange(input) {
     else {
         for(var i = 0; i < outcomes.length; i++) {
             if(outcomes[i].parentNode.getAttribute("name") == clicked.id) {
-                outcomesChecks[i].disabled = true;
-                outcomesChecks[i].checked = false;
+				checkedOutcomes[i].checked = false;
                 outcomes[i].style.display = 'none';
             }
         }

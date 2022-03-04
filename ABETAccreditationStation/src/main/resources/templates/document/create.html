@@ -40,16 +40,18 @@
 									Program</label> <label class="error"
 								th:if="${#fields.hasErrors('outcomes')}" th:errors="*{outcomes}">Outcome
 									Error</label>
-								<div class="document-outcome-title" th:if="${!aProg.outcomes.isEmpty}">Outcome(s):</div>
-								<ul>
-									<li th:name="${'programs' + (rowIter.index + 1)}"
-										th:each="outcome,rowIter1 : ${aProg.outcomes}">
-										<label th:name="${'programs' + (rowIter.index + 1)}" th:inline="text">
-											<input type="checkbox" th:field="*{outcomes}"
-												th:value="${outcome.id}" disabled /> [[${outcome.name}]]
-										</label>
-									</li>
-								</ul>
+								<div th:name="${'programs' + (rowIter.index + 1)}">
+									<div th:name="outcome" class="task-outcome-title"
+										th:if="${!aProg.outcomes.isEmpty}">Outcome(s):</div>
+									<ul th:name="outcome">
+										<li th:each="outcome,rowIter1 : ${aProg.outcomes}"><label
+											th:name="${'programs' + (rowIter.index + 1)}"
+											th:inline="text"> <input type="checkbox"
+												th:field="*{outcomes}" th:value="${outcome.id}"/>
+												[[${outcome.name}]]
+										</label></li>
+									</ul>
+								</div>
 							</li>
 						</ul>
 					</div>
