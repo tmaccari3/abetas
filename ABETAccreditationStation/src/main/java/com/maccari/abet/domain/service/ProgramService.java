@@ -138,7 +138,7 @@ public class ProgramService implements Service<Program> {
 	
 	public boolean checkPrograms(List<Program> programs, List<StudentOutcome> outcomes,
 			String userEmail) {
-		List<Program> validPrograms = programDao.getActivePrograms(userEmail);
+		/*List<Program> validPrograms = programDao.getActivePrograms(userEmail);
 		System.out.println(validPrograms);
 		for(Program program : programs) {
 			if(!validPrograms.contains(program)) {
@@ -150,11 +150,12 @@ public class ProgramService implements Service<Program> {
 				List<StudentOutcome> validOutcomes = programDao
 						.getActiveOutcomesForProgram(program.getId());
 				if(!validOutcomes.contains(outcome)) {
-					System.out.println("OC invalid");
+					System.out.println("gotta be in here: "+validOutcomes);
+					System.out.println("the guy: "+outcome);
 					return true;
 				}
 			}
-		}
+		}*/
 		for(StudentOutcome outcome : outcomes) {
 			if(!isInProgram(programs, outcome)) {
 				return true;
@@ -165,7 +166,13 @@ public class ProgramService implements Service<Program> {
 	}
 	
 	private boolean isInProgram(List<Program> programs, StudentOutcome outcome) {
+		if(outcome == null) {
+			return false;
+		}
 		for(Program program : programs) {
+			if(program == null) {
+				return false;
+			}
 			if(program.getId() == outcome.getProgramId()) {
 				return true;
 			}
