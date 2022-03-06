@@ -1,5 +1,10 @@
 @charset "ISO-8859-1";
 
+::-webkit-scrollbar {
+    width: 0; 
+    background: transparent; 
+}
+
 body {
 	overflow-y: hidden;
 }
@@ -25,15 +30,20 @@ body {
 	min-width: 350px;
 	overflow-x: hidden;
     overflow-y: visible;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
 }
 
 	.recent-title {
+		position: sticky;
 		background-color: #00004d;
 		color: white;
 		font-weight: bold;
 		vertical-align: middle;
 		width: 100%;
 		padding: 5px;
+    	top: 0;
+    	z-index: 1;
 	}
 	
 	.recent-document {
@@ -65,4 +75,48 @@ body {
 	background-color: #edf2f7;
 	border: 2px solid #00004d;
 	padding: 5px;
+}
+
+.click {
+	cursor: pointer;
+}
+
+.dropdown-check-list {
+  display: inline-block;
+}
+.dropdown-check-list .anchor {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  padding: 5px 50px 5px 10px;
+  border: 1px solid #ccc;
+}
+.dropdown-check-list .anchor:after {
+  position: absolute;
+  content: "";
+  border-left: 2px solid black;
+  border-top: 2px solid black;
+  padding: 5px;
+  right: 10px;
+  top: 20%;
+  -moz-transform: rotate(-135deg);
+  -ms-transform: rotate(-135deg);
+  -o-transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+  transform: rotate(-135deg);
+}
+.dropdown-check-list .anchor:active:after {
+  right: 8px;
+  top: 21%;
+}
+.dropdown-check-list ul.items {
+  padding: 2px;
+  display: none;
+  margin: 0;
+  border: 1px solid #ccc;
+  border-top: none;
+  z-index: 2;
+}
+.dropdown-check-list ul.items li {
+  list-style: none;
 }

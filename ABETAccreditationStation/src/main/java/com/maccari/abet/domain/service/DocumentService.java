@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.maccari.abet.domain.entity.Document;
+import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.StudentOutcome;
 import com.maccari.abet.domain.entity.web.WebDocument;
@@ -15,6 +16,9 @@ import com.maccari.abet.repository.DocumentDao;
 public class DocumentService implements Service<Document> {
 	@Autowired
 	private DocumentDao docDao;
+	
+	@Autowired
+	private FileService fileService;
 	
 	@Override
 	public List<Document> getAll() {
@@ -27,8 +31,17 @@ public class DocumentService implements Service<Document> {
 
 	@Override
 	public Document getById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		return docDao.getById(id);
+	}
+	
+	public Document getFullDocById(int id) {
+		Document document = getById(id);
+		File file = document.getFile();
+		if (file != null) {
+			document.setFile(fileService.getFileById(file.getId()));
+		}
+
+		return document;
 	}
 
 	@Override

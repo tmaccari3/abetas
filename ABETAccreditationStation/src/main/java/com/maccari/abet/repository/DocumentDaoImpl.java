@@ -120,6 +120,18 @@ public class DocumentDaoImpl implements DocumentDao {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public Document getById(int id) {
+		try {
+			String SQL = "SELECT * FROM document WHERE id = ?";
+			Document doc = jdbcTemplate.queryForObject(SQL, new FullDocMapper(), id);
+			
+			return doc;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
 
 	@Override
 	public List<Document> getRecentDocuments(int amount) {

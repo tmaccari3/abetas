@@ -11,8 +11,8 @@
 <body layout:fragment="content">
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<form action="#" id="task" th:action="@{/doc/create}"
-		th:object="${webDocument}" method="post" enctype="multipart/form-data">
+	<form action="#" th:action="@{/doc/create}" th:object="${webDocument}" method="post" 
+		enctype="multipart/form-data">
 		<div class="doc-container">
 			<h3 style="text-align: center">Submit a Document</h3>
 			<br>

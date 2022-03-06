@@ -215,7 +215,7 @@ public class TaskController {
 	@RequestMapping(value = "/delete")
 	public String displayTaskForRemoval(@RequestParam(value = "id", required = true) 
 		int id, Model model) {
-		model.addAttribute("task", getTaskById(id));
+		model.addAttribute("task", taskService.getFullTaskById(id));
 		
 		return "task/delete";
 	}
@@ -236,19 +236,9 @@ public class TaskController {
 	@GetMapping("/details")
 	public String viewTaskDetails(@RequestParam(value = "id", required = true)
 			int id, Model model) {
-		model.addAttribute("task", getTaskById(id));
+		model.addAttribute("task", taskService.getFullTaskById(id));
 		
 		return "task/details";
-	}
-	
-	private Task getTaskById(int id) {
-		Task task = taskService.getById(id);
-		File file = task.getFile();
-		if(file != null) {
-			task.setFile(fileService.getFileById(file.getId()));
-		}
-		
-		return task;
 	}
 
 	@ModelAttribute("progTypes")

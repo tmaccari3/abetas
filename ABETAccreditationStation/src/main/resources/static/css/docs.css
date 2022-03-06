@@ -21,6 +21,12 @@
 	min-width: 400px;
 }
 
+.document-details-button {
+	background-color: #e6eeff;
+	border: none;
+	text-decoration: underline;
+}
+
 .doc-middle-container {
 	position: relative;
 	background-color: #dae4f1;
@@ -76,6 +82,18 @@
 	vertical-align: top;
 	width: 49%;
 	overflow-x: auto;
+}
+
+.document-title-main {
+	display: inline-block;
+	vertical-align: top;
+	width: 49%;
+}
+
+.document-submit-date {
+	display: inline-block;
+	vertical-align: top;
+	width: 49%;
 }
 
 .document-title {

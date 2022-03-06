@@ -24,8 +24,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.web.DocumentSearch;
 import com.maccari.abet.domain.entity.web.WebDocument;
 import com.maccari.abet.domain.service.DocumentService;
+import com.maccari.abet.domain.service.FileService;
 import com.maccari.abet.domain.service.ProgramService;
 import com.maccari.abet.web.validation.DocumentValidator;
 
@@ -42,7 +44,7 @@ public class DocumentController {
 	private DocumentValidator docValidator;
 	
 	@GetMapping(value = "/index")
-	public String viewDocuments(Model model) {
+	public String viewDocuments(DocumentSearch documentSearch, Model model) {
 		model.addAttribute("documents", docService.getRecentDocuments(10));
 		
 		return "document/index";
@@ -51,6 +53,14 @@ public class DocumentController {
 	@GetMapping(value = "/create")
 	public String createDocument(WebDocument webDoc) {
 		return "document/create";
+	}
+	
+	@GetMapping(value = "/details")
+	public String documentDetails(@RequestParam(value = "id", required = true) 
+		int id, Model model) {
+		model.addAttribute("document", docService.getFullDocById(id));
+
+		return "document/details";
 	}
 	
 	@RequestMapping(value = {"/create", "/edit"}, params = "upload")

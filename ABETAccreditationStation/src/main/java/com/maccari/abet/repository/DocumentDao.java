@@ -10,6 +10,8 @@ import com.maccari.abet.domain.entity.Document;
 public interface DocumentDao {
 	List<Document> getAll();
 	
+	Document getById(final int id);
+	
 	List<Document> getRecentDocuments(final int amount);
 	
 	void createDocument(final Document document);

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+<link href="/css/docs.css" rel="stylesheet" />
+<link href="/css/review.css" rel="stylesheet" />
+<script type="text/javascript" th:src="@{/js/review.js}" /></script>
+<meta charset="ISO-8859-1">
+<title>Document Details</title>
+</head>
+<body layout:fragment="content">
+	<div class="doc-details-container">
+		<h3>Document Details</h3>
+		<div class="title">
+			<div class="document-title-main">
+				<div class="inline">
+					<h6>Title:</h6>
+				</div>
+				<div class="inline">
+					<h6 th:text="${document.title}">Title</h6>
+				</div>
+			</div>
+			<div class="doc-info">
+				<div class="inline">
+					<h6>Author:</h6>
+				</div>
+				<div class="inline">
+					<h6 th:text="${document.author}">Author</h6>
+				</div>
+			</div>
+		</div>
+		<br>
+		<div class="doc-info-container">
+			<div class="document-submit-date">
+				<div class="title">
+					<h6>Submitted:</h6>
+				</div>
+				<h6 th:text="${document.submitDate}">Due Date</h6>
+			</div>
+			<div class="doc-info">
+				<div class="title">
+					<h6>Submitted for a Task:</h6>
+				</div>
+				<div th:if="${document.taskId == 0}">Yes</div>
+				<div th:if="${document.taskId ne 0}">No</div>
+			</div>
+		</div>
+		<br>
+		<br>
+		<div class="doc-info-container">
+			<div class="doc-info">
+				<div class="title">
+					<h6>Program(s):</h6>
+				</div>
+				<div th:each="program : *{document.programs}">
+					<p th:text="${program.name}"></p>
+				</div>
+			</div>
+			<div class="doc-info">
+				<div class="title">
+					<h6>Outcome(s):</h6>
+				</div>
+				<div th:each="outcome : *{document.outcomes}">
+					<p th:text="${outcome.name}"></p>
+				</div>
+			</div>
+		</div>
+		<br>
+		<div class="document-description">
+			<div class="title">
+				<h6>Description:</h6>
+			</div>
+			<p th:text="${document.description}"></p>
+		</div>
+		<div class="doc-info-container">
+			<div class="doc-info">
+				<div class="title">
+					<h6>File(s):</h6>
+				</div>
+				<p th:text="'Download file:'">Download file</p>
+				<a th:href="@{/download/} + ${document.file.id}"
+					th:text="${document.file.fileName}">file</a>
+			</div>
+		</div>
+	</div>
+	<br>
+</body>
+</html>
