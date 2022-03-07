@@ -1,10 +1,5 @@
 @charset "ISO-8859-1";
 
-::-webkit-scrollbar {
-    width: 0; 
-    background: transparent; 
-}
-
 body {
 	overflow-y: hidden;
 }
@@ -16,7 +11,6 @@ body {
 	height: 100%;
 	padding: 5px;
 	display: flex;
-	justify-content: center;
 	margin: auto;
 }
 
@@ -51,6 +45,11 @@ body {
 		border-top: 3px solid #00004d;
 		padding: 5px 2px 2px 2px;
 	}
+	
+	.recent-container::-webkit-scrollbar {
+    	width: 0; 
+    	background: transparent; 
+	}
 
 .middle-container {
 	float: left;
@@ -70,53 +69,33 @@ body {
 	float: left;
 	width: 64%;
 	margin: 10px;
-	min-width: 500px;
+	min-width: 800px;
 	height: 82%;
 	background-color: #edf2f7;
 	border: 2px solid #00004d;
 	padding: 5px;
+	display: flex;
+  	flex-direction: column;
+}
+
+.search-result-container {
+	border: 2px solid #00004d;
+	width: 100%;
+	min-width: 470px;
+	overflow-y: auto;
+ 	overflow-x: hidden;
+  	flex: 1;
+}
+
+.search-button-container {
+	float: right;
 }
 
 .click {
 	cursor: pointer;
 }
 
-.dropdown-check-list {
-  display: inline-block;
-}
-.dropdown-check-list .anchor {
-  position: relative;
-  cursor: pointer;
-  display: inline-block;
-  padding: 5px 50px 5px 10px;
-  border: 1px solid #ccc;
-}
-.dropdown-check-list .anchor:after {
-  position: absolute;
-  content: "";
-  border-left: 2px solid black;
-  border-top: 2px solid black;
-  padding: 5px;
-  right: 10px;
-  top: 20%;
-  -moz-transform: rotate(-135deg);
-  -ms-transform: rotate(-135deg);
-  -o-transform: rotate(-135deg);
-  -webkit-transform: rotate(-135deg);
-  transform: rotate(-135deg);
-}
-.dropdown-check-list .anchor:active:after {
-  right: 8px;
-  top: 21%;
-}
-.dropdown-check-list ul.items {
-  padding: 2px;
-  display: none;
-  margin: 0;
-  border: 1px solid #ccc;
-  border-top: none;
-  z-index: 2;
-}
-.dropdown-check-list ul.items li {
-  list-style: none;
+.program-multi {
+	position: absolute;
+    z-index: 100;
 }

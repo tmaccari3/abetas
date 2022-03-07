@@ -5,17 +5,111 @@
 <head>
 <link href="/css/docs.css" rel="stylesheet" />
 <link href="/css/review.css" rel="stylesheet" />
-<script type="text/javascript" th:src="@{/js/review.js}" /></script>
-<meta charset="ISO-8859-1">
+<link
+	href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css"
+	rel="stylesheet" />
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.css">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.js"></script>
 <title>Review Documentation</title>
 </head>
 <body layout:fragment="content">
+	<script type="text/javascript">
+		$(function() {
+			$(".chzn-select").chosen();
+		});
+	</script>
 	<div class="review-container">
 		<div class="recent-container">
 			<div class="recent-title">Recent Submissions</div>
-			<div class="recent-document" th:each="document : ${documents}">
+			<div class="recent-document" th:each="document : ${recentDocuments}">
 				<form name="doc" th:action="@{/doc/details}">
 					<!-- <div class="click" onClick="document.forms['doc'].submit();"> -->
+					<div class="task-title">
+						<div class="task-title-main">
+							<div>
+								<div class="inline">
+									<h6>Title:</h6>
+								</div>
+								<div class="inline" th:text="${document.title}">Title</div>
+								<div class="inline document-date"
+									th:text="${document.getFormattedDate}"></div>
+							</div>
+							<div>
+								<div class="inline">
+									<h6>Submitted by:</h6>
+								</div>
+								<div class="inline">
+									<div th:text="${document.author}">author</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="review-middle-container">
+						<div class="doc-info-container">
+							<div class="doc-info">
+								<div class="title">
+									<h6>Program(s):</h6>
+								</div>
+								<div th:each="program : *{document.programs}">
+									<p th:text="${program.name}"></p>
+								</div>
+							</div>
+							<div class="doc-info">
+								<div class="title">
+									<h6>Submitted for a Task:</h6>
+								</div>
+								<div th:if="${document.taskId == 0}">No</div>
+								<div th:if="${document.taskId ne 0}">Yes</div>
+							</div>
+						</div>
+					</div>
+					<div class="review-middle-container">
+						<div class="doc-info-container">
+							<div class="title">
+								<h6>Description:</h6>
+							</div>
+							<div th:text="${document.description}">description</div>
+						</div>
+					</div>
+					<button class="document-details-button" name="id"
+						th:value="${document.id}" type="submit">See more</button>
+					<br>
+					<!--  </div> -->
+				</form>
+			</div>
+		</div>
+		<div class="middle-container"></div>
+		<div class="search-container">
+			<div>
+				<form action="#" th:action="@{/doc/index}"
+					th:object="${documentSearch}" method="post">
+					<h6>Search Documentation</h6>
+					<div class="inline top">
+						<label>From Date:</label> <input type="date"
+							th:field="*{fromDate}" />
+					</div>
+					<div class="inline top">
+						<label>To Date:</label> <input type="date" th:field="*{toDate}" />
+					</div>
+					<div class="program-multi inline top">
+						<label class="inline top">Programs:</label> 
+						<select class="chzn-select" multiple="true"
+							data-placeholder="Select Programs..." style="width: 200px">
+							<option th:each="aProg : ${progTypes}" th:value="${aProg.id}"
+								th:text="${aProg.name}" th:field="*{programs}"></option>
+						</select>
+					</div>
+					<div class="search-button-container inline top">
+						<button class="abetas-button" name="id" type="submit">Search</button>
+					</div>
+				</form>
+			</div>
+			<div class="search-result-container">
+				<div class="recent-document" th:each="document : ${searchDocuments}">
+					<form name="doc" th:action="@{/doc/details}">
+						<!-- <div class="click" onClick="document.forms['doc'].submit();"> -->
 						<div class="task-title">
 							<div class="task-title-main">
 								<div>
@@ -63,37 +157,13 @@
 								<div th:text="${document.description}">description</div>
 							</div>
 						</div>
-						<button class="document-details-button" name="id" th:value="${document.id}"
-							type="submit">
-							 See more
-						</button>
+						<button class="document-details-button" name="id"
+							th:value="${document.id}" type="submit">See more</button>
 						<br>
-					<!--  </div> -->
-				</form>
+						<!-- </div> -->
+					</form>
+				</div>
 			</div>
-		</div>
-		<div class="middle-container"></div>
-		<div class="search-container">
-			<form action="#" th:action="@{/doc/search}"
-				th:object="${documentSearch}" method="post">
-				<h6>Search Documentation</h6>
-				<div class="inline center">
-					<label>Due Date:</label> <input type="date" th:field="*{date}" />
-				</div>
-				<div id="list1" class="dropdown-check-list center" tabindex="100">
-					<div id="anchor" class="anchor" onClick="showItems()">Select
-						Fruits</div>
-					<ul id="items" class="items">
-						<li><input type="checkbox" />Apple</li>
-						<li><input type="checkbox" />Orange</li>
-						<li><input type="checkbox" />Grapes</li>
-						<li><input type="checkbox" />Berry</li>
-						<li><input type="checkbox" />Mango</li>
-						<li><input type="checkbox" />Banana</li>
-						<li><input type="checkbox" />Tomato</li>
-					</ul>
-				</div>
-			</form>
 		</div>
 	</div>
 </body>

@@ -46,8 +46,7 @@
 				<div th:if="${document.taskId ne 0}">No</div>
 			</div>
 		</div>
-		<br>
-		<br>
+		<br> <br>
 		<div class="doc-info-container">
 			<div class="doc-info">
 				<div class="title">
@@ -67,12 +66,6 @@
 			</div>
 		</div>
 		<br>
-		<div class="document-description">
-			<div class="title">
-				<h6>Description:</h6>
-			</div>
-			<p th:text="${document.description}"></p>
-		</div>
 		<div class="doc-info-container">
 			<div class="doc-info">
 				<div class="title">
@@ -81,6 +74,12 @@
 				<p th:text="'Download file:'">Download file</p>
 				<a th:href="@{/download/} + ${document.file.id}"
 					th:text="${document.file.fileName}">file</a>
+			</div>
+			<div class="document-description inline">
+				<div class="title">
+					<h6>Description:</h6>
+				</div>
+				<p th:text="${document.description}"></p>
 			</div>
 		</div>
 	</div>

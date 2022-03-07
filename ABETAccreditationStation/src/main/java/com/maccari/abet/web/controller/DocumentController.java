@@ -45,7 +45,22 @@ public class DocumentController {
 	
 	@GetMapping(value = "/index")
 	public String viewDocuments(DocumentSearch documentSearch, Model model) {
-		model.addAttribute("documents", docService.getRecentDocuments(10));
+		model.addAttribute("recentDocuments", docService.getRecentDocuments(documentSearch.getCount()));
+		model.addAttribute("searchDocuments", docService.getBySearch(documentSearch));
+		
+		return "document/index";
+	}
+	
+	@RequestMapping(value = "/index", method = RequestMethod.POST)
+	public String searchDocuments(@Valid DocumentSearch documentSearch, Model model, 
+			BindingResult bindingResult) {
+		System.out.println(documentSearch.getPrograms());
+		if (bindingResult.hasErrors()) {
+			return "task/create";
+		}
+		
+		model.addAttribute("recentDocuments", docService.getRecentDocuments(documentSearch.getCount()));
+		model.addAttribute("searchDocuments", docService.getBySearch(documentSearch));
 		
 		return "document/index";
 	}

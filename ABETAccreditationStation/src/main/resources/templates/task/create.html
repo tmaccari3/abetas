@@ -19,7 +19,7 @@
 			<br>
 			<div class="title-container">
 				<div class="inline center">
-					<label>Title:</label> <input type="text" th:field="*{title}" />
+					<label>Title:</label> <input class="title-input" type="text" th:field="*{title}" />
 				</div>
 				<div class="inline center">
 					<p class="error" th:if="${#fields.hasErrors('title')}"

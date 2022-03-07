@@ -9,6 +9,7 @@ import com.maccari.abet.domain.entity.Document;
 import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.StudentOutcome;
+import com.maccari.abet.domain.entity.web.DocumentSearch;
 import com.maccari.abet.domain.entity.web.WebDocument;
 import com.maccari.abet.repository.DocumentDao;
 
@@ -23,6 +24,10 @@ public class DocumentService implements Service<Document> {
 	@Override
 	public List<Document> getAll() {
 		return docDao.getAll();
+	}
+	
+	public List<Document> getBySearch(DocumentSearch search) {
+		return docDao.getBySearch(search);
 	}
 	
 	public List<Document> getRecentDocuments(int amount) {

@@ -64,7 +64,7 @@
 
 .doc-file-container {
 	vertical-align: top;
-	width: 49%;
+	width: 100%;
 }
 
 .doc-area-container {
@@ -80,7 +80,7 @@
 .document-description {
 	display: inline-block;
 	vertical-align: top;
-	width: 49%;
+	width: 100%;
 	overflow-x: auto;
 }
 

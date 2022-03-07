@@ -139,6 +139,10 @@ body {
 	font-weight: bold;
 }
 
+.title-input {
+	width: 300px;
+}
+
 .separator {
 	display: inline-block;
 	border-left: 6px solid #00004d;
@@ -154,6 +158,10 @@ input[type=file] {
 
 .inline {
 	display: inline-block;
+}
+
+.top {
+	vertical-align: top;
 }
 
 .float-left {

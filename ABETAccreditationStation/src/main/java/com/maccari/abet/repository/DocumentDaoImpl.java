@@ -24,6 +24,7 @@ import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.StudentOutcome;
 import com.maccari.abet.domain.entity.Task;
+import com.maccari.abet.domain.entity.web.DocumentSearch;
 import com.maccari.abet.repository.TaskDaoImpl.SimpleTaskMapper;
 
 @Repository
@@ -122,6 +123,52 @@ public class DocumentDaoImpl implements DocumentDao {
 	}
 	
 	@Override
+	public List<Document> getBySearch(DocumentSearch search) {
+		ArrayList<Document> docs = new ArrayList<>();
+		try {
+			String SQL = "SELECT * FROM document";
+			int size = search.getPrograms().size();
+			
+			if(size == 0) {
+			}
+			else if(size == 1) {
+				SQL += " WHERE task_id = " + search.getPrograms().get(1) + " ";
+			}
+			else {
+				int i;
+				SQL += " WHERE ";
+				for(i = 0; i < size - 1; i++) {
+					SQL += "task_id = " + search.getPrograms().get(i) + " or ";
+				}
+				SQL += "task_id = " + search.getPrograms().get(i) + " ";
+			}
+			if(search.getToDate() != null && search.getFromDate() != null) {
+				SQL += " WHERE submit_date >= '" + search.getFormattedDate(search.getFromDate()) 
+					+ "' and submit_date <= '" + search.getFormattedDate(search.getToDate()) + "'";
+			}
+			else if(search.getFromDate() != null) {
+				System.out.println(search.getFromDate());
+				if(size == 0) {
+					SQL += " WHERE submit_date >= '" + search.getFormattedDate(search.getFromDate()) + "'";
+				}
+			}
+			else if(search.getToDate() != null) {
+				System.out.println(search.getToDate());
+				if(size == 0) {
+					SQL += " WHERE submit_date <= '" + search.getFormattedDate(search.getToDate()) + "'";
+				}
+			}
+			SQL += " LIMIT ?";
+			System.out.println(SQL);
+			docs = (ArrayList<Document>) jdbcTemplate.query(SQL, new FullDocMapper(), search.getCount());
+			
+			return docs;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+	
+	@Override
 	public Document getById(int id) {
 		try {
 			String SQL = "SELECT * FROM document WHERE id = ?";
@@ -152,11 +199,11 @@ public class DocumentDaoImpl implements DocumentDao {
 		try {
 			String SQL = "SELECT * FROM document WHERE task_id = ?";
 			docs = (ArrayList<Document>) jdbcTemplate.query(SQL, new FullDocMapper(), taskId);
+			
+			return docs;
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
-
-		return docs;
 	}
 	
 	class SimpleDocMapper implements RowMapper<Document> {
