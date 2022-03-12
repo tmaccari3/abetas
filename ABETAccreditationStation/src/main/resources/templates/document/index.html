@@ -85,7 +85,11 @@
 			<div>
 				<form action="#" th:action="@{/doc/index}"
 					th:object="${documentSearch}" method="post">
-					<h6>Search Documentation</h6>
+					<h6 class="inline">Search Documentation</h6>
+					<div class="search-button-container inline top">
+						<button class="abetas-button" name="id" type="submit">Search</button>
+					</div>
+					<br>
 					<div class="inline top">
 						<label>From Date:</label> <input type="date"
 							th:field="*{fromDate}" />
@@ -100,9 +104,6 @@
 							<option th:each="aProg : ${progTypes}" th:value="${aProg.id}"
 								th:text="${aProg.name}" th:field="*{programs}"></option>
 						</select>
-					</div>
-					<div class="search-button-container inline top">
-						<button class="abetas-button" name="id" type="submit">Search</button>
 					</div>
 				</form>
 			</div>
