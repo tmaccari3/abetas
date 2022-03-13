@@ -139,7 +139,7 @@ public class DocumentDaoImpl implements DocumentDao {
 			if(size == 0) {
 			}
 			else if(size == 1) {
-				SQL += " p.program_id = " + search.getPrograms().get(0);
+				SQL += " dp.program_id = " + search.getPrograms().get(0);
 			}
 			else {
 				int i;

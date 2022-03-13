@@ -82,7 +82,7 @@
 		</div>
 		<div class="search-container">
 			<div>
-				<form id="review" action="#" th:action="@{/doc/index}"
+				<form action="#" th:action="@{/doc/index}"
 					th:object="${documentSearch}" method="post">
 					<h6>Search Documentation</h6>
 					<div class="inline top">
@@ -171,11 +171,10 @@
 		<div class="search-filter-container">
 			<h6>Filter Search</h6>
 			<div class="inline top">
-				<label class="inline top">Programs: </label> 
-				<select form="review"class="program-multi" multiple="multiple">
-					<option th:each="aProg : ${progTypes}"
-						th:field="*{documentSearch.programs}" th:value="${aProg.id}"
-						th:text="${aProg.name}">Part name</option>
+				<label class="inline top">Programs: </label> <select
+					class="program-multi" th:field="*{documentSearch.programs}" multiple="multiple">
+					<option th:each="aProg : ${progTypes}" th:field="*{documentSearch.programs}"
+						th:value="${aProg.id}" th:text="${aProg.name}">Part name</option>
 				</select>
 			</div>
 		</div>
