@@ -80,16 +80,11 @@
 				</form>
 			</div>
 		</div>
-		<div class="middle-container"></div>
 		<div class="search-container">
 			<div>
-				<form action="#" th:action="@{/doc/index}"
+				<form id="review" action="#" th:action="@{/doc/index}"
 					th:object="${documentSearch}" method="post">
-					<h6 class="inline">Search Documentation</h6>
-					<div class="search-button-container inline top">
-						<button class="abetas-button" name="id" type="submit">Search</button>
-					</div>
-					<br>
+					<h6>Search Documentation</h6>
 					<div class="inline top">
 						<label>From Date:</label> <input type="date"
 							th:field="*{fromDate}" />
@@ -97,18 +92,23 @@
 					<div class="inline top">
 						<label>To Date:</label> <input type="date" th:field="*{toDate}" />
 					</div>
-					<div class="program-multi inline top">
+					<!-- <div class="program-multi inline top">
 						<label class="inline top">Programs:</label> 
 						<select class="chzn-select" multiple="true"
 							data-placeholder="Select Programs..." style="width: 200px">
 							<option th:each="aProg : ${progTypes}" th:value="${aProg.id}"
 								th:text="${aProg.name}" th:field="*{programs}"></option>
 						</select>
+					</div> -->
+					<div class="search-button-container inline top">
+						<button class="abetas-button" name="id" type="submit">Search</button>
 					</div>
 				</form>
 			</div>
 			<div class="search-result-container">
-				<div class="recent-document" th:each="document : ${searchDocuments}">
+				<div class="recent-document"
+					th:if="!${#lists.isEmpty(searchDocuments)}"
+					th:each="document : ${searchDocuments}">
 					<form name="doc" th:action="@{/doc/details}">
 						<!-- <div class="click" onClick="document.forms['doc'].submit();"> -->
 						<div class="task-title">
@@ -164,6 +164,19 @@
 						<!-- </div> -->
 					</form>
 				</div>
+				<div class="empty-result" th:if="${#lists.isEmpty(searchDocuments)}">
+					No Documents match your search.</div>
+			</div>
+		</div>
+		<div class="search-filter-container">
+			<h6>Filter Search</h6>
+			<div class="inline top">
+				<label class="inline top">Programs: </label> 
+				<select form="review"class="program-multi" multiple="multiple">
+					<option th:each="aProg : ${progTypes}"
+						th:field="*{documentSearch.programs}" th:value="${aProg.id}"
+						th:text="${aProg.name}">Part name</option>
+				</select>
 			</div>
 		</div>
 	</div>

@@ -67,9 +67,9 @@ body {
 
 .search-container {
 	float: left;
-	width: 64%;
+	width: 45%;
 	margin: 10px;
-	min-width: 800px;
+	min-width: 500px;
 	height: 82%;
 	background-color: #edf2f7;
 	border: 2px solid #00004d;
@@ -87,6 +87,24 @@ body {
   	flex: 1;
 }
 
+.search-filter-container {
+	float: left;
+	width: 20%;
+	height: 82%;
+	margin: 10px;
+	background-color: #edf2f7;
+	border: 2px solid #00004d;
+	display: flex;
+	flex-direction: column;
+	padding: 5px;
+}
+
+.empty-result {
+	text-align: center;
+	line-height: 100px;
+	font-weight: bold;
+}
+
 .search-button-container {
 	float: right;
 }
@@ -96,6 +114,10 @@ body {
 }
 
 .program-multi {
+	width: 100%;
+}
+
+/*.program-multi {
 	position: absolute;
     z-index: 100;
-}
+}*/

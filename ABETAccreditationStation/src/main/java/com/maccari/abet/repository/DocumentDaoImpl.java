@@ -126,36 +126,42 @@ public class DocumentDaoImpl implements DocumentDao {
 	public List<Document> getBySearch(DocumentSearch search) {
 		ArrayList<Document> docs = new ArrayList<>();
 		try {
-			String SQL = "SELECT * FROM document";
+			String SQL = "SELECT * FROM document d "
+					+ "INNER JOIN document_program dp "
+					+ "ON d.id = dp.doc_id";
 			int size = search.getPrograms().size();
+			boolean dates = search.getToDate() != null || search.getFromDate() != null;
+			boolean programs = size > 0;
+			if(dates || programs) {
+				SQL += " WHERE";
+			}
 			
 			if(size == 0) {
 			}
 			else if(size == 1) {
-				SQL += " WHERE task_id = " + search.getPrograms().get(1) + " ";
+				SQL += " p.program_id = " + search.getPrograms().get(0);
 			}
 			else {
 				int i;
-				SQL += " WHERE ";
 				for(i = 0; i < size - 1; i++) {
-					SQL += "task_id = " + search.getPrograms().get(i) + " or ";
+					SQL += " dp.program_id = " + search.getPrograms().get(i) + " or";
 				}
-				SQL += "task_id = " + search.getPrograms().get(i) + " ";
+				SQL += " dp.program_id = " + search.getPrograms().get(i);
 			}
 			if(search.getToDate() != null && search.getFromDate() != null) {
-				SQL += " WHERE submit_date >= '" + search.getFormattedDate(search.getFromDate()) 
+				SQL += " submit_date >= '" + search.getFormattedDate(search.getFromDate()) 
 					+ "' and submit_date <= '" + search.getFormattedDate(search.getToDate()) + "'";
 			}
 			else if(search.getFromDate() != null) {
 				System.out.println(search.getFromDate());
 				if(size == 0) {
-					SQL += " WHERE submit_date >= '" + search.getFormattedDate(search.getFromDate()) + "'";
+					SQL += " submit_date >= '" + search.getFormattedDate(search.getFromDate()) + "'";
 				}
 			}
 			else if(search.getToDate() != null) {
 				System.out.println(search.getToDate());
 				if(size == 0) {
-					SQL += " WHERE submit_date <= '" + search.getFormattedDate(search.getToDate()) + "'";
+					SQL += " submit_date <= '" + search.getFormattedDate(search.getToDate()) + "'";
 				}
 			}
 			SQL += " LIMIT ?";
