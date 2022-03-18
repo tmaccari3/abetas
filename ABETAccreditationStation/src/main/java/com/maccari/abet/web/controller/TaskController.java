@@ -26,9 +26,11 @@ import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.Task;
 import com.maccari.abet.domain.entity.web.WebDocument;
+import com.maccari.abet.domain.entity.web.WebEmail;
 import com.maccari.abet.domain.entity.web.WebTask;
 import com.maccari.abet.domain.service.FileService;
 import com.maccari.abet.domain.service.ProgramService;
+import com.maccari.abet.domain.service.ReminderService;
 import com.maccari.abet.domain.service.TaskService;
 import com.maccari.abet.web.validation.TaskValidator;
 
@@ -45,11 +47,19 @@ public class TaskController {
 	private ProgramService programService;
 	
 	@Autowired
+	private ReminderService reminderService;
+	
+	@Autowired
 	private TaskValidator taskValidator;
 
 	@GetMapping("/index")
 	public String viewMyTasks(Principal principal, Model model) {
 		model.addAttribute("tasks", taskService.getAssigned(principal.getName()));
+		WebEmail email = new WebEmail();
+		email.setTo("totmac17@gmail.com");
+		email.setSubject("Test Reminder");
+		email.setBody("This is a test.");
+		reminderService.scheduleReminder(email);
 		
 		return "task/index";
 	}

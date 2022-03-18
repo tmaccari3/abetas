@@ -11,6 +11,7 @@ public class WebEmail {
 	private String from;
 	private String subject;
 	private String body;
+	
 	public String getTo() {
 		return to;
 	}

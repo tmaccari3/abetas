@@ -14,28 +14,28 @@ import com.maccari.abet.domain.entity.web.WebEmail;
 @Component
 public class EmailServiceImpl implements EmailService {
 
-    @Autowired
-    private JavaMailSender emailSender;
+	@Autowired
+	private JavaMailSender emailSender;
 
-    public void sendEmail(String to, String from, String subject, String text) {
-        SimpleMailMessage message = new SimpleMailMessage(); 
-        
-        message.setFrom(from);
-        message.setTo(to); 
-        message.setSubject(subject);
-        message.setText(text);
-        
-        emailSender.send(message);
-    }
-    
-    public void sendRegistrationEmail(WebEmail email) throws MessagingException {
-    	MimeMessage message = emailSender.createMimeMessage();
-    	MimeMessageHelper helper = new MimeMessageHelper(message, true);
-    	
-    	helper.setTo(email.getTo());
-    	helper.setSubject(email.getSubject() + ": " + email.getFrom());
-    	helper.setText(email.getBody());
-    	
-        emailSender.send(message);
-    }
+	public void sendEmail(String to, String from, String subject, String text) {
+		SimpleMailMessage message = new SimpleMailMessage();
+
+		message.setFrom(from);
+		message.setTo(to);
+		message.setSubject(subject);
+		message.setText(text);
+
+		emailSender.send(message);
+	}
+
+	public void sendRegistrationEmail(WebEmail email) throws MessagingException {
+		MimeMessage message = emailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+		helper.setTo(email.getTo());
+		helper.setSubject(email.getSubject() + ": " + email.getFrom());
+		helper.setText(email.getBody());
+
+		emailSender.send(message);
+	}
 }
