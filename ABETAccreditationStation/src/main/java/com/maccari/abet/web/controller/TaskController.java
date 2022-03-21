@@ -55,11 +55,6 @@ public class TaskController {
 	@GetMapping("/index")
 	public String viewMyTasks(Principal principal, Model model) {
 		model.addAttribute("tasks", taskService.getAssigned(principal.getName()));
-		WebEmail email = new WebEmail();
-		email.setTo("totmac17@gmail.com");
-		email.setSubject("Test Reminder");
-		email.setBody("This is a test.");
-		reminderService.scheduleReminder(email);
 		
 		return "task/index";
 	}
@@ -160,6 +155,8 @@ public class TaskController {
 		taskService.create(taskService.webTaskToTask(webTask));
 		
 		session.removeAttribute("UPLOADED_FILE");
+		
+		scheduleReminders(webTask);
 
 		return "redirect:/";
 	}
@@ -249,6 +246,19 @@ public class TaskController {
 		model.addAttribute("task", taskService.getFullTaskById(id));
 		
 		return "task/details";
+	}
+	
+	public void scheduleReminders(WebTask task) {
+		WebEmail email = new WebEmail();
+		email.setSubject("Test Reminder");
+		email.setBody("This is a test.");
+		
+		for(String emailAddress : task.getAssignees()) {
+			System.out.println("Scheduling for " + emailAddress + "...");
+			email.setTo(emailAddress);
+			reminderService.sendImmediately(email);
+			reminderService.scheduleReminder(email);
+		}
 	}
 
 	@ModelAttribute("progTypes")

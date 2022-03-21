@@ -17,12 +17,13 @@ public class EmailJob implements Job {
 	
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-		System.out.println("*** EMAILING NOW ***");
 		JobDataMap jobDataMap = context.getMergedJobDataMap();
 		String subject = jobDataMap.getString("subject");
         String body = jobDataMap.getString("body");
         String to = jobDataMap.getString("to");
         String from = jobDataMap.getString("from");
+        
+		System.out.println("*** EMAILING " + to + " NOW ***");
         
         emailService.sendEmail(to, from, subject, body);
 	}

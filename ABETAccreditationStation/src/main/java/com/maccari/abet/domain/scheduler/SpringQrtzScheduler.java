@@ -3,12 +3,15 @@ package com.maccari.abet.domain.scheduler;
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
+import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
+import org.quartz.JobKey;
 import org.quartz.SimpleTrigger;
 import org.quartz.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.quartz.QuartzDataSource;
@@ -17,6 +20,7 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
@@ -29,6 +33,8 @@ import org.springframework.scheduling.quartz.SpringBeanJobFactory;;
 public class SpringQrtzScheduler {
 
     Logger logger = LoggerFactory.getLogger(getClass());
+    
+    static final int weekInSeconds = 604800;
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -62,28 +68,35 @@ public class SpringQrtzScheduler {
     }
 
     @Bean
-    public JobDetailFactoryBean jobDetail() {
+    @Scope("prototype")
+    public JobDetailFactoryBean jobDetail(String group) {
         JobDetailFactoryBean jobDetailFactory = new JobDetailFactoryBean();
         jobDetailFactory.setJobClass(EmailJob.class);
         jobDetailFactory.setDescription("Invoke Email Job service...");
         jobDetailFactory.setDurability(true);
+        jobDetailFactory.setName("Reminder_JobDetail");
+        jobDetailFactory.setGroup(group);
         
         return jobDetailFactory;
     }
 
     @Bean
-    public SimpleTriggerFactoryBean trigger(JobDetail job, int startDelay) {
-        SimpleTriggerFactoryBean trigger = new SimpleTriggerFactoryBean();
-        trigger.setJobDetail(job);
+    @Scope("prototype")
+    public SimpleTriggerFactoryBean trigger(JobDetail job, String group, 
+    	int repeatCount, int interval) {
+        SimpleTriggerFactoryBean triggerFactory = new SimpleTriggerFactoryBean();
+        if(job != null) {
+            triggerFactory.setJobDetail(job);	
+        }
 
-        int frequencyInSec = 10;
-        logger.info("Configuring trigger to fire every {} seconds", frequencyInSec);
+        logger.info("Configuring trigger to fire every {} seconds", interval);
 
-        //trigger.setRepeatInterval(frequencyInSec * 1000);
-        //trigger.setRepeatCount(0);
-        trigger.setStartDelay(0);
-        trigger.setName("Reminder_Trigger");
+        triggerFactory.setRepeatInterval(interval * 1000);
+        triggerFactory.setRepeatCount(repeatCount);
+        triggerFactory.setStartDelay(5);
+        triggerFactory.setName("Reminder_Trigger");
+        triggerFactory.setGroup(group);
         
-        return trigger;
+        return triggerFactory;
     }
 }
