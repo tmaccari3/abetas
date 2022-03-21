@@ -23,6 +23,7 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 import org.springframework.scheduling.quartz.SpringBeanJobFactory;;
 
+//make wrapper class for getObject() method
 @Configuration
 @EnableAutoConfiguration
 public class SpringQrtzScheduler {
@@ -71,15 +72,16 @@ public class SpringQrtzScheduler {
     }
 
     @Bean
-    public SimpleTriggerFactoryBean trigger(JobDetail job) {
+    public SimpleTriggerFactoryBean trigger(JobDetail job, int startDelay) {
         SimpleTriggerFactoryBean trigger = new SimpleTriggerFactoryBean();
         trigger.setJobDetail(job);
 
         int frequencyInSec = 10;
         logger.info("Configuring trigger to fire every {} seconds", frequencyInSec);
 
-        trigger.setRepeatInterval(frequencyInSec * 1000);
-        trigger.setRepeatCount(SimpleTrigger.REPEAT_INDEFINITELY);
+        //trigger.setRepeatInterval(frequencyInSec * 1000);
+        //trigger.setRepeatCount(0);
+        trigger.setStartDelay(0);
         trigger.setName("Reminder_Trigger");
         
         return trigger;

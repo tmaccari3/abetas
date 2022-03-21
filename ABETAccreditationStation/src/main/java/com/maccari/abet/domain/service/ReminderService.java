@@ -24,6 +24,7 @@ public class ReminderService {
 	
 	public void scheduleReminder(WebEmail email) {
 		try {
+			
 			JobDetail job = jobFactory.getObject();
 			job.getJobDataMap().put("from", email.getFrom());
 			job.getJobDataMap().put("to", email.getTo());
