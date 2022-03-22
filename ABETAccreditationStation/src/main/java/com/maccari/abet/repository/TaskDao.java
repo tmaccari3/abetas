@@ -8,7 +8,7 @@ import com.maccari.abet.domain.entity.Task;
 
 @Repository
 public interface TaskDao {
-	void createTask(final Task task);
+	int createTask(final Task task);
 	
 	void removeTask(final Task task);
 	

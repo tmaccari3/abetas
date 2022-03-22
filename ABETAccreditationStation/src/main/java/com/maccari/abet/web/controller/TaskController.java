@@ -25,7 +25,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.Task;
-import com.maccari.abet.domain.entity.web.WebDocument;
 import com.maccari.abet.domain.entity.web.WebEmail;
 import com.maccari.abet.domain.entity.web.WebTask;
 import com.maccari.abet.domain.service.FileService;
@@ -152,7 +151,7 @@ public class TaskController {
 		}
 		
 		webTask.setCoordinator(principal.getName());
-		taskService.create(taskService.webTaskToTask(webTask));
+		webTask.setId(taskService.createAndGetId(taskService.webTaskToTask(webTask)));
 		
 		session.removeAttribute("UPLOADED_FILE");
 		
@@ -230,7 +229,13 @@ public class TaskController {
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	public String deleteTask(@RequestParam(value = "id", required = true) 
 		int id, Model model) {
-		taskService.remove(taskService.getById(id));
+		Task task = taskService.getById(id);
+		taskService.remove(task);
+		
+		for(String assignee : task.getAssignees()) {
+			System.out.println("About to delete: " + assignee + task.getId());
+			reminderService.deleteJob(assignee + task.getId());
+		}
 		
 		return "redirect:/task/viewCreated";
 	}
@@ -257,7 +262,7 @@ public class TaskController {
 			System.out.println("Scheduling for " + emailAddress + "...");
 			email.setTo(emailAddress);
 			reminderService.sendImmediately(email);
-			reminderService.scheduleReminder(email);
+			reminderService.scheduleReminder(email, task);
 		}
 	}
 

@@ -1,22 +1,12 @@
 package com.maccari.abet.domain.scheduler;
 
 import javax.annotation.PostConstruct;
-import javax.sql.DataSource;
 
-import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
-import org.quartz.JobKey;
-import org.quartz.SimpleTrigger;
-import org.quartz.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
-import org.springframework.boot.autoconfigure.quartz.QuartzDataSource;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +24,11 @@ public class SpringQrtzScheduler {
 
     Logger logger = LoggerFactory.getLogger(getClass());
     
-    static final int weekInSeconds = 604800;
+    private static final int weekInSeconds = 604800;
+    
+    private static final String jobName = "RDJob";
+    
+    private static final String triggerName = "RDTrigger";
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -43,7 +37,12 @@ public class SpringQrtzScheduler {
     public void init() {
         logger.info("Hello world from Spring...");
     }
-
+    
+    @Bean
+    public JobTriggerNameContainer jobTriggerNameContainer() {
+    	return new JobTriggerNameContainer(jobName, triggerName);
+    }
+    
     @Bean
     public SpringBeanJobFactory springBeanJobFactory() {
         AutoWiringSpringBeanJobFactory jobFactory = new AutoWiringSpringBeanJobFactory();
@@ -74,7 +73,7 @@ public class SpringQrtzScheduler {
         jobDetailFactory.setJobClass(EmailJob.class);
         jobDetailFactory.setDescription("Invoke Email Job service...");
         jobDetailFactory.setDurability(true);
-        jobDetailFactory.setName("Reminder_JobDetail");
+        jobDetailFactory.setName(jobName);
         jobDetailFactory.setGroup(group);
         
         return jobDetailFactory;
@@ -91,10 +90,10 @@ public class SpringQrtzScheduler {
 
         logger.info("Configuring trigger to fire every {} seconds", interval);
 
-        triggerFactory.setRepeatInterval(interval * 1000);
+        triggerFactory.setRepeatInterval((interval + 10) * 1000);
         triggerFactory.setRepeatCount(repeatCount);
         triggerFactory.setStartDelay(5);
-        triggerFactory.setName("Reminder_Trigger");
+        triggerFactory.setName(triggerName);
         triggerFactory.setGroup(group);
         
         return triggerFactory;

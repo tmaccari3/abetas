@@ -49,6 +49,10 @@ public class TaskService implements Service<Task> {
 	public void create(Task item) {
 		taskDao.createTask(item);
 	}
+	
+	public int createAndGetId(Task item) {
+		return taskDao.createTask(item);
+	}
 
 	@Override
 	public void remove(Task item) {

@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -24,7 +23,6 @@ import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.StudentOutcome;
 import com.maccari.abet.domain.entity.Task;
-import com.maccari.abet.repository.ProgramDaoImpl.StudentOutcomeMapper;
 import com.maccari.abet.repository.mapper.IdMapper;
 import com.maccari.abet.repository.mapper.StringMapper;
 
@@ -44,7 +42,7 @@ public class TaskDaoImpl implements TaskDao {
 	}
 
 	@Override
-	public void createTask(Task task) {
+	public int createTask(Task task) {
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
 		TransactionStatus status = transactionManager.getTransaction(def);
@@ -64,6 +62,8 @@ public class TaskDaoImpl implements TaskDao {
 			insertRelations(task, insertFile(task));
 
 			transactionManager.commit(status);
+			
+			return task.getId();
 		} catch (Exception e) {
 			System.out.println("Error in creating task record, rolling back");
 			transactionManager.rollback(status);
