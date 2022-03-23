@@ -164,6 +164,10 @@ input[type=file] {
 	vertical-align: top;
 }
 
+.count {
+	width: 55px;
+}
+
 .float-left {
 	float: left;
 }

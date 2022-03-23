@@ -152,19 +152,20 @@ public class DocumentDaoImpl implements DocumentDao {
 			}
 			else if(search.getFromDate() != null) {
 				System.out.println(search.getFromDate());
-				if(size == 0) {
-					SQL += " submit_date >= '" + search.getFormattedDate(search.getFromDate()) + "'";
+				if(size > 0) {
+					SQL += " and";
 				}
+				SQL += " submit_date >= '" + search.getFormattedDate(search.getFromDate()) + "'";
 			}
 			else if(search.getToDate() != null) {
-				System.out.println(search.getToDate());
-				if(size == 0) {
-					SQL += " submit_date <= '" + search.getFormattedDate(search.getToDate()) + "'";
+				if(size > 0) {
+					SQL += " and";
 				}
+				SQL += " submit_date <= '" + search.getFormattedDate(search.getToDate()) + "'";
 			}
 			SQL += " LIMIT ?";
 			System.out.println(SQL);
-			docs = (ArrayList<Document>) jdbcTemplate.query(SQL, new FullDocMapper(), search.getCount());
+			docs = (ArrayList<Document>) jdbcTemplate.query(SQL, new FullDocMapper(), search.getSearchCount());
 			
 			return docs;
 		} catch (EmptyResultDataAccessException e) {

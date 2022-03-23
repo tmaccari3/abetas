@@ -42,7 +42,8 @@ body {
 	
 	.recent-document {
 		background-color: #e8f1fd;
-		border-top: 3px solid #00004d;
+		border-top: 2px solid #00004d;
+		border-bottom: 2px solid #00004d;
 		padding: 5px 2px 2px 2px;
 	}
 	
@@ -78,6 +79,10 @@ body {
   	flex-direction: column;
 }
 
+.search-fields-container {
+	padding: 1px;
+}
+
 .search-result-container {
 	border: 2px solid #00004d;
 	width: 100%;
@@ -99,6 +104,16 @@ body {
 	padding: 5px;
 }
 
+.search-form {
+	width: 100%;
+	height: 100%;
+}
+
+.actual-rows {
+	font-weight: bold;
+	vertical-align: middle;
+}
+
 .empty-result {
 	text-align: center;
 	line-height: 100px;
@@ -115,6 +130,10 @@ body {
 
 .program-multi {
 	width: 100%;
+}
+
+input[type=date] {
+	width: 150px;
 }
 
 /*.program-multi {

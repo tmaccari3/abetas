@@ -18,7 +18,9 @@ public class DocumentSearch {
 	
 	private List<Integer> outcomes;
 	
-	private int count = 10;
+	private int searchCount = 20;
+	
+	private int recentCount = 20;
 	
 	public DocumentSearch() {
 		this.programs = new ArrayList<Integer>();
@@ -56,15 +58,23 @@ public class DocumentSearch {
 	public void setOutcomes(List<Integer> outcomes) {
 		this.outcomes = outcomes;
 	}
-
-	public int getCount() {
-		return count;
+	
+	public int getSearchCount() {
+		return searchCount;
 	}
 
-	public void setCount(int count) {
-		this.count = count;
+	public void setSearchCount(int searchCount) {
+		this.searchCount = searchCount;
 	}
 	
+	public int getRecentCount() {
+		return recentCount;
+	}
+
+	public void setRecentCount(int recentCount) {
+		this.recentCount = recentCount;
+	}
+
 	public String getFormattedDate(Date date) {
 		if(date == null) {
 			return "";
@@ -73,5 +83,18 @@ public class DocumentSearch {
 		else {
 			return new SimpleDateFormat("yyyy-MM-dd").format(date);
 		}
+	}
+	
+	//for testing
+	public String toString() {
+		String result = "";
+		
+		result += getFormattedDate(toDate) + "\n";
+		result += getFormattedDate(fromDate) + "\n";
+		result += programs + "\n";
+		result += outcomes + "\n";
+		result += searchCount + "\n";
+		
+		return result;
 	}
 }
