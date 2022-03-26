@@ -11,14 +11,15 @@
 <body layout:fragment="content">
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<form action="#" th:action="@{/doc/create}" th:object="${webDocument}" method="post" 
-		enctype="multipart/form-data">
+	<form action="#" th:action="@{/doc/create}" th:object="${webDocument}"
+		method="post" enctype="multipart/form-data">
 		<div class="doc-container">
 			<h3 style="text-align: center">Submit a Document</h3>
 			<br>
 			<div class="title-container">
 				<div class="inline center">
-					<label>Title:</label> <input class="title-input" type="text" th:field="*{title}" />
+					<label>Title:</label> <input class="title-input" type="text"
+						th:field="*{title}" />
 				</div>
 				<div class="inline center">
 					<p class="error" th:if="${#fields.hasErrors('title')}"
@@ -47,12 +48,11 @@
 										<li th:each="outcome,rowIter1 : ${aProg.outcomes}"><label
 											th:name="${'programs' + (rowIter.index + 1)}"
 											th:inline="text"> <input type="checkbox"
-												th:field="*{outcomes}" th:value="${outcome.id}"/>
+												th:field="*{outcomes}" th:value="${outcome.id}" />
 												[[${outcome.name}]]
 										</label></li>
 									</ul>
-								</div>
-							</li>
+								</div></li>
 						</ul>
 					</div>
 				</div>
@@ -89,6 +89,16 @@
 						</td>
 					</tr>
 				</table>
+			</div>
+			<div class="doc-tag-container">
+				<h5>Tag(s):</h5>
+				<ul>
+					<li th:each="tag : ${tags}">
+						<input type="checkbox" th:field="*{tags}" th:value="${tag}" /> 
+						<label th:for="${#ids.prev('tags')}" th:text="${tag}">Default
+							Role</label>
+					</li>
+				</ul>
 			</div>
 			<br>
 			<div class="doc-area-container">

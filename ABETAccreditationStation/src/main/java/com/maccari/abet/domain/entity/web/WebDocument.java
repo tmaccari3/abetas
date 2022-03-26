@@ -26,6 +26,8 @@ public class WebDocument {
 
 	private List<StudentOutcome> fullOutcomes;
 	
+	private List<String> tags;
+	
 	@NotEmpty(message = "*required")
 	private String description;
 	
@@ -138,5 +140,13 @@ public class WebDocument {
 
 	public void setTaskId(int taskId) {
 		this.taskId = taskId;
+	}
+
+	public List<String> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<String> tags) {
+		this.tags = tags;
 	}
 }

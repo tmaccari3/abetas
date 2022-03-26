@@ -48,6 +48,10 @@ public class DocumentService implements Service<Document> {
 
 		return document;
 	}
+	
+	public List<String> getAllTags() {
+		return docDao.getAllTags();
+	}
 
 	@Override
 	public void create(Document item) {

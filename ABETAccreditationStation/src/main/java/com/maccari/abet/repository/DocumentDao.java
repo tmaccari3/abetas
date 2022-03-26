@@ -20,4 +20,6 @@ public interface DocumentDao {
 	void createDocument(final Document document);
 	
 	List<Document> getDocsForTask(final int taskId);
+	
+	List<String> getAllTags();
 }

@@ -18,6 +18,8 @@ public class Document {
 
 	private List<StudentOutcome> outcomes;
 	
+	private List<String> tags;
+	
 	@NotEmpty(message = "*required")
 	private String description;
 	
@@ -71,6 +73,14 @@ public class Document {
 
 	public void setOutcomes(List<StudentOutcome> outcomes) {
 		this.outcomes = outcomes;
+	}
+
+	public List<String> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<String> tags) {
+		this.tags = tags;
 	}
 
 	public String getDescription() {

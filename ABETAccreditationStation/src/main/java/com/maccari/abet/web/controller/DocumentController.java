@@ -141,6 +141,11 @@ public class DocumentController {
 		return "redirect:/";
 	}
 	
+	@ModelAttribute("tags")
+	public ArrayList<String> getTags() {
+		return (ArrayList<String>) docService.getAllTags();
+	}
+	
 	@ModelAttribute("progTypes")
 	public ArrayList<Program> getPrograms(Principal principal) {
 		return (ArrayList<Program>) programService.getActivePrograms(principal.getName());

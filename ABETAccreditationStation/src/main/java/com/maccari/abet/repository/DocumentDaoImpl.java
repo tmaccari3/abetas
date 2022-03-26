@@ -24,6 +24,7 @@ import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.StudentOutcome;
 import com.maccari.abet.domain.entity.web.DocumentSearch;
+import com.maccari.abet.repository.mapper.StringMapper;
 
 @Repository
 public class DocumentDaoImpl implements DocumentDao {
@@ -103,6 +104,11 @@ public class DocumentDaoImpl implements DocumentDao {
 			for (StudentOutcome outcome : document.getOutcomes()) {
 				jdbcTemplate.update(SQL, document.getId(), outcome.getId(), outcome.getName());
 			}
+			
+			SQL = "INSERT INTO document_tag (doc_id, tag) VALUES (?, ?, ?)";
+			for(String tag : document.getTags()) {
+				jdbcTemplate.update(SQL, tag);
+			}
 
 			SQL = "INSERT INTO document_file (file_id, doc_id) VALUES (?, ?)";
 			jdbcTemplate.update(SQL, fileId, document.getId());
@@ -165,7 +171,8 @@ public class DocumentDaoImpl implements DocumentDao {
 			}
 			SQL += " LIMIT ?";
 			System.out.println(SQL);
-			docs = (ArrayList<Document>) jdbcTemplate.query(SQL, new FullDocMapper(), search.getSearchCount());
+			docs = (ArrayList<Document>) jdbcTemplate.query(SQL, new FullDocMapper(), 
+					search.getSearchCount());
 			
 			return docs;
 		} catch (EmptyResultDataAccessException e) {
@@ -208,6 +215,21 @@ public class DocumentDaoImpl implements DocumentDao {
 			return docs;
 		} catch (EmptyResultDataAccessException e) {
 			return null;
+		}
+	}
+	
+	@Override
+	public List<String> getAllTags() {
+		ArrayList<String> tags = new ArrayList<>();
+		try {
+			String SQL = "SELECT * FROM tag";
+			tags = (ArrayList<String>) jdbcTemplate.query(SQL, new StringMapper());
+			
+			return tags;
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			
+			return null;	
 		}
 	}
 	
