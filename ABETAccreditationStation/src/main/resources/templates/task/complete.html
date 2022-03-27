@@ -135,6 +135,17 @@
 								</tr>
 							</table>
 						</div>
+						<div class="doc-tag-container">
+							<h5>Tag(s):</h5>
+							<label class="error" th:if="${#fields.hasErrors('tags')}"
+								th:errors="*{tags}">Tag Error</label>
+							<ul>
+								<li th:each="tag : ${tags}"><input type="checkbox"
+									th:field="*{tags}" th:value="${tag}" /> <label
+									th:for="${#ids.prev('tags')}" th:text="${tag}">Default
+										Tag</label></li>
+							</ul>
+						</div>
 						<br> <br>
 						<div class="doc-area-container">
 							<div>

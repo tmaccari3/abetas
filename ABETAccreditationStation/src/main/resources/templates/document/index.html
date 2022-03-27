@@ -100,7 +100,8 @@
 							th:field="*{searchCount}" />
 					</div>
 					<div class="inline">
-						<div class="inline" style="vertical-align: middle">Actual Rows: </div>
+						<div class="inline" style="vertical-align: middle">Actual
+							Rows:</div>
 						<div class="inline actual-rows" th:text="${searchDocuments.size}"></div>
 					</div>
 					<!-- <div class="program-multi inline top">
@@ -174,13 +175,21 @@
 				</div>
 			</div>
 			<div class="search-filter-container">
-				<h6>Filter Search</h6>
-				<div class="inline top">
-					<label class="inline top">Programs: </label> <select
-						class="program-multi" th:field="*{programs}" multiple="multiple">
+				<div>
+					<h6>Filter Search</h6>
+					<label class="top">Programs: </label> <select class="program-multi"
+						th:field="*{programs}" multiple="multiple">
 						<option th:each="aProg : ${progTypes}" th:field="*{programs}"
 							th:value="${aProg.id}" th:text="${aProg.name}">Part name</option>
-					</select>
+					</select> <label class="top">Tags: </label>
+					<ul style="padding-left: 10px">
+						<li th:each="tag: ${tags}">
+							<input type="checkbox"
+								th:field="*{tags}" th:value="${tag}"/> 
+							<label th:for="${#ids.prev('tags')}" th:text="${tag}">Default
+								Tag</label> 
+						</li>
+					</ul>
 				</div>
 			</div>
 		</div>

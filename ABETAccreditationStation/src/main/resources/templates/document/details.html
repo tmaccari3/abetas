@@ -36,14 +36,14 @@
 				<div class="title">
 					<h6>Submitted:</h6>
 				</div>
-				<h6 th:text="${document.submitDate}">Due Date</h6>
+				<h6 th:text="${document.getFormattedDate}">Due Date</h6>
 			</div>
 			<div class="doc-info">
 				<div class="title">
 					<h6>Submitted for a Task:</h6>
 				</div>
-				<div th:if="${document.taskId == 0}">Yes</div>
-				<div th:if="${document.taskId ne 0}">No</div>
+				<div th:if="${document.taskId ne 0}">Yes</div>
+				<div th:if="${document.taskId == 0}">No</div>
 			</div>
 		</div>
 		<br> <br>
@@ -77,10 +77,19 @@
 			</div>
 			<div class="doc-info">
 				<div class="title">
-					<h6>Description:</h6>
+					<h6>Tag(s):</h6>
 				</div>
-				<p th:text="${document.description}"></p>
+				<div th:each="tag : *{document.tags}">
+					<p th:text="${tag}"></p>
+				</div>
 			</div>
+		</div>
+		<br>
+		<div class="doc-info-container">
+			<div class="title">
+				<h6>Description:</h6>
+			</div>
+			<p th:text="${document.description}"></p>
 		</div>
 	</div>
 	<br>

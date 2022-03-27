@@ -18,6 +18,8 @@ public class DocumentSearch {
 	
 	private List<Integer> outcomes;
 	
+	private List<String> tags;
+	
 	private int searchCount = 20;
 	
 	private int recentCount = 20;
@@ -53,6 +55,14 @@ public class DocumentSearch {
 
 	public List<Integer> getOutcomes() {
 		return outcomes;
+	}
+
+	public List<String> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<String> tags) {
+		this.tags = tags;
 	}
 
 	public void setOutcomes(List<Integer> outcomes) {

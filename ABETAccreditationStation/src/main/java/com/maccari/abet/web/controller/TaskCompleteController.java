@@ -168,4 +168,9 @@ public class TaskCompleteController {
 	public File getUploadedFiles(HttpSession session) {
 		return (File) session.getAttribute("UPLOADED_FILE");
 	}
+	
+	@ModelAttribute("tags")
+	public ArrayList<String> getTags() {
+		return (ArrayList<String>) docService.getAllTags();
+	}
 }

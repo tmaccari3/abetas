@@ -1,5 +1,6 @@
 package com.maccari.abet.domain.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +83,7 @@ public class DocumentService implements Service<Document> {
 		document.setAuthor(webDoc.getAuthor());
 		document.setPrograms(webDoc.getFullPrograms());
 		document.setOutcomes(webDoc.getFullOutcomes());
+		document.setTags(webDoc.getTags());
 		document.setSubmitDate(webDoc.getSubmitDate());
 		document.setDescription(webDoc.getDescription());
 		document.setFile(webDoc.getUploadedFile());

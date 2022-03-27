@@ -7,6 +7,8 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +25,23 @@ import com.maccari.abet.domain.entity.Document;
 import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.StudentOutcome;
+import com.maccari.abet.domain.entity.searchable.QSearchableDocument;
+import com.maccari.abet.domain.entity.searchable.SearchableDocument;
 import com.maccari.abet.domain.entity.web.DocumentSearch;
 import com.maccari.abet.repository.mapper.StringMapper;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 @Repository
 public class DocumentDaoImpl implements DocumentDao {
 	@Autowired
 	private DataSourceTransactionManager transactionManager;
+	
+	@PersistenceContext
+	private EntityManager entityManager;
 
 	private DataSource dataSource;
+	
+	private JPAQueryFactory queryFactory;
 
 	private JdbcTemplate jdbcTemplate;
 
@@ -39,8 +49,9 @@ public class DocumentDaoImpl implements DocumentDao {
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 		this.jdbcTemplate = new JdbcTemplate(this.dataSource);
+		this.queryFactory = new JPAQueryFactory(entityManager);
 	}
-
+	
 	@Override
 	public void createDocument(Document document) {
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
@@ -64,6 +75,7 @@ public class DocumentDaoImpl implements DocumentDao {
 		} catch (Exception e) {
 			System.out.println("Error in creating task record, rolling back");
 			transactionManager.rollback(status);
+			
 			throw e;
 		}
 	}
@@ -105,9 +117,9 @@ public class DocumentDaoImpl implements DocumentDao {
 				jdbcTemplate.update(SQL, document.getId(), outcome.getId(), outcome.getName());
 			}
 			
-			SQL = "INSERT INTO document_tag (doc_id, tag) VALUES (?, ?, ?)";
+			SQL = "INSERT INTO document_tag (doc_id, tag) VALUES (?, ?)";
 			for(String tag : document.getTags()) {
-				jdbcTemplate.update(SQL, tag);
+				jdbcTemplate.update(SQL, document.getId(), tag);
 			}
 
 			SQL = "INSERT INTO document_file (file_id, doc_id) VALUES (?, ?)";
@@ -128,6 +140,14 @@ public class DocumentDaoImpl implements DocumentDao {
 	
 	@Override
 	public List<Document> getBySearch(DocumentSearch search) {
+		QSearchableDocument document = QSearchableDocument.searchableDocument;
+		SearchableDocument doc = queryFactory.selectFrom(document)
+				.where(document.id.eq(20))
+				.fetchOne();
+		System.out.println(doc.getId());
+		/*Iterable<Document> docsIter = docSearchDao.findAll(filterBySearch);
+		List<Document> docs = new ArrayList<Document>();
+		docsIter.forEach(docs::add);*/
 		ArrayList<Document> docs = new ArrayList<>();
 		try {
 			String SQL = "SELECT * FROM document d "
@@ -171,7 +191,7 @@ public class DocumentDaoImpl implements DocumentDao {
 			}
 			SQL += " LIMIT ?";
 			System.out.println(SQL);
-			docs = (ArrayList<Document>) jdbcTemplate.query(SQL, new FullDocMapper(), 
+			docs = (ArrayList<Document>) jdbcTemplate.query(SQL, new MediumDocMapper(), 
 					search.getSearchCount());
 			
 			return docs;
@@ -197,7 +217,7 @@ public class DocumentDaoImpl implements DocumentDao {
 		ArrayList<Document> docs = new ArrayList<>();
 		try {
 			String SQL = "SELECT * FROM document ORDER BY submit_date DESC LIMIT ?";
-			docs = (ArrayList<Document>) jdbcTemplate.query(SQL, new FullDocMapper(), amount);
+			docs = (ArrayList<Document>) jdbcTemplate.query(SQL, new MediumDocMapper(), amount);
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
@@ -210,7 +230,7 @@ public class DocumentDaoImpl implements DocumentDao {
 		ArrayList<Document> docs = new ArrayList<>();
 		try {
 			String SQL = "SELECT * FROM document WHERE task_id = ?";
-			docs = (ArrayList<Document>) jdbcTemplate.query(SQL, new FullDocMapper(), taskId);
+			docs = (ArrayList<Document>) jdbcTemplate.query(SQL, new MediumDocMapper(), taskId);
 			
 			return docs;
 		} catch (EmptyResultDataAccessException e) {
@@ -248,6 +268,30 @@ public class DocumentDaoImpl implements DocumentDao {
 		}
 	}
 	
+	class MediumDocMapper implements RowMapper<Document> {
+		public Document mapRow(ResultSet rs, int rowNum) throws SQLException {
+			Document document = new Document();
+			document.setId(rs.getInt("id"));
+			document.setTaskId(rs.getInt("task_id"));
+			document.setTitle(rs.getString("title"));
+			document.setAuthor(rs.getString("author"));
+			document.setDescription(rs.getString("description"));
+			document.setSubmitDate(rs.getObject("submit_date", Timestamp.class));
+			document.setTask(rs.getBoolean("task"));
+
+			try {
+				String SQL = "SELECT * FROM document_program WHERE doc_id = ?";
+				document.setPrograms(jdbcTemplate.query(SQL, new ProgramMapper(), 
+						document.getId()));
+
+			} catch (EmptyResultDataAccessException e) {
+				document.setPrograms(null);
+			}
+			
+			return document;
+		}
+	}
+	
 	class FullDocMapper implements RowMapper<Document> {
 		public Document mapRow(ResultSet rs, int rowNum) throws SQLException {
 			Document document = new Document();
@@ -275,19 +319,29 @@ public class DocumentDaoImpl implements DocumentDao {
 						document.getId()));
 
 			} catch (EmptyResultDataAccessException e) {
-				document.setPrograms(null);
+				document.setOutcomes(null);
 			}
 			
 			try {
 				String SQL = "SELECT * FROM document_file WHERE doc_id = ?";
-				int fileId = jdbcTemplate.query(SQL, new IdMapper(), document.getId()).get(0);
+				int fileId = jdbcTemplate.query(SQL, new IdMapper(), 
+						document.getId()).get(0);
 				
 				File file = new File();
 				file.setId(fileId);
 				document.setFile(file);
 
 			} catch (EmptyResultDataAccessException e) {
-				document.setPrograms(null);
+				document.setFile(null);
+			}
+			
+			try {
+				String SQL = "SELECT tag FROM document_tag WHERE doc_id = ?";
+				document.setTags(jdbcTemplate.query(SQL, new StringMapper(), 
+						document.getId()));
+
+			} catch (EmptyResultDataAccessException e) {
+				document.setTags(null);
 			}
 
 			return document;

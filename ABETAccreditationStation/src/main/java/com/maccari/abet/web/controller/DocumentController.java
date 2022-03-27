@@ -53,9 +53,9 @@ public class DocumentController {
 	@RequestMapping(value = "/index", method = RequestMethod.POST)
 	public String searchDocuments(@Valid DocumentSearch documentSearch, Model model, 
 			BindingResult bindingResult) {
-		System.out.println(documentSearch.getPrograms());
+		System.out.println(documentSearch.getTags());
 		if (bindingResult.hasErrors()) {
-			return "task/create";
+			return "document/index";
 		}
 		
 		model.addAttribute("recentDocuments", docService.getRecentDocuments(documentSearch.getRecentCount()));

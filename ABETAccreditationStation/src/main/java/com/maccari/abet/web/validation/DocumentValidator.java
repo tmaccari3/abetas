@@ -22,8 +22,7 @@ public class DocumentValidator implements Validator {
 			errors.rejectValue("programs", "program.empty");
 		}
 		
-		if(doc.getOutcomes().isEmpty() && !doc.getPrograms().isEmpty() &&
-				doc.getFullOutcomes().isEmpty() && !doc.getFullPrograms().isEmpty()) {
+		if(doc.getOutcomes().isEmpty() && !doc.getPrograms().isEmpty()) {
 			System.out.println("no outcome");
 			errors.rejectValue("programs", "outcome.empty");
 		}
@@ -31,6 +30,11 @@ public class DocumentValidator implements Validator {
 		if(doc.getUploadedFile() == null) {
 			System.out.println("no file");
 			errors.rejectValue("uploadedFile", "file.null");
+		}
+		
+		if(doc.getTags().isEmpty()) {
+			System.out.println("no tags");
+			errors.rejectValue("tags", "tags.empty");
 		}
 	}
 }

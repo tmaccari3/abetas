@@ -38,7 +38,9 @@ public class FileService {
 
 	public void fillFiles(List<Document> documents) {
 		for(Document document : documents) {
-			document.setFile(fileDao.getFileById(document.getFile().getId()));
+			if(document.getFile() != null) {
+				document.setFile(fileDao.getFileById(document.getFile().getId()));	
+			}
 		}
 	}
 }
