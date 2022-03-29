@@ -5,6 +5,15 @@ import javax.validation.constraints.Size;
 
 import com.maccari.abet.domain.entity.StudentOutcome;
 
+/*
+ * DocumentSearch.java 
+ * Author: Thomas Maccari
+ * 
+ * Description: This class serves as a form backing object for 
+ * a Student Outcome
+ * 
+ */
+
 public class WebStudentOutcome {
 	private int id;
 	

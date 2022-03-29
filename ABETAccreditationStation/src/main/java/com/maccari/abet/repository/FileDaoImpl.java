@@ -1,8 +1,5 @@
 package com.maccari.abet.repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
@@ -10,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.TransactionDefinition;
@@ -18,6 +14,18 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.maccari.abet.domain.entity.File;
+import com.maccari.abet.repository.mapper.FileMapper;
+
+/*
+ * FileDaoImpl.java 
+ * Author: Yaodong Bi, Thomas Maccari
+ * 
+ * Implements: FileDao
+ * 
+ * Description: An implementation using postgreSQL to store, update, and delete
+ * file related data. 
+ * 
+ */
 
 @Repository
 public class FileDaoImpl implements FileDao {
@@ -105,19 +113,5 @@ public class FileDaoImpl implements FileDao {
 	public int update(String tableName, File file) {
 		// TODO Auto-generated method stub
 		return 0;
-	}
-	
-	class FileMapper implements RowMapper<File> {
-		public File mapRow(ResultSet rs, int rowNum) throws SQLException {
-			File file = new File();
-			file.setId(rs.getInt("id"));
-			file.setFileName(rs.getString("file_name"));
-			file.setFileType(rs.getString("file_type"));
-			file.setFileSize(rs.getLong("file_size"));
-			file.setAuthor(rs.getString("author"));
-			file.setData(rs.getBytes("data"));
-
-			return file;
-		}
 	}
 }

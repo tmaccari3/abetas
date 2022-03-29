@@ -4,6 +4,16 @@ import java.util.Comparator;
 
 import com.maccari.abet.domain.entity.web.WebProgram;
 
+/*
+ * ProgramComparator.java 
+ * Author: Thomas Maccari
+ * 
+ * Implements: Comparator
+ * 
+ * Description: Sorts WebPrograms by id
+ * 
+ */
+
 public class WebProgramOrderById implements Comparator<WebProgram> {
 	@Override
 	public int compare(WebProgram wp1, WebProgram wp2) {

@@ -14,6 +14,17 @@ import com.maccari.abet.domain.entity.web.WebTask;
 import com.maccari.abet.repository.TaskDao;
 import com.maccari.abet.repository.UserDao;
 
+/*
+ * TaskService.java 
+ * Author: Thomas Maccari
+ * 
+ * Implements: Service.java
+ * 
+ * Description: This service class provides access to the data-source, methods 
+ * for Task to WebTask conversion, and other task related utilities.
+ * 
+ */
+
 @Component
 public class TaskService implements Service<Task> {
 	@Autowired
@@ -80,6 +91,7 @@ public class TaskService implements Service<Task> {
 		return taskDao.getCreatedTasks(email);
 	}
 
+	// Converts a given WebTask to a Task
 	public Task webTaskToTask(WebTask webTask) {
 		Task task = new Task();
 
@@ -96,6 +108,7 @@ public class TaskService implements Service<Task> {
 		return task;
 	}
 
+	// Converts a given Task to a WebTask
 	public WebTask taskToWebTask(Task task) {
 		WebTask webTask = new WebTask(task);
 
@@ -115,6 +128,7 @@ public class TaskService implements Service<Task> {
 		return webTask;
 	}
 
+	// Returns the position of the first user not found by email from a list of emails
 	public int userExists(List<String> emails) {
 		for (int i = 0; i < emails.size(); i++) {
 			if (userDao.getUserByEmail(emails.get(i)) == null) {

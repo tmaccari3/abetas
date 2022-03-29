@@ -26,10 +26,23 @@ import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.StudentOutcome;
 import com.maccari.abet.domain.entity.searchable.QSearchableDocument;
-import com.maccari.abet.domain.entity.searchable.SearchableDocument;
 import com.maccari.abet.domain.entity.web.DocumentSearch;
+import com.maccari.abet.repository.mapper.IdMapper;
+import com.maccari.abet.repository.mapper.ProgramMapper;
 import com.maccari.abet.repository.mapper.StringMapper;
+import com.maccari.abet.repository.mapper.StudentOutcomeMapper;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+
+/*
+ * DocumentDaoImpl.java 
+ * Author: Thomas Maccari
+ * 
+ * Implements: DocumentDao
+ * 
+ * Description: An implementation using postgreSQL to store, update, and delete
+ * document related data. 
+ * 
+ */
 
 @Repository
 public class DocumentDaoImpl implements DocumentDao {
@@ -52,6 +65,7 @@ public class DocumentDaoImpl implements DocumentDao {
 		this.queryFactory = new JPAQueryFactory(entityManager);
 	}
 	
+	// Inserts a document into the data-source
 	@Override
 	public void createDocument(Document document) {
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
@@ -80,6 +94,7 @@ public class DocumentDaoImpl implements DocumentDao {
 		}
 	}
 
+	// Inserts the file portion of the document
 	private int insertFile(Document document) {
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
@@ -100,6 +115,7 @@ public class DocumentDaoImpl implements DocumentDao {
 		}
 	}
 
+	// Inserts into the relation tables that, when combined, make up a document
 	private void insertRelations(Document document, int fileId) {
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
@@ -138,21 +154,26 @@ public class DocumentDaoImpl implements DocumentDao {
 		return null;
 	}
 	
+	// Given search criteria, build a query to get documents that satisfy them
 	@Override
 	public List<Document> getBySearch(DocumentSearch search) {
 		QSearchableDocument document = QSearchableDocument.searchableDocument;
 		/*SearchableDocument doc = queryFactory.selectFrom(document)
 				.where(document.id.eq(20))
-				.fetchOne();*/
-		//System.out.println(doc.getId());
-		/*Iterable<Document> docsIter = docSearchDao.findAll(filterBySearch);
+				.fetchOne();
+		System.out.println(doc.getId());
+		Iterable<Document> docsIter = docSearchDao.findAll(filterBySearch);
 		List<Document> docs = new ArrayList<Document>();
 		docsIter.forEach(docs::add);*/
 		ArrayList<Document> docs = new ArrayList<>();
+		//SELECT id, task_id, title, author, description, submit_date, task FROM document d INNER JOIN document_program dp ON d.id = dp.doc_id INNER JOIN document_tag dt ON d.id = dt.doc_id
 		try {
-			String SQL = "SELECT * FROM document d "
+			String SQL = "SELECT id, task_id, title, author, "
+					+ "description, submit_date, task FROM document d "
 					+ "INNER JOIN document_program dp "
-					+ "ON d.id = dp.doc_id";
+					+ "ON d.id = dp.doc_id "
+					+ "INNER JOIN document_tag dt "
+					+ "ON d.id = dt.doc_id ";
 			int size = search.getPrograms().size();
 			boolean dates = search.getToDate() != null || search.getFromDate() != null;
 			boolean programs = size > 0;
@@ -189,7 +210,7 @@ public class DocumentDaoImpl implements DocumentDao {
 				}
 				SQL += " submit_date <= '" + search.getFormattedDate(search.getToDate()) + "'";
 			}
-			SQL += " LIMIT ?";
+			SQL += " GROUP BY id LIMIT ?";
 			System.out.println(SQL);
 			docs = (ArrayList<Document>) jdbcTemplate.query(SQL, new MediumDocMapper(), 
 					search.getSearchCount());
@@ -253,6 +274,7 @@ public class DocumentDaoImpl implements DocumentDao {
 		}
 	}
 	
+	// A simple mapper that gets only the document info stored in the document table
 	class SimpleDocMapper implements RowMapper<Document> {
 		public Document mapRow(ResultSet rs, int rowNum) throws SQLException {
 			Document document = new Document();
@@ -268,6 +290,7 @@ public class DocumentDaoImpl implements DocumentDao {
 		}
 	}
 	
+	// A more complex mapper that also gets the programs linked to the document
 	class MediumDocMapper implements RowMapper<Document> {
 		public Document mapRow(ResultSet rs, int rowNum) throws SQLException {
 			Document document = new Document();
@@ -292,6 +315,7 @@ public class DocumentDaoImpl implements DocumentDao {
 		}
 	}
 	
+	// The complete document mapper that obtains all info related to a document
 	class FullDocMapper implements RowMapper<Document> {
 		public Document mapRow(ResultSet rs, int rowNum) throws SQLException {
 			Document document = new Document();
@@ -345,48 +369,6 @@ public class DocumentDaoImpl implements DocumentDao {
 			}
 
 			return document;
-		}
-	}
-	
-	class ProgramMapper implements RowMapper<Program> {
-		public Program mapRow(ResultSet rs, int rowNum) throws SQLException {
-			Program program = new Program();
-			program.setId(rs.getInt("program_id"));
-			program.setName(rs.getString("name"));
-			
-			return program;
-		}
-	}
-	
-	class StudentOutcomeMapper implements RowMapper<StudentOutcome> {
-		public StudentOutcome mapRow(ResultSet rs, int rowNum) throws SQLException {
-			StudentOutcome outcome = new StudentOutcome();
-			outcome.setProgramId(rs.getInt("outcome_id"));
-			outcome.setName(rs.getString("name"));
-			
-			return outcome;
-		}
-	}
-
-	class FileMapper implements RowMapper<File> {
-		public File mapRow(ResultSet rs, int rowNum) throws SQLException {
-			File file = new File();
-			file.setId(rs.getInt("id"));
-			file.setFileName(rs.getString("filename"));
-			file.setFileType(rs.getString("filetype"));
-			file.setFileSize(rs.getLong("fileSize"));
-			file.setAuthor(rs.getString("author"));
-			file.setData(rs.getBytes("data"));
-
-			return file;
-		}
-	}
-
-	class IdMapper implements RowMapper<Integer> {
-		public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
-			int id = rs.getInt(1);
-
-			return id;
 		}
 	}
 }

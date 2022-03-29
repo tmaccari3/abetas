@@ -24,7 +24,20 @@ import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.StudentOutcome;
 import com.maccari.abet.domain.entity.Task;
 import com.maccari.abet.repository.mapper.IdMapper;
+import com.maccari.abet.repository.mapper.ProgramMapper;
 import com.maccari.abet.repository.mapper.StringMapper;
+import com.maccari.abet.repository.mapper.StudentOutcomeMapper;
+
+/*
+ * TaskDaoImpl.java 
+ * Author: Thomas Maccari
+ * 
+ * Implements: TaskDao
+ * 
+ * Description: An implementation using postgreSQL to store, update, and delete
+ * Task related data. 
+ * 
+ */
 
 @Repository
 public class TaskDaoImpl implements TaskDao {
@@ -41,6 +54,7 @@ public class TaskDaoImpl implements TaskDao {
 		this.jdbcTemplate = new JdbcTemplate(this.dataSource);
 	}
 
+	// Inserts a task into the data-source
 	@Override
 	public int createTask(Task task) {
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
@@ -71,6 +85,7 @@ public class TaskDaoImpl implements TaskDao {
 		}
 	}
 
+	// Inserts into the relation tables that, when combined, make up a task
 	private void insertRelations(Task task, int fileId) {
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
@@ -103,6 +118,7 @@ public class TaskDaoImpl implements TaskDao {
 		}
 	}
 	
+	// Inserts the file portion of the document
 	private int insertFile(Task task) {
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
@@ -276,6 +292,7 @@ public class TaskDaoImpl implements TaskDao {
 		}
 	}
 
+	// Get the ids of all Tasks assigned to a given email (user)
 	private List<Integer> getAssignedTaskIds(String email) {
 		try {
 			String SQL = "SELECT id FROM assigned WHERE assignee = ?";
@@ -299,6 +316,7 @@ public class TaskDaoImpl implements TaskDao {
 		}
 	}
 
+	// A simple mapper that gets only the task info stored in the task table
 	class SimpleTaskMapper implements RowMapper<Task> {
 		public Task mapRow(ResultSet rs, int rowNum) throws SQLException {
 			Task task = new Task();
@@ -314,6 +332,7 @@ public class TaskDaoImpl implements TaskDao {
 		}
 	}
 
+	// The complete task mapper that obtains all info related to a task
 	class FullTaskMapper implements RowMapper<Task> {
 		public Task mapRow(ResultSet rs, int rowNum) throws SQLException {
 			Task task = new Task();
@@ -367,55 +386,6 @@ public class TaskDaoImpl implements TaskDao {
 			}
 
 			return task;
-		}
-	}
-	
-	private List<StudentOutcome> getAllOutcomesForProgram(int id){
-		try {
-			String SQL = "SELECT * FROM student_outcome WHERE prog_id = ?";
-			ArrayList<StudentOutcome> outcomes = (ArrayList<StudentOutcome>) jdbcTemplate.query(
-					SQL, new StudentOutcomeMapper(), id);
-			
-			return outcomes;
-		} catch (Exception e) {
-			System.out.println("Error in getting outcomes for program.");
-
-			return new ArrayList<StudentOutcome>();
-		}
-	}
-
-	class FileMapper implements RowMapper<File> {
-		public File mapRow(ResultSet rs, int rowNum) throws SQLException {
-			File file = new File();
-			file.setId(rs.getInt("id"));
-			file.setFileName(rs.getString("filename"));
-			file.setFileType(rs.getString("filetype"));
-			file.setFileSize(rs.getLong("fileSize"));
-			file.setAuthor(rs.getString("author"));
-			file.setData(rs.getBytes("data"));
-
-			return file;
-		}
-	}
-	
-	class ProgramMapper implements RowMapper<Program> {
-		public Program mapRow(ResultSet rs, int rowNum) throws SQLException {
-			Program program = new Program();
-			program.setId(rs.getInt("program_id"));
-			program.setName(rs.getString("name"));
-			program.setOutcomes(getAllOutcomesForProgram(program.getId()));
-			
-			return program;
-		}
-	}
-	
-	class StudentOutcomeMapper implements RowMapper<StudentOutcome> {
-		public StudentOutcome mapRow(ResultSet rs, int rowNum) throws SQLException {
-			StudentOutcome outcome = new StudentOutcome();
-			outcome.setId(rs.getInt("outcome_id"));
-			outcome.setName(rs.getString("name"));
-			
-			return outcome;
 		}
 	}
 }

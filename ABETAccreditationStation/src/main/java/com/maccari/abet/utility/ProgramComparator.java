@@ -4,6 +4,16 @@ import java.util.Comparator;
 
 import com.maccari.abet.domain.entity.Program;
 
+/*
+ * ProgramComparator.java 
+ * Author: Thomas Maccari
+ * 
+ * Implements: Comparator
+ * 
+ * Description: Sorts programs alphabetically 
+ * 
+ */
+
 public class ProgramComparator implements Comparator<Program>{
 
 	@Override

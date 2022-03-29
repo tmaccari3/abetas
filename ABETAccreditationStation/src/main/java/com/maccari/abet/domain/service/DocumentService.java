@@ -1,6 +1,5 @@
 package com.maccari.abet.domain.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,17 @@ import com.maccari.abet.domain.entity.StudentOutcome;
 import com.maccari.abet.domain.entity.web.DocumentSearch;
 import com.maccari.abet.domain.entity.web.WebDocument;
 import com.maccari.abet.repository.DocumentDao;
+
+/*
+ * DocumentService.java 
+ * Author: Thomas Maccari
+ * 
+ * Implements: Service.java
+ * 
+ * Description: This service class provides access to the data-source, methods 
+ * for Document to WebDocument conversion, and other document related utilities.
+ * 
+ */
 
 @Component
 public class DocumentService implements Service<Document> {
@@ -40,6 +50,7 @@ public class DocumentService implements Service<Document> {
 		return docDao.getById(id);
 	}
 	
+	// Retrieves the document as well as its designated file.
 	public Document getFullDocById(int id) {
 		Document document = getById(id);
 		File file = document.getFile();
@@ -75,6 +86,7 @@ public class DocumentService implements Service<Document> {
 		return docDao.getDocsForTask(taskId);
 	}
 
+	// Converts the given WebDocument to a Document
 	public Document webDoctoDoc(WebDocument webDoc) {
 		Document document = new Document();
 		
@@ -93,6 +105,7 @@ public class DocumentService implements Service<Document> {
 		return document;
 	}
 	
+	// Fills the id lists that correspond to the programs and outcomes of the WebDocument
 	public void fillDocIds(WebDocument webDoc) {
 		for(Program program : webDoc.getFullPrograms()) {
 			webDoc.getPrograms().add(program.getId());

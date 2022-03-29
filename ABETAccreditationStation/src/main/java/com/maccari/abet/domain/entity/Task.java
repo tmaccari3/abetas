@@ -9,6 +9,14 @@ import java.util.List;
 
 import javax.validation.constraints.NotEmpty;
 
+/*
+ * Task.java 
+ * Author: Thomas Maccari
+ * 
+ * Description: The domain object that represents a tuple from the task table.
+ * 
+ */
+
 public class Task {
 	private int id;
 
@@ -151,6 +159,7 @@ public class Task {
 		this.submitDate = submitDate;
 	}
 	
+	// Returns a string representation the status based on the boolean value
 	public String getStatus() {
 		String result = "incomplete";
 		if(submitted) {

@@ -2,6 +2,14 @@ package com.maccari.abet.domain.entity;
 
 import java.util.List;
 
+/*
+ * Program.java 
+ * Author: Thomas Maccari
+ * 
+ * Description: The domain object that represents a tuple from the program table.
+ * 
+ */
+
 public class Program {
 	private int id;
 	
@@ -55,7 +63,7 @@ public class Program {
 		return false;
 	}
 	
-	//for testing
+	// For testing
 	public String toString() {
 		String result = "";
 		//result += id + " ";

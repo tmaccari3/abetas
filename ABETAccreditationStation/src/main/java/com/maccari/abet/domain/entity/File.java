@@ -2,6 +2,14 @@ package com.maccari.abet.domain.entity;
 
 import java.io.Serializable;
 
+/*
+ * File.java 
+ * Author: Thomas Maccari
+ * 
+ * Description: The domain object that represents a tuple from the file table.
+ * 
+ */
+
 public class File implements Serializable {
 	private static final long serialVersionUID = 129348938L;
 	private int id;

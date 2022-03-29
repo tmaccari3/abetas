@@ -17,7 +17,15 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 import org.springframework.scheduling.quartz.SpringBeanJobFactory;;
 
-//make wrapper class for getObject() method
+/*
+ * SpringQrtzScheduler.java 
+ * Author: Thomas Maccari
+ * 
+ * Description: This configuration class instantiates factory beans for jobs,
+ * triggers, and schedulers.
+ * 
+ */
+
 @Configuration
 @EnableAutoConfiguration
 public class SpringQrtzScheduler {
@@ -26,6 +34,7 @@ public class SpringQrtzScheduler {
     
     private static final int weekInSeconds = 604800;
     
+    // static names for jobs and triggers
     private static final String jobName = "RDJob";
     
     private static final String triggerName = "RDTrigger";
@@ -66,6 +75,7 @@ public class SpringQrtzScheduler {
         return schedulerFactory;
     }
 
+    // This factory can take parameters specified here when producing a job
     @Bean
     @Scope("prototype")
     public JobDetailFactoryBean jobDetail(String group) {
@@ -79,6 +89,7 @@ public class SpringQrtzScheduler {
         return jobDetailFactory;
     }
 
+    // This factory can take parameters specified here when producing a trigger
     @Bean
     @Scope("prototype")
     public SimpleTriggerFactoryBean trigger(JobDetail job, String group, 

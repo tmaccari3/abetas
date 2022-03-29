@@ -21,6 +21,17 @@ import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.StudentOutcome;
 import com.maccari.abet.repository.mapper.IdMapper;
 
+/*
+ * ProgramDaoImpl.java 
+ * Author: Thomas Maccari
+ * 
+ * Implements: ProgramDao
+ * 
+ * Description: An implementation using postgreSQL to store, update, and delete
+ * Program related data. 
+ * 
+ */
+
 @Repository
 public class ProgramDaoImpl implements ProgramDao {
 	@Autowired
@@ -50,7 +61,8 @@ public class ProgramDaoImpl implements ProgramDao {
 		} catch(Exception e) {
 			System.out.println("Error in creating program record, rolling back");
 			transactionManager.rollback(status);
-			//throw e;
+			
+			throw e;
 		}
 	}
 	
@@ -69,6 +81,7 @@ public class ProgramDaoImpl implements ProgramDao {
 		} catch(Exception e) {
 			System.out.println("Error in creating student outcome record, rolling back");
 			transactionManager.rollback(status);
+			
 			throw e;
 		}
 	}
@@ -132,7 +145,6 @@ public class ProgramDaoImpl implements ProgramDao {
 			transactionManager.rollback(status);
 			
 			return null;
-			//throw e;
 		}
 	}
 	
@@ -153,7 +165,6 @@ public class ProgramDaoImpl implements ProgramDao {
 			transactionManager.rollback(status);
 			
 			return null;
-			//throw e;
 		}
 	}
 
@@ -203,6 +214,7 @@ public class ProgramDaoImpl implements ProgramDao {
 		}
 	}
 	
+	// Gets all Programs that are 'active' in the system
 	@Override
 	public List<Program> getActivePrograms(String userEmail) {
 		ArrayList<Integer> programIds = new ArrayList<Integer>();
@@ -239,6 +251,7 @@ public class ProgramDaoImpl implements ProgramDao {
 		}
 	}
 
+	// Gets all Outcomes that are 'active' in the system for a given Program
 	@Override
 	public List<StudentOutcome> getActiveOutcomesForProgram(int id) {
 		try {
@@ -278,6 +291,7 @@ public class ProgramDaoImpl implements ProgramDao {
 		}
 	}
 	
+	// This program mapper is unique for this class and gets more data
 	class ProgramMapper implements RowMapper<Program> {
 		public Program mapRow(ResultSet rs, int rowNum) throws SQLException {
 			Program program = new Program();
@@ -290,6 +304,7 @@ public class ProgramDaoImpl implements ProgramDao {
 		}
 	}
 	
+	// This outcome mapper is unique for this class and gets more data
 	class StudentOutcomeMapper implements RowMapper<StudentOutcome> {
 		public StudentOutcome mapRow(ResultSet rs, int rowNum) throws SQLException {
 			StudentOutcome outcome = new StudentOutcome();

@@ -21,6 +21,17 @@ import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.User;
 import com.maccari.abet.utility.WebList;
 
+/*
+ * UserDaoImpl.java 
+ * Author: Thomas Maccari
+ * 
+ * Implements: UserDao
+ * 
+ * Description: An implementation using postgreSQL to store, update, and delete
+ * User related data. 
+ * 
+ */
+
 @Repository
 public class UserDaoImpl implements UserDao {
 	@Autowired
@@ -137,6 +148,7 @@ public class UserDaoImpl implements UserDao {
 		}
 	}
 	
+	// Gets all programs this user is able to access
 	private List<Program> getUserPrograms(String email) {
 		try {
 			String SQL = "SELECT * FROM user_program WHERE email=?";

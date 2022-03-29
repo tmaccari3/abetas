@@ -17,6 +17,15 @@ import com.maccari.abet.domain.entity.web.WebEmail;
 import com.maccari.abet.domain.entity.web.WebTask;
 import com.maccari.abet.domain.scheduler.JobTriggerNameContainer;
 
+/*
+ * ReminderService.java 
+ * Author: Thomas Maccari
+ * 
+ * Description: A unique service that handles reminder scheduling and managing 
+ * the jobs that send the reminders.
+ * 
+ */
+
 @Component
 public class ReminderService {
 	@Autowired
@@ -46,8 +55,10 @@ public class ReminderService {
 			email.getBody());
 	}
 	
+	// Schedule a reminder given an email and a task
 	public void scheduleReminder(WebEmail email, WebTask task) {
 		try {
+			// Set group name to sender email + task id for a unique key combination
 			JobDetail job = jobFactoryProvider.getObject(email.getTo() + task.getId())
 					.getObject();
 			
@@ -56,6 +67,8 @@ public class ReminderService {
 			job.getJobDataMap().put("subject", email.getSubject());
 			job.getJobDataMap().put("body", email.getBody());
 			
+			// Produce a trigger with group name same as job, interval of execution 
+		    // and the amount of times to repeat the trigger
 			SimpleTriggerFactoryBean triggerFactory = triggerFactoryProvider
 					.getObject(null, email.getTo() + task.getId(), 2, 10);
 			Trigger trigger = triggerFactory.getObject();
@@ -67,7 +80,10 @@ public class ReminderService {
 		}
 	}
 	
+	// Given the group, delete the job by its key.
 	public void deleteJob(String group) {
+		// The job factory produces jobs with a set name. 
+		// Combine this with the given group and the get the job's key.
 		JobKey key = new JobKey(JTNameContainer.getJobName(), group);
 		try {
 			scheduler.deleteJob(key);
@@ -77,6 +93,6 @@ public class ReminderService {
 	}
 	
 	public void unscheduleJob(String group) {
-		
+		// TODO Auto-generated method stub
 	}
 }

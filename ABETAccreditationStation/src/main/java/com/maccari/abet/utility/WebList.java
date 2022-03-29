@@ -2,6 +2,16 @@ package com.maccari.abet.utility;
 
 import java.util.ArrayList;
 
+/*
+ * WebList.java 
+ * Author: Thomas Maccari
+ * 
+ * Description: This class inherits from the ArrayList class via composition for 
+ * the purpose of defining a custom toString method for ease of displaying on 
+ * a webpage.
+ * 
+ */
+
 public class WebList<T> {
 	private ArrayList<T> list;
 	

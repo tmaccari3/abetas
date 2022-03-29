@@ -1,5 +1,14 @@
 package com.maccari.abet.repository.mapper;
 
+/*
+ * IdMapper.java 
+ * Author: Thomas Maccari
+ * 
+ * Description: A general purpose mapper class for obtaining the id given a ResultSet.
+ * Contains a constructor for setting which column the id is found at.
+ * 
+ */
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
