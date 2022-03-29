@@ -9,6 +9,15 @@ import com.maccari.abet.domain.entity.Document;
 import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.repository.FileDao;
 
+/*
+ * FileService.java 
+ * Author: Thomas Maccari
+ * 
+ * Description: A stand alone service that provides access to the data-source 
+ * for the purpose of accessing files.
+ * 
+ */
+
 @Component
 public class FileService {
 	@Autowired

@@ -1,5 +1,14 @@
 package com.maccari.abet.domain.scheduler;
 
+/*
+ * EmailJob.java 
+ * Author: Thomas Maccari
+ * 
+ * Description: This implementation of the Job class sends the an email stored
+ * in a job's data map.
+ * 
+ */
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

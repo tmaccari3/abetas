@@ -5,6 +5,14 @@ import java.util.List;
 
 import com.maccari.abet.utility.WebList;
 
+/*
+ * User.java 
+ * Author: Thomas Maccari
+ * 
+ * Description: The domain object that represents a tuple from the user table.
+ * 
+ */
+
 public class User {
 	private String email;
 	

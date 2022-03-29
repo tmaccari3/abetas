@@ -141,11 +141,11 @@ public class DocumentDaoImpl implements DocumentDao {
 	@Override
 	public List<Document> getBySearch(DocumentSearch search) {
 		QSearchableDocument document = QSearchableDocument.searchableDocument;
-		SearchableDocument doc = queryFactory.selectFrom(document)
+		/*SearchableDocument doc = queryFactory.selectFrom(document)
 				.where(document.id.eq(20))
 				.fetchOne();
 		System.out.println(doc.getId());
-		/*Iterable<Document> docsIter = docSearchDao.findAll(filterBySearch);
+		Iterable<Document> docsIter = docSearchDao.findAll(filterBySearch);
 		List<Document> docs = new ArrayList<Document>();
 		docsIter.forEach(docs::add);*/
 		ArrayList<Document> docs = new ArrayList<>();

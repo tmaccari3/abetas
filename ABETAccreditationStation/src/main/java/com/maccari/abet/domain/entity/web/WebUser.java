@@ -9,6 +9,14 @@ import javax.validation.constraints.Size;
 
 import com.maccari.abet.domain.entity.Program;
 
+/*
+ * DocumentSearch.java 
+ * Author: Thomas Maccari
+ * 
+ * Description: This class serves as a form backing object for a User
+ * 
+ */
+
 public class WebUser {
 	@NotEmpty(message = "*Email required")
 	@Email(message = "Enter a valid email address")

@@ -14,6 +14,15 @@ import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.StudentOutcome;
 import com.maccari.abet.domain.entity.Task;
 
+/*
+ * DocumentSearch.java 
+ * Author: Thomas Maccari
+ * 
+ * Description: This class serves as a form backing object for 
+ * a Task created by a user
+ * 
+ */
+
 public class WebTask {
 	private int id;
 

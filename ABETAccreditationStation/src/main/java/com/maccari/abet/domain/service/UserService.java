@@ -9,6 +9,17 @@ import com.maccari.abet.domain.entity.User;
 import com.maccari.abet.domain.entity.web.WebUser;
 import com.maccari.abet.repository.UserDao;
 
+/*
+ * UserService.java 
+ * Author: Thomas Maccari
+ * 
+ * Implements: Service.java
+ * 
+ * Description: This service class provides access to the data-source
+ * and other user related utilities.
+ * 
+ */
+
 @Component
 public class UserService implements Service<User> {
 	@Autowired
@@ -51,6 +62,7 @@ public class UserService implements Service<User> {
 		return new User(webUser.getEmail(), webUser.getRoles(), webUser.getPrograms());
 	}
 	
+	// Returns true if the user with that email has an account within the system
 	public boolean userExists(String email) {
 		if(userDao.getUserByEmail(email) == null) {
 			return false;

@@ -7,6 +7,15 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+/*
+ * DocumentSearch.java 
+ * Author: Thomas Maccari
+ * 
+ * Description: This class serves as a form backing object for 
+ * the user's search criteria (the fields the enter)
+ * 
+ */
+
 public class DocumentSearch {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date toDate;

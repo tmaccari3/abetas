@@ -3,6 +3,15 @@ package com.maccari.abet.domain.entity;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+/*
+ * StudentOutcome.java 
+ * Author: Thomas Maccari
+ * 
+ * Description: The domain object that represents a tuple from the student 
+ * outcome table.
+ * 
+ */
+
 public class StudentOutcome {
 	private int id;
 	
@@ -70,6 +79,7 @@ public class StudentOutcome {
 		return false;
 	}
 	
+	// For testing
 	public String toString() {
 		String result = "";
 		//result += programId + " ";

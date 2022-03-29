@@ -6,6 +6,14 @@ import java.util.List;
 
 import javax.validation.constraints.NotEmpty;
 
+/*
+ * Document.java 
+ * Author: Thomas Maccari
+ * 
+ * Description: The domain object that represents a tuple from the document table.
+ * 
+ */
+
 public class Document {
 	private int id;
 	
@@ -123,6 +131,7 @@ public class Document {
 		this.taskId = taskId;
 	}
 	
+	// Returns the formatted date in year-month-day form as a string
 	public String getFormattedDate() {
 		if(submitDate == null) {
 			return "";

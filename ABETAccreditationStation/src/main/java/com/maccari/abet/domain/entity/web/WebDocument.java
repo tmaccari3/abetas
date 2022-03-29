@@ -10,6 +10,15 @@ import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.StudentOutcome;
 
+/*
+ * WebDocument.java 
+ * Author: Thomas Maccari
+ * 
+ * Description: This class serves as a form backing object for 
+ * the a Document entered by a user
+ * 
+ */
+
 public class WebDocument {
 	private int id;
 

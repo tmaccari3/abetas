@@ -16,6 +16,18 @@ import com.maccari.abet.domain.entity.web.WebUser;
 import com.maccari.abet.repository.ProgramDao;
 import com.maccari.abet.utility.WebProgramOrderById;
 
+/*
+ * ProgramService.java 
+ * Author: Thomas Maccari
+ * 
+ * Implements: Service.java
+ * 
+ * Description: This service class provides access to the data-source, methods 
+ * for Program to WebProgram conversion, program validation, 
+ * and other program related utilities.
+ * 
+ */
+
 @Component
 public class ProgramService implements Service<Program> {
 	@Autowired
@@ -74,6 +86,7 @@ public class ProgramService implements Service<Program> {
 		return programDao.getAllPrograms();
 	}
 	
+	// Gets all program, converts them to WebPrograms, and sorts them by id
 	public List<WebProgram> getAllWebPrograms() {
 		List<WebProgram> webPrograms = new ArrayList<WebProgram>();
 		List<Program> programs = programDao.getAllPrograms();
@@ -87,6 +100,7 @@ public class ProgramService implements Service<Program> {
 		return webPrograms;
 	}
 	
+	// Converts the given WebProgram to a Program
 	public Program convertWebProgram(WebProgram webProgram) {
 		Program program = new Program();
 		program.setId(webProgram.getId());
@@ -97,6 +111,7 @@ public class ProgramService implements Service<Program> {
 		return program;
 	}
 	
+	// Fills the program and student outcome lists for a given task
 	public void fillPrograms(WebTask task) {
 		ArrayList<Program> programs = new ArrayList<Program>();
 		ArrayList<StudentOutcome> outcomes = new ArrayList<StudentOutcome>();
@@ -112,6 +127,7 @@ public class ProgramService implements Service<Program> {
 		task.setFullOutcomes(outcomes);
 	}
 	
+	// Fills the program and student outcome lists for a given document
 	public void fillPrograms(WebDocument document) {
 		ArrayList<Program> programs = new ArrayList<Program>();
 		ArrayList<StudentOutcome> outcomes = new ArrayList<StudentOutcome>();
@@ -127,6 +143,7 @@ public class ProgramService implements Service<Program> {
 		document.setFullOutcomes(outcomes);
 	}
 	
+	// Fills the program and student outcome lists for a given user
 	public void fillPrograms(WebUser user) {
 		ArrayList<Program> programs = new ArrayList<Program>();
 		for(Integer id : user.getProgramIds()) {
@@ -136,26 +153,9 @@ public class ProgramService implements Service<Program> {
 		user.setPrograms(programs);
 	}
 	
+	// Checks is the outcomes and programs are valid selections for a user
 	public boolean checkPrograms(List<Program> programs, List<StudentOutcome> outcomes,
 			String userEmail) {
-		/*List<Program> validPrograms = programDao.getActivePrograms(userEmail);
-		System.out.println(validPrograms);
-		for(Program program : programs) {
-			if(!validPrograms.contains(program)) {
-				System.out.println("prog invalid");
-				return true;
-			}
-			
-			for(StudentOutcome outcome : outcomes) {
-				List<StudentOutcome> validOutcomes = programDao
-						.getActiveOutcomesForProgram(program.getId());
-				if(!validOutcomes.contains(outcome)) {
-					System.out.println("gotta be in here: "+validOutcomes);
-					System.out.println("the guy: "+outcome);
-					return true;
-				}
-			}
-		}*/
 		for(StudentOutcome outcome : outcomes) {
 			if(!isInProgram(programs, outcome)) {
 				return true;
@@ -165,6 +165,7 @@ public class ProgramService implements Service<Program> {
 		return false;
 	}
 	
+	// Determines if a selected outcome belongs to one of the selected programs
 	private boolean isInProgram(List<Program> programs, StudentOutcome outcome) {
 		if(outcome == null) {
 			return false;

@@ -3,6 +3,15 @@ package com.maccari.abet.domain.entity.web;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
+/*
+ * DocumentSearch.java 
+ * Author: Thomas Maccari
+ * 
+ * Description: This class serves as a form backing object for 
+ * an email message to be sent
+ * 
+ */
+
 public class WebEmail {
 	private String to;
 	
