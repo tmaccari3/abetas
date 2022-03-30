@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+<link href="/css/docs.css" rel="stylesheet" />
+<script type="text/javascript" th:src="@{/js/program.js}" /></script>
+<meta charset="ISO-8859-1">
+<title>Submit a Document</title>
+</head>
+<body layout:fragment="content">
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<form action="#" th:action="@{/doc/create}" th:object="${webDocument}"
+		method="post" enctype="multipart/form-data">
+		<div class="doc-container">
+			<h3 style="text-align: center">Submit a Document</h3>
+			<br>
+			<div class="title-container">
+				<div class="inline center">
+					<label>Title:</label> <input class="title-input" type="text"
+						th:field="*{title}" />
+				</div>
+				<div class="inline center">
+					<p class="error" th:if="${#fields.hasErrors('title')}"
+						th:errors="*{title}">Title Error</p>
+				</div>
+			</div>
+			<br>
+			<div class="doc-middle-container">
+				<div class="doc-program-container">
+					<div>
+						<h5>Program(s)</h5>
+						<label class="error" th:if="${#fields.hasErrors('programs')}"
+							th:errors="*{programs}">Program Error</label>
+						<ul>
+							<li th:each="aProg,rowIter : ${progTypes}"><input
+								type="checkbox" th:field="*{programs}" th:value="${aProg.id}"
+								name="addProgram" onClick="disableChange(this)" /> <label
+								th:for="${#ids.prev('programs')}" th:text="${aProg.name}">Default
+									Program</label> <label class="error"
+								th:if="${#fields.hasErrors('outcomes')}" th:errors="*{outcomes}">Outcome
+									Error</label>
+								<div th:name="${'programs' + (rowIter.index + 1)}">
+									<div th:name="outcome" class="task-outcome-title"
+										th:if="${!aProg.outcomes.isEmpty}">Outcome(s):</div>
+									<ul th:name="outcome">
+										<li th:each="outcome,rowIter1 : ${aProg.outcomes}"><label
+											th:name="${'programs' + (rowIter.index + 1)}"
+											th:inline="text"> <input type="checkbox"
+												th:field="*{outcomes}" th:value="${outcome.id}" />
+												[[${outcome.name}]]
+										</label></li>
+									</ul>
+								</div></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="doc-file-container">
+				<h5>File Upload:</h5>
+				<label class="error" th:if="${#fields.hasErrors('uploadedFile')}"
+					th:errors="*{uploadedFile}">File Error</label>
+				<table>
+					<tr>
+						<td style="border-bottom: none">
+							<!-- <label class="abetas-button label-button" for="uploadFile">Select a File</label> -->
+							<input id="uploadFile" class="abetas-file-button" type="file"
+							name="file" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<button class="abetas-button" type="submit" name="upload"
+								value="download" formnovalidate="formnovalidate">Upload
+								File</button>
+							<button class="abetas-button" type="submit" name="upload"
+								value="cancel" formnovalidate="formnovalidate">Cancel
+								upload</button>
+						</td>
+					</tr>
+					<tr>
+						<td th:if="${uploadedFile ne null}">
+							<div th:text="${'Submitted file: ' + uploadedFile.getFileName()}"></div>
+						</td>
+						<td th:if="${uploadedFile == null}">
+							<div th:text="${'Submitted file: none'}"></div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="doc-tag-container">
+				<h5>Tag(s):</h5>
+				<label class="error" th:if="${#fields.hasErrors('tags')}"
+							th:errors="*{tags}">Tag Error</label>
+				<ul>
+					<li th:each="tag : ${tags}">
+						<input type="checkbox" th:field="*{tags}" th:value="${tag}" /> 
+						<label th:for="${#ids.prev('tags')}" th:text="${tag}">Default
+							Tag</label>
+					</li>
+				</ul>
+			</div>
+			<br>
+			<div class="doc-area-container">
+				<h6>Description:</h6>
+				<p class="error" th:if="${#fields.hasErrors('description')}"
+					th:errors="*{description}">Description Error</p>
+				<textarea placeholder="Enter description..."
+					th:field="*{description}" rows="4" cols="50" maxlength="255">
+           					Enter description...</textarea>
+			</div>
+			<br>
+			<div style="float: right" class="inline">
+				<button class="abetas-button" type="submit" name="cancel"
+					formnovalidate="formnovalidate" value="cancel">Return</button>
+			</div>
+			<div class="inline">
+				<button class="abetas-button" type="submit" name="btnSubmit"
+					value="Submit">Submit</button>
+			</div>
+		</div>
+	</form>
+</body>
+</html>

@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+<link href="/css/task.css" rel="stylesheet" />
+<script type="text/javascript" th:src="@{/js/program.js}" /></script>
+<meta charset="ISO-8859-1">
+<title>Create Task</title>
+</head>
+<body layout:fragment="content">
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<form action="#" id="task" th:action="@{/task/create}"
+		th:object="${webTask}" method="post" enctype="multipart/form-data">
+		<div class="task-container">
+			<h3 style="text-align: center">Create a Task</h3>
+			<br>
+			<div class="title-container">
+				<div class="inline center">
+					<label>Title:</label> <input class="title-input" type="text" th:field="*{title}" />
+				</div>
+				<div class="inline center">
+					<p class="error" th:if="${#fields.hasErrors('title')}"
+						th:errors="*{title}">Title Error</p>
+				</div>
+			</div>
+			<div class="title-container">
+				<div class="inline center">
+					<label>Due Date:</label> <input type="date" th:field="*{dueDate}" />
+				</div>
+				<div class="inline center">
+					<p class="error" th:if="${#fields.hasErrors('dueDate')}"
+						th:errors="*{dueDate}">Title Error</p>
+				</div>
+			</div>
+			<br>
+			<h5>Assignee List</h5>
+			<label class="error" th:if="${#fields.hasErrors('assignees')}"
+				th:errors="*{assignees}">Assignees Error</label>
+			<table class="assignee-list">
+				<thead>
+					<tr>
+						<th>Email</th>
+						<th></th>
+						<th class="create">
+							<button class="abetas-button" type="submit" name="addRow"
+								formnovalidate="formnovalidate">
+								<span class="fa fa-plus"></span> Add Assignee
+							</button>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="assignee,rowIter : *{assignees}">
+						<td th:text="${rowIter.index + 1}" /></td>
+						<td><input type="email"
+							th:field="*{assignees[__${rowIter.index}__]}" /></td>
+						<td class="create">
+							<button class="abetas-button" type="submit" name="removeRow"
+								th:value="${rowIter.index}" formnovalidate="formnovalidate">
+								<span class="fa fa-minus"></span> Remove
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<br>
+			<div class="task-middle-container">
+				<div class="task-program-container">
+					<div>
+						<h5>Program(s):</h5>
+						<label class="error" th:if="${#fields.hasErrors('programs')}"
+							th:errors="*{programs}">Program Error</label>
+						<ul>
+							<li th:each="aProg,rowIter : ${progTypes}"><input
+								type="checkbox" th:field="*{programs}" th:value="${aProg.id}"
+								name="addProgram" onClick="disableChange(this)" /> <label
+								th:for="${#ids.prev('programs')}" th:text="${aProg.name}">Default
+									Program</label> <label class="error"
+								th:if="${#fields.hasErrors('outcomes')}" th:errors="*{outcomes}">Outcome
+									Error</label>
+								<div th:name="${'programs' + (rowIter.index + 1)}">
+									<div th:name="outcome" class="task-outcome-title"
+										th:if="${!aProg.outcomes.isEmpty}">Outcome(s):</div>
+									<ul th:name="outcome">
+										<li th:each="outcome,rowIter1 : ${aProg.outcomes}"><label
+											th:name="${'programs' + (rowIter.index + 1)}"
+											th:inline="text"> <input type="checkbox"
+												th:field="*{outcomes}" th:value="${outcome.id}" />
+												[[${outcome.name}]]
+										</label></li>
+									</ul>
+								</div></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="task-file-container">
+				<h5>Task File:</h5>
+				<label class="error" th:if="${#fields.hasErrors('uploadedFile')}"
+					th:errors="*{uploadedFile}">File Error</label>
+				<table>
+					<tr>
+						<td style="border-bottom: none"><input id="uploadFile"
+							class="abetas-file-button" type="file" name="file" /></td>
+					</tr>
+					<tr>
+						<td>
+							<button class="abetas-button" type="submit" name="upload"
+								value="download" formnovalidate="formnovalidate">Upload
+								File</button>
+							<button class="abetas-button" type="submit" name="upload"
+								value="cancel" formnovalidate="formnovalidate">Cancel
+								Upload</button>
+						</td>
+					</tr>
+					<tr>
+						<td th:if="${uploadedFile ne null}">
+							<div th:text="${'Submitted file: ' + uploadedFile.getFileName()}"></div>
+						</td>
+						<td th:if="${uploadedFile == null}">
+							<div th:text="${'Submitted file: none'}"></div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<br>
+			<div class="task-area-container">
+				<h6>Task Description:</h6>
+				<p class="error" th:if="${#fields.hasErrors('description')}"
+					th:errors="*{description}">Description Error</p>
+				<textarea placeholder="Enter description..."
+					th:field="*{description}" rows="4" cols="50" maxlength="255">
+           					Enter description...</textarea>
+			</div>
+			<br>
+			<div style="float: right" class="inline">
+				<button class="abetas-button" type="submit" name="cancel"
+					formnovalidate="formnovalidate" value="cancel">Return</button>
+			</div>
+			<div class="inline">
+				<button class="abetas-button" type="submit" name="btnSubmit"
+					value="Submit">Submit</button>
+			</div>
+		</div>
+	</form>
+</body>
+</html>

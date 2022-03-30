@@ -1,0 +1,54 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+<link href="/css/home.css" rel="stylesheet" />
+<meta charset="ISO-8859-1">
+<title>Register</title>
+</head>
+<body layout:fragment="content">
+	<form action="#" th:action="@{/register}" th:object="${webUser}"
+		method="post">
+		<div class="register-container">
+			<h3 style="text-align: center">Register</h3>
+			<br>
+			<div class="error" style="text-align: center" th:if="${#fields.hasErrors('email')}"
+				th:errors="*{email}"> email error</div>
+			<table>
+				<tr>
+					<td>Email Address:</td>
+					<td><input type="email" th:field="*{email}" /></td>
+				</tr>
+				<tr>
+					<td>Password:</td>
+					<td><input type="password" th:field="*{password}" /></td>
+				</tr>
+				<tr>
+					<td>Confirm Password:</td>
+					<td><input type="password" th:field="*{confPassword}" /></td>
+				</tr>
+			</table>
+			<br>
+			<h6>Role(s)</h6>
+			<label class="error" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Role
+				Error</label>
+			<ul>
+				<li th:each="aRole : ${roleTypes}"><input type="checkbox"
+					th:field="*{roles}" th:value="${aRole}" /> <label
+					th:for="${#ids.prev('roles')}" th:text="${aRole}">Default
+						Role</label></li>
+			</ul>
+			<br>
+			<table>
+				<tr>
+					<td th:if="${#fields.hasErrors('password')}"
+						th:errors="*{password}">Password Error</td>
+				</tr>
+			</table>
+			<div class="abetas-login-button" style="text-align: center;">
+				<button class="login" type="submit">Register</button>
+			</div>
+		</div>
+	</form>
+</body>
+</html>

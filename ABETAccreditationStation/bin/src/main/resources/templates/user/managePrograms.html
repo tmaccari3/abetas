@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+<link href="/css/manage.css" rel="stylesheet" />
+<meta charset="ISO-8859-1">
+<title>Manage User Programs</title>
+</head>
+<body layout:fragment="content">
+	<br>
+	<div class="container">
+		<div class="options-container">
+			<div class="option">
+				<p>User List</p>
+			</div>
+		</div>
+		<div class="table-container">
+			<table>
+				<tr>
+					<th>Email</th>
+					<th>Program(s)</th>
+					<th>Options</th>
+				</tr>
+				<tr th:each="user : ${users}">
+					<td th:text="${user.email}"></td>
+					<td th:text="${user.programs}"></td>
+					<td>
+						<div class="option">
+							<form action="/user/edit/programs">
+								<button class="abetas-button" name="email" th:value="${user.email}"
+									type="submit">
+									<span class="fa fa-edit"></span> Edit
+								</button>
+							</form>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

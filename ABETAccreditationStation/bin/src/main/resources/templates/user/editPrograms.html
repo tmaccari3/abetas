@@ -1,0 +1,46 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+<link href="/css/manage.css" rel="stylesheet" />
+<meta charset="ISO-8859-1">
+<title>Edit User Programs</title>
+</head>
+<body layout:fragment="content">
+	<form action="#" th:action="@{/user/edit/programs}" th:object="${webUser}"
+		method="post">
+		<div class="user-details-container">
+			<h3>User Summary</h3>
+			<input type="hidden"
+					th:field="*{email}" th:value="${email}" />
+			<input type="hidden"
+					th:field="*{roles}" th:value="${roles}" />
+			<br>
+			<div class="user-title">
+				<h6>Email Address:</h6>
+			</div>
+			<p th:text="${webUser.email}" /></p>
+			<div class="user-title">
+				<h6>Program(s)</h6>
+			</div>
+			<label th:if="${#fields.hasErrors('programIds')}" th:errors="*{programIds}">Program
+				Error</label>
+			<ul>
+				<li th:each="aProg : ${progTypes}"><input type="checkbox"
+					th:field="*{programIds}" th:value="${aProg.id}" /> <label
+					th:for="${#ids.prev('programIds')}" th:text="${aProg.name}">Default
+						Program</label></li>
+			</ul>
+			<br>
+			<div style="float: right" class="inline">
+				<button class="abetas-button" type="submit" name="cancel"
+					value="cancel">Return</button>
+			</div>
+			<div class="inline">
+				<button class="abetas-button" type="submit" name="submit"
+					value="Submit">Save Changes</button>
+			</div>
+		</div>
+	</form>
+</body>
+</html>

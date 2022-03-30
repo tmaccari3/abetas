@@ -54,7 +54,7 @@ public class DocumentDaoImpl implements DocumentDao {
 
 	private DataSource dataSource;
 	
-	private JPAQueryFactory queryFactory;
+	//private JPAQueryFactory queryFactory;
 
 	private JdbcTemplate jdbcTemplate;
 
@@ -62,7 +62,7 @@ public class DocumentDaoImpl implements DocumentDao {
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 		this.jdbcTemplate = new JdbcTemplate(this.dataSource);
-		this.queryFactory = new JPAQueryFactory(entityManager);
+		//this.queryFactory = new JPAQueryFactory(entityManager);
 	}
 	
 	// Inserts a document into the data-source

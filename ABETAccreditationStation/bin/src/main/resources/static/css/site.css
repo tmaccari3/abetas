@@ -1,0 +1,188 @@
+@charset "ISO-8859-1";
+
+html {
+    height: 100%;
+}
+
+body {
+	background-color: #e6eeff;
+    height: 100%;
+}
+
+.container {
+	min-width: 400px;
+	height: 438px;
+	width: 100%;
+}
+
+.header {
+	background-color: #d6e0f5;
+	width: 100%;
+	height: 40px;
+	margin: auto;
+	padding-top: 7px;
+	padding-left: 5px;
+	font-weight: bold;
+}
+
+.header-div {
+	background-color: #00004d;
+	height: 50px;
+	position: sticky;
+	top: 0;
+	z-index: 1;
+}
+
+.menu-div {
+	display: inline-block;
+	overflow: hidden;
+	background-color: #00004d;
+	width: 89%;
+	height: 50px;
+}
+
+.menu-div button {
+	background-color: #00004d;
+	border: none;
+	color: white;
+	font-weight: bold;
+	height: 50px;
+	padding: 10px 24px;
+	cursor: pointer;
+	float: left;
+}
+
+.menu-div:after {
+	content: "";
+	clear: both;
+	display: table;
+}
+
+.menu-div button:not(:last-child) {
+	border-right: none;
+}
+
+.menu-div button:hover {
+	background-color: #000066;
+}
+
+.dropdown-menu {
+	background-color: #edf2f7;
+}
+
+.menu-item-button {
+	border: none;
+	width: 100%;
+	text-align: left;
+	background-color: #edf2f7;
+}
+
+.menu-item-button:hover {
+	border: none;
+	background-color: white;
+}
+
+.admin-menu:hover {
+	color: white;
+}
+
+.login-div {
+	display: inline-block;
+	height: 50px;
+	background-color: #00004d;
+	width: 10%;
+}
+
+.login-button {
+	background-color: #00004d;
+	border: none;
+	padding: 10px 24px;
+	cursor: pointer;
+	color: white;
+	height: 50px;
+	font-weight: bold;
+	float: right !important;
+}
+
+.login-button:hover {
+	background-color: #000066;
+}
+
+/*-------site wide-------*/
+.abetas-button {
+	color: black;
+    background-color: #d0d0e1;
+    border-color: #a3a3c2;
+    border-radius: 4px;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.abetas-file-button {
+	color: black;
+    border-color: #a3a3c2;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.label-button {
+	padding: 2px;
+	border: 2px solid #a3a3c2;;
+}
+
+.title {
+	border-bottom: 1px solid  #bfbfbf;
+}
+
+.title-container {
+	display: inline-block;
+	font-weight: bold;
+}
+
+.title-input {
+	width: 300px;
+}
+
+.separator {
+	display: inline-block;
+	border-left: 6px solid #00004d;
+}
+
+input[type=email], input[type=text], input[type=password] {
+	min-width: 80px;
+}
+
+input[type=file] {
+	max-width: 250px;
+}
+
+.inline {
+	display: inline-block;
+}
+
+.top {
+	vertical-align: top;
+}
+
+.count {
+	width: 50px;
+}
+
+.float-left {
+	float: left;
+}
+
+.checkbox input {
+	vertical-align: middle;
+    position: relative;
+    bottom: 1px;
+}
+
+.checkbox label {
+	display: block;
+}
+
+.error { 
+	color: red;
+	font-weight: italic;
+}

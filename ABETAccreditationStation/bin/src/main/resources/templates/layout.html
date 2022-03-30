@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<meta charset="ISO-8859-1">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v6.0.0/css/all.css">
+<link href="/css/site.css" rel="stylesheet" />
+<script>
+	(function() {
+		// hold onto the drop down menu                                             
+		var dropdownMenu;
+
+		// and when you show it, move it to the body                                     
+		$(window).on('show.bs.dropdown', function(e) {
+
+			// grab the menu        
+			dropdownMenu = $(e.target).find('.dropdown-menu');
+
+			// detach it and append it to the body
+			$('body').append(dropdownMenu.detach());
+
+			// grab the new offset position
+			var eOffset = $(e.target).offset();
+
+			// make sure to place it where it would normally go 
+			dropdownMenu.css({
+				'display' : 'block',
+				'top' : eOffset.top + $(e.target).outerHeight(),
+				'left' : eOffset.left
+			});
+		});
+
+		// and when you hide it, reattach the drop down, and hide it normally                                                   
+		$(window).on('hide.bs.dropdown', function(e) {
+			$(e.target).append(dropdownMenu.detach());
+			dropdownMenu.hide();
+		});
+	})();
+</script>
+</head>
+<body>
+	<div class="header" sec:authorize="isAuthenticated()">
+		Welcome, <span sec:authentication="name"></span>
+	</div>
+	<div class="header-div">
+		<div class="menu-div">
+			<form action="/">
+				<button type="submit">
+					<span class="fas fa-home"></span> Home
+				</button>
+			</form>
+			<div class="dropdown" sec:authorize="hasAnyRole('ASSESSMENT_COORD, ADMIN')">
+				<button class="btn btn-default dropdown-toggle admin-menu"
+					type="button" id="menu1" data-toggle="dropdown">
+					User Menu<span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+					<li sec:authorize="hasAnyRole('ADMIN')" role="presentation">
+						<form action="/manage">
+							<button type="submit" class="menu-item-button" role="menuitem"
+								tabindex="-1">Manage Users</button>
+						</form>
+					</li>
+					<li sec:authorize="hasAnyRole('ASSESSMENT_COORD')" role="presentation">
+						<form action="/manage/programs">
+							<button type="submit" class="menu-item-button" role="menuitem"
+								tabindex="-1">Manage User Programs</button>
+						</form>
+					</li>
+					<li role="presentation" class="divider"></li>
+				</ul>
+			</div>
+			<div class="dropdown" sec:authorize="hasAnyRole('FACULTY, ASSESSMENT_COORD, ADMIN')">
+				<button class="btn btn-default dropdown-toggle admin-menu"
+					type="button" id="menu1" data-toggle="dropdown">
+					Task Menu <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+					<li role="presentation">
+						<div
+							sec:authorize="hasAnyRole('FACULTY, ASSESSMENT_COORD, ADMIN')">
+							<form action="/task/index">
+								<button type="submit" class="menu-item-button">View My
+									Tasks</button>
+							</form>
+						</div>
+					</li>
+					<li role="presentation">
+						<div sec:authorize="hasAnyRole('ASSESSMENT_COORD')">
+							<form action="/task/viewCreated">
+								<button type="submit" class="menu-item-button">View
+									Created Tasks</button>
+							</form>
+						</div>
+					</li>
+					<li role="presentation">
+						<div sec:authorize="hasAnyRole('ASSESSMENT_COORD, ADMIN')">
+							<form action="/task/create">
+								<button type="submit" class="menu-item-button">Create
+									Task</button>
+							</form>
+						</div>
+					</li>
+					<li role="presentation" class="divider"></li>
+				</ul>
+			</div>
+			<div sec:authorize="hasAnyRole('ASSESSMENT_COORD')">
+				<form action="/program/index">
+					<button type="submit">Program Menu</button>
+				</form>
+			</div>
+			<div sec:authorize="hasAnyRole('FACULTY, ASSESSMENT_COORD, ADMIN')">
+				<form action="/doc/create">
+					<button type="submit">Submit Documentation</button>
+				</form>
+			</div>
+			<div sec:authorize="hasAnyRole('ABET_READER')">
+				<form action="/doc/index">
+					<button type="submit">Review Documentation</button>
+				</form>
+			</div>
+		</div>
+		<div class="login-div" sec:authorize="isAnonymous()">
+			<form action="/login">
+				<button class="login-button" type="submit">Login</button>
+			</form>
+		</div>
+		<div class="login-div" sec:authorize="isAuthenticated()">
+			<form th:action="@{/logout}" method=post>
+				<button class="login-button" type="submit">Logout</button>
+			</form>
+		</div>
+	</div>
+	<div layout:fragment="content"></div>
+</body>
+</html>

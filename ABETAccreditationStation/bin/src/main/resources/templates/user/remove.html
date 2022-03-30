@@ -1,0 +1,36 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+<link href="/css/manage.css" rel="stylesheet" />
+<meta charset="ISO-8859-1">
+<title>Remove User</title>
+</head>
+<body layout:fragment="content">
+	<form action="#" th:action="@{/user/remove}" method="post">
+		<div class="user-details-container">
+			<h3>User to remove</h3>
+			<br>
+			<div class="user-title">
+				<h6>Email Address:</h6>
+			</div>
+			<p th:text="${user.email}" /></p>
+			<div class="user-title">
+				<h6>Role(s)</h6>
+			</div>
+			<div th:each="role : ${user.roles}">
+				<p th:text="${role}"></p>
+			</div>
+			<br>
+			<div style="float: right" class="inline">
+				<button class="abetas-button" type="submit" name="cancel"
+					value="cancel">Return</button>
+			</div>
+			<div class="inline">
+				<button class="abetas-button" name="email" th:value="${user.email}"
+					type="submit">Remove User</button>
+			</div>
+		</div>
+	</form>
+</body>
+</html>

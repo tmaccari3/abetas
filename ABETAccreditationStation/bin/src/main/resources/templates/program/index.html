@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+<link href="/css/program.css" rel="stylesheet" />
+<meta charset="ISO-8859-1">
+<title>Manage Programs</title>
+</head>
+<body layout:fragment="content">
+	<form action="#" th:action="@{/program/create}"
+		th:object="${webProgram}" method="post">
+		<br>
+		<div class="container">
+			<div class="options-container">
+				<div class="option">
+					<p>Program List</p>
+				</div>
+				<div class="option">
+					<button class="abetas-button" type="submit" name="addRow">
+						<span class="fas fa-plus"></span> Add a Program
+					</button>
+				</div>
+			</div>
+			<div class="table-container">
+				<table>
+					<tr>
+						<th>Programs</th>
+						<th>Active</th>
+						<th>Options</th>
+					</tr>
+					<tr th:each="program : ${programs}">
+						<td th:if="${!program.newRow}" th:text="${program.name}"></td>
+						<td th:if="${program.newRow}"><input class="program-input" type="text"
+							th:field="*{name}" />
+							<p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name
+								Error</p></td>
+						<td th:text="${program.active}"></td>
+						<td th:if="${program.newRow}">
+							<div class="option">
+								<button class="abetas-button" type="submit" name="submit"
+									value="Submit">Submit</button>
+							</div>
+							<div class="option">
+								<button class="abetas-button" name="cancel"
+									formnovalidate="formnovalidate" value="cancel">Cancel</button>
+							</div>
+						</td>
+						<td th:if="${!program.newRow}">
+							<div class="option">
+								<button class="abetas-button" name="outcome"
+									th:value="${program.id}" type="submit">
+									<span class="fa fa-edit"></span> View Outcomes
+								</button>
+							</div>
+							<div th:if="${program.active}" class="option">
+								<button class="abetas-button" name="deactivate"
+									th:value="${program.id}" type="submit">
+									<span class="fas fa-minus"></span> Deactivate
+								</button>
+							</div>
+							<div th:if="${!program.active}" class="option">
+								<button class="abetas-button" name="reactivate"
+									th:value="${program.id}" type="submit">
+									<span class="fas fa-minus"></span> Reactivate
+								</button>
+							</div>
+							<div class="option">
+								<button class="abetas-button" name="remove"
+									th:value="${program.id}" type="submit">
+									<span class="fas fa-minus"></span> Remove
+								</button>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</form>
+</body>
+</html>

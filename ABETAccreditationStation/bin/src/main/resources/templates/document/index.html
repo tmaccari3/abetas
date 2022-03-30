@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+<link href="/css/docs.css" rel="stylesheet" />
+<link href="/css/review.css" rel="stylesheet" />
+<link
+	href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css"
+	rel="stylesheet" />
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.css">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.js"></script>
+<title>Review Documentation</title>
+</head>
+<body layout:fragment="content">
+	<script type="text/javascript">
+		$(function() {
+			$(".chzn-select").chosen();
+		});
+	</script>
+	<form class="search-form" action="#" th:action="@{/doc/index}"
+		th:object="${documentSearch}" method="post">
+		<div class="review-container">
+			<div class="recent-container">
+				<div class="recent-title">Recent Submissions</div>
+				<div class="recent-document" th:each="document : ${recentDocuments}">
+					<!-- <div class="click" onClick="document.forms['doc'].submit();"> -->
+					<div class="task-title">
+						<div class="task-title-main">
+							<div>
+								<div class="inline">
+									<h6>Title:</h6>
+								</div>
+								<div class="inline" th:text="${document.title}">Title</div>
+								<div class="inline document-date"
+									th:text="${document.getFormattedDate}"></div>
+							</div>
+							<div>
+								<div class="inline">
+									<h6>Submitted by:</h6>
+								</div>
+								<div class="inline">
+									<div th:text="${document.author}">author</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="review-middle-container">
+						<div class="doc-info-container">
+							<div class="doc-info">
+								<div class="title">
+									<h6>Program(s):</h6>
+								</div>
+								<div th:each="program : ${document.programs}">
+									<p th:text="${program.name}"></p>
+								</div>
+							</div>
+							<div class="doc-info">
+								<div class="title">
+									<h6>Submitted for a Task:</h6>
+								</div>
+								<div th:if="${document.taskId == 0}">No</div>
+								<div th:if="${document.taskId ne 0}">Yes</div>
+							</div>
+						</div>
+					</div>
+					<div class="review-middle-container">
+						<div class="doc-info-container">
+							<div class="title">
+								<h6>Description:</h6>
+							</div>
+							<div th:text="${document.description}">description</div>
+						</div>
+					</div>
+					<a th:href="@{/doc/details?id={id}(id=${document.id})}">See
+						more</a> <br>
+					<!--  </div> -->
+				</div>
+			</div>
+			<div class="search-container">
+				<div class="search-fields-container">
+					<div class="inline top">
+						<h6>Search Documentation</h6>
+					</div>
+					<div class="search-button-container inline top">
+						<button class="abetas-button" name="id" type="submit">Search</button>
+					</div>
+					<br>
+					<div class="inline top">
+						<label>From Date:</label> <input type="date"
+							th:field="*{fromDate}" />
+					</div>
+					<div class="inline top">
+						<label>To Date:</label> <input type="date" th:field="*{toDate}" />
+					</div>
+					<div class="inline top">
+						<label>Max Rows:</label> <input class="count" type="number"
+							th:field="*{searchCount}" />
+					</div>
+					<div class="inline">
+						<div class="inline" style="vertical-align: middle">Actual
+							Rows:</div>
+						<div class="inline actual-rows" th:text="${searchDocuments.size}"></div>
+					</div>
+					<!-- <div class="program-multi inline top">
+						<label class="inline top">Programs:</label> 
+						<select class="chzn-select" multiple="true"
+							data-placeholder="Select Programs..." style="width: 200px">
+							<option th:each="aProg : ${progTypes}" th:value="${aProg.id}"
+								th:text="${aProg.name}" th:field="*{programs}"></option>
+						</select>
+					</div> -->
+				</div>
+				<div class="search-result-container">
+					<div class="recent-document"
+						th:if="!${#lists.isEmpty(searchDocuments)}"
+						th:each="document : ${searchDocuments}">
+						<!-- <div class="click" onClick="document.forms['doc'].submit();"> -->
+						<div class="task-title">
+							<div class="task-title-main">
+								<div>
+									<div class="inline">
+										<h6>Title:</h6>
+									</div>
+									<div class="inline" th:text="${document.title}">Title</div>
+									<div class="inline document-date"
+										th:text="${document.getFormattedDate}"></div>
+								</div>
+								<div>
+									<div class="inline">
+										<h6>Submitted by:</h6>
+									</div>
+									<div class="inline">
+										<div th:text="${document.author}">author</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="review-middle-container">
+							<div class="doc-info-container">
+								<div class="doc-info">
+									<div class="title">
+										<h6>Program(s):</h6>
+									</div>
+									<div th:each="program : ${document.programs}">
+										<p th:text="${program.name}"></p>
+									</div>
+								</div>
+								<div class="doc-info">
+									<div class="title">
+										<h6>Submitted for a Task:</h6>
+									</div>
+									<div th:if="${document.taskId == 0}">Yes</div>
+									<div th:if="${document.taskId ne 0}">No</div>
+								</div>
+							</div>
+						</div>
+						<div class="review-middle-container">
+							<div class="doc-info-container">
+								<div class="title">
+									<h6>Description:</h6>
+								</div>
+								<div th:text="${document.description}">description</div>
+							</div>
+						</div>
+						<a th:href="@{/doc/details?id={id}(id=${document.id})}">See
+							more</a> <br>
+						<!-- </div> -->
+					</div>
+					<div class="empty-result"
+						th:if="${#lists.isEmpty(searchDocuments)}">No Documents
+						match your search.</div>
+				</div>
+			</div>
+			<div class="search-filter-container">
+				<div>
+					<h6>Filter Search</h6>
+					<label class="top">Programs: </label> <select class="program-multi"
+						th:field="*{programs}" multiple="multiple">
+						<option th:each="aProg : ${progTypes}" th:field="*{programs}"
+							th:value="${aProg.id}" th:text="${aProg.name}">Part name</option>
+					</select> <label class="top">Tags: </label>
+					<ul style="padding-left: 10px">
+						<li th:each="tag: ${tags}">
+							<input type="checkbox"
+								th:field="*{tags}" th:value="${tag}"/> 
+							<label th:for="${#ids.prev('tags')}" th:text="${tag}">Default
+								Tag</label> 
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</form>
+</body>
+</html>

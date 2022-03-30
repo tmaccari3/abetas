@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+<link href="/css/task.css" rel="stylesheet" />
+<link href="/css/docs.css" rel="stylesheet" />
+<meta charset="ISO-8859-1">
+<title>Review Submission</title>
+</head>
+<body layout:fragment="content">
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<form action="#" th:action="@{/task/doc/submit}" method="post">
+		<div class="task-complete-equal">
+			<div class="task-complete-row">
+				<div class="task-complete-details-container cell">
+					<h3>Task Details</h3>
+					<div class="title">
+						<div class="task-title-main">
+							<div class="inline">
+								<h6>Title:</h6>
+							</div>
+							<div class="inline">
+								<h6 th:text="${task.title}">Title</h6>
+							</div>
+						</div>
+						<div class="task-due">
+							<div class="inline">
+								<h6>Due:</h6>
+							</div>
+							<div class="inline">
+								<h6 th:text="${task.dueDate}">Due Date</h6>
+							</div>
+						</div>
+					</div>
+					<br>
+					<div class="task-details">
+						<div class="task-assignees">
+							<div class="title">
+								<h6>Assignee List</h6>
+							</div>
+							<div th:each="assignee : ${task.assignees}">
+								<p th:text="${assignee}"></p>
+							</div>
+						</div>
+						<div class="task-description">
+							<div class="title">
+								<h6>Description:</h6>
+							</div>
+							<p th:text="${task.description}"></p>
+						</div>
+					</div>
+					<br>
+					<div class="task-details">
+						<div class="task-programs">
+							<div class="title">
+								<h6>Program(s)</h6>
+							</div>
+							<div th:each="program : ${task.programs}">
+								<p th:text="${program.name}"></p>
+							</div>
+						</div>
+						<div class="task-outcome">
+							<div class="title">
+								<h6>Student Outcome(s):</h6>
+							</div>
+							<div th:each="outcome : ${task.outcomes}">
+								<p th:text="${outcome.name}"></p>
+							</div>
+						</div>
+					</div>
+					<div class="task-details">
+						<div class="task-file">
+							<div class="title">
+								<h6>File(s):</h6>
+							</div>
+							<div th:if="${task.file ne null}">
+								<p th:text="'Download file:'">Download file</p>
+								<a th:href="@{/download/} + ${task.file.id}"
+									th:text="${task.file.fileName}">file</a>
+							</div>
+							<div th:if="${task.file == null}">N/A</div>
+						</div>
+					</div>
+				</div>
+				<div class="separator cell"></div>
+				<div class="task-submission-container cell">
+					<h3>Submissions</h3>
+					<div th:if="${invalid_submit ne null}" th:text="${invalid_submit}"></div>
+					<div th:if="${!documents.isEmpty}" class="task-document-container">
+						<div class="task-document" th:each="document : ${documents}">
+							<div class="title">
+								<div class="task-title-main">
+									<div>
+										<div class="inline">
+											<h6>Submission Title:</h6>
+										</div>
+										<div class="inline">
+											<div th:text="${document.title}">Title</div>
+										</div>
+									</div>
+									<div>
+										<div class="inline">
+											<h6>Submitted by:</h6>
+										</div>
+										<div class="inline">
+											<div th:text="${document.author}">author</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<br>
+							<div class="task-doc-middle-container">
+								<div class="doc-info-container">
+									<div class="doc-info">
+										<div class="document-title">
+											<h6>File(s):</h6>
+										</div>
+										<div th:if="${document.file ne null}">
+											<p class="inline" th:text="'Download file:'">Download
+												file</p>
+											<a class="inline"
+												th:href="@{/download/} + ${document.file.id}"
+												th:text="${document.file.fileName}">file</a>
+										</div>
+										<div th:if="${document.file == null}">N/A</div>
+									</div>
+									<div class="doc-info">
+										<div class="title">
+											<h6>Tag(s):</h6>
+										</div>
+										<div th:each="tag : *{document.tags}">
+											<p th:text="${tag}"></p>
+										</div>
+									</div>
+								</div>
+								<div class="document-description">
+									<div class="title">
+										<h6>Description:</h6>
+									</div>
+									<div th:text="${document.description}">description</div>
+								</div>
+							</div>
+							<br>
+						</div>
+						<br>
+					</div>
+					<div th:if="${documents.isEmpty}" class="task-document-container">
+						No documents submitted.</div>
+				</div>
+			</div>
+		</div>
+		<div class="task-submit">
+			<div style="float: left" class="task-submit-button inline">
+				<button class="abetas-button" type="submit" name="cancel"
+					formnovalidate="formnovalidate" value="cancel">Return</button>
+			</div>
+			<div style="float: right" class="task-submit-button inline">
+				<button class="abetas-button" type="submit" name="id"
+					th:value="${task.id}" value="submit">Submit</button>
+			</div>
+		</div>
+	</form>
+</body>
+</html>

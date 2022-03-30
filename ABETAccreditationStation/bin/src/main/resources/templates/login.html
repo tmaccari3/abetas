@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+<link href="/css/login.css" rel="stylesheet" />
+<meta charset="ISO-8859-1">
+<title>Login</title>
+</head>
+<body layout:fragment="content">
+	<div class="container">
+		<h3>ABET Station Login</h3>
+		<br>
+		<form name="f" th:action="@{/login}" method="post">
+			<div class="child" th:if="${param.error}">Invalid username and
+				password</div>
+			<div class="child" th:if="${param.logout}">You have been logged
+				out.</div>
+			<table>
+				<tr>
+					<td>Email</td>
+					<td><input type="email" id="username" name="username" /></td>
+				</tr>
+				<tr>
+					<td>Password</td>
+					<td><input type="password" id="password" name="password" /></td>
+				</tr>
+			</table>
+			<br> <br>
+			<div class="child">
+				<button class="abetas-login-button" type="submit">Log in</button>
+			</div>
+		</form>
+		<br>
+		<div class="child">
+			<form action="/register/request">
+				<button class="abetas-login-button" type="submit">Register</button>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

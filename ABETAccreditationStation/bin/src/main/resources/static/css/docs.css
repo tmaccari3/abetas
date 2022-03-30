@@ -1,0 +1,125 @@
+@charset "ISO-8859-1";
+
+.doc-container {
+	position: relative;
+	margin: auto;
+	vertical-align: middle;
+	background-color: #edf2f7;
+	border: 5px groove;
+	border-color: gray;
+	padding: 20px;
+	width: 60%;
+	min-width: 630px;
+}
+
+.doc-details-container {
+	position: relative;
+	margin: auto;
+	vertical-align: middle;
+	background-color: #edf2f7;
+	padding: 20px;
+	min-width: 400px;
+}
+
+.document-details-button {
+	background-color: #e6eeff;
+	border: none;
+	text-decoration: underline;
+}
+
+.doc-middle-container {
+	position: relative;
+	background-color: #dae4f1;
+	margin: auto;
+	width: 100%;
+	border-top: 1px solid #00004d;
+	border-bottom: 1px solid #00004d;
+	padding: 5px;
+}
+
+.doc-info-container {
+	display: inline-block;
+    vertical-align: top;
+    width: 100%;
+}
+
+.doc-info {
+	display: inline-block;
+    vertical-align: top;
+    width: 49%;
+}
+
+.doc-index-container {
+	position: relative;
+	margin: auto;
+	vertical-align: middle;
+	padding: 20px;
+	min-width: 400px;
+}
+
+.doc-program-container {
+	vertical-align: top;
+	width: 100%;
+}
+
+.doc-file-container {
+	display: inline-block;
+	vertical-align: top;
+	width: 49%;
+}
+
+.doc-tag-container {
+	display: inline-block;
+	vertical-align: top;
+	width: 49%;
+}
+
+.doc-area-container {
+	text-align: center;
+}
+
+.document-description {
+	display: inline-block;
+	vertical-align: top;
+	width: 100%;
+	overflow-x: auto;
+}
+
+.document-title-main {
+	display: inline-block;
+	vertical-align: top;
+	width: 49%;
+}
+
+.document-submit-date {
+	display: inline-block;
+	vertical-align: top;
+	width: 49%;
+}
+
+.document-title {
+	border-bottom: 1px solid #bfbfbf;
+}
+
+.document-date {
+	font-weight: bold;
+	float: right;
+}
+
+.document-outcome-title {
+	font-size: 14px; 
+	text-decoration: underline;
+}
+
+li {
+	overflow-x: auto;
+}
+
+table {
+	width: 100%
+}
+
+th, td {
+	padding: 5px;
+	border-bottom: 1px solid #00004d;
+}

@@ -1,0 +1,108 @@
+@charset "ISO-8859-1";
+
+.container {
+	min-width: 400px;
+	height: 438px;
+	width: 100%;
+}
+
+.user-details-container {
+	position: relative;
+	margin: auto;
+	vertical-align: middle;
+	background-color: #e6f2ff;
+	border: 5px groove;
+	padding: 20px;
+	border-color: gray;
+	width: 30%;
+	min-width: 400px;
+}
+
+.user-title {
+	border-bottom: 1px solid #bfbfbf;
+}
+
+.options-container {
+	height: 30px;
+}
+
+.option {
+	display: inline-block;
+	font-weight: bold;
+	padding-right: 5px;
+}
+
+.remove-container {
+	width: 100%;
+}
+
+.table-container {
+	background-color: #cbd3e6;
+	width: 100%;
+	height: 90%;
+	overflow-x: hidden;
+    overflow-y: visible;
+    border: 2px solid black;
+}
+
+table {
+	width: 100%;
+}
+
+th:first-child {
+	background-color: #8585ad;
+	border-bottom: 2px solid black;
+	border-right: 2px solid black;
+	color: white;
+	padding-left: 5px;
+}
+
+th {
+	background-color: #8585ad;
+	border-bottom: 2px solid black;
+	border-right: 2px solid black;
+	color: white;
+	padding-left: 5px;
+}
+
+th:first-last {
+	background-color: #8585ad;
+	border-bottom: 2px solid black;
+	color: white;
+	padding-left: 5px;
+}
+
+tr {
+	background-color: #f2f2f2;
+}
+
+tr:last-child {
+	border-bottom: 2px solid black;
+}
+
+td:first-child {
+	border-right: 2px solid black;
+}
+
+td {
+	border-top: 2px solid black;
+	border-right: 2px solid black;
+}
+
+button.user {
+	color: black;
+    background-color: #c2c2d6;
+    border-color: #a3a3c2;
+    border-radius: 4px;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+a.user {
+	color: black;
+	border: 2px solid #a3a3c2;
+    background-color: #c2c2d6;
+    border-radius: 4px;
+	font-size: 12px;
+	font-weight: bold;
+}

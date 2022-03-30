@@ -1,0 +1,142 @@
+@charset "ISO-8859-1";
+
+body {
+	overflow-y: hidden;
+}
+
+.review-container {
+	display: inline-block;
+	min-width: 901px;
+	width: 100%;
+	height: 100%;
+	padding: 5px;
+	display: flex;
+	margin: auto;
+}
+
+.recent-container {
+	float: left;
+	width: 30%;
+	height: 82%;
+	margin: 10px;
+	background-color: #edf2f7;
+	border: 2px solid #00004d;
+	min-width: 350px;
+	overflow-x: hidden;
+    overflow-y: visible;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+
+	.recent-title {
+		position: sticky;
+		background-color: #00004d;
+		color: white;
+		font-weight: bold;
+		vertical-align: middle;
+		width: 100%;
+		padding: 5px;
+    	top: 0;
+    	z-index: 1;
+	}
+	
+	.recent-document {
+		background-color: #e8f1fd;
+		border-top: 2px solid #00004d;
+		border-bottom: 2px solid #00004d;
+		padding: 5px 2px 2px 2px;
+	}
+	
+	.recent-container::-webkit-scrollbar {
+    	width: 0; 
+    	background: transparent; 
+	}
+
+.middle-container {
+	float: left;
+	margin-left: 10px;
+}
+
+.review-middle-container {
+	background-color: #dae4f1;
+	margin: auto;
+	width: 100%;
+	min-width: 50px;
+	border-top: 1px solid #00004d;
+	padding: 5px;
+}
+
+.search-container {
+	float: left;
+	width: 50%;
+	margin: 10px;
+	min-width: 500px;
+	height: 82%;
+	background-color: #edf2f7;
+	border: 2px solid #00004d;
+	padding: 5px;
+	display: flex;
+  	flex-direction: column;
+}
+
+.search-fields-container {
+	padding: 1px;
+}
+
+.search-result-container {
+	border: 2px solid #00004d;
+	width: 100%;
+	min-width: 470px;
+	overflow-y: auto;
+ 	overflow-x: hidden;
+  	flex: 1;
+}
+
+.search-filter-container {
+	float: left;
+	width: 20%;
+	height: 82%;
+	margin: 10px;
+	background-color: #edf2f7;
+	border: 2px solid #00004d;
+	display: flex;
+	flex-direction: column;
+	padding: 5px;
+}
+
+.search-form {
+	width: 100%;
+	height: 100%;
+}
+
+.actual-rows {
+	font-weight: bold;
+	vertical-align: middle;
+}
+
+.empty-result {
+	text-align: center;
+	line-height: 100px;
+	font-weight: bold;
+}
+
+.search-button-container {
+	float: right;
+}
+
+.click {
+	cursor: pointer;
+}
+
+.program-multi {
+	width: 100%;
+}
+
+input[type=date] {
+	width: 150px;
+}
+
+/*.program-multi {
+	position: absolute;
+    z-index: 100;
+}*/

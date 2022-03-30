@@ -1,0 +1,94 @@
+@charset "ISO-8859-1";
+
+.program-container {
+	position: relative;
+	margin: auto;
+	vertical-align: middle;
+	background-color: #edf2f7;
+	border: 5px groove;
+	border-color: gray;
+	padding: 20px;
+	width: 60%;
+	min-width: 400px;
+}
+
+.program-details-container {
+	position: relative;
+	margin: auto;
+	vertical-align: middle;
+	background-color: #edf2f7;
+	padding: 20px;
+	min-width: 400px;
+	width: 60%;
+}
+
+.program-title {
+	border-bottom: 1px solid #bfbfbf;
+}
+
+.options-container {
+	height: 30px;
+}
+
+.option {
+	display: inline-block;
+	font-weight: bold;
+	padding-right: 5px;
+}
+
+.table-container {
+	background-color: #cbd3e6;
+	width: 100%;
+	height: 90%;
+	overflow-x: hidden;
+    overflow-y: visible;
+    border: 2px solid black;
+}
+
+.program-input {
+	width: 100%; 
+}
+
+table {
+	width: 100%;
+}
+
+th:first-child {
+	background-color: #8585ad;
+	border-bottom: 2px solid black;
+	border-right: 2px solid black;
+	color: white;
+	padding-left: 5px;
+}
+
+th {
+	background-color: #8585ad;
+	border-bottom: 2px solid black;
+	border-right: 2px solid black;
+	color: white;
+	padding-left: 5px;
+}
+
+th:first-last {
+	background-color: #8585ad;
+	border-bottom: 2px solid black;
+	color: white;
+	padding-left: 5px;
+}
+
+tr {
+	background-color: #f2f2f2;
+}
+
+tr:last-child {
+	border-bottom: 2px solid black;
+}
+
+td:first-child {
+	border-right: 2px solid black;
+}
+
+td {
+	border-top: 2px solid black;
+	border-right: 2px solid black;
+}
