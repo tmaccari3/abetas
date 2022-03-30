@@ -5,6 +5,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +21,14 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.QProgram;
 import com.maccari.abet.domain.entity.StudentOutcome;
+import com.maccari.abet.domain.entity.user.QUserProgram;
+import com.maccari.abet.domain.entity.user.UserProgram;
 import com.maccari.abet.repository.mapper.IdMapper;
+import com.querydsl.core.Tuple;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 /*
  * ProgramDaoImpl.java 
@@ -34,261 +43,234 @@ import com.maccari.abet.repository.mapper.IdMapper;
 
 @Repository
 public class ProgramDaoImpl implements ProgramDao {
-	@Autowired
-	private DataSourceTransactionManager transactionManager;
-	
-	private DataSource dataSource;
-	
-	private JdbcTemplate jdbcTemplate;
-	
+	@PersistenceContext
+	private EntityManager em;
+
+	private JPAQueryFactory queryFactory;
+
 	@Autowired
 	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
-		this.jdbcTemplate = new JdbcTemplate(this.dataSource);
+		this.queryFactory = new JPAQueryFactory(em);
 	}
-
+	
 	@Override
 	public void createProgram(Program program) {
-		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
-		TransactionStatus status = transactionManager.getTransaction(def);
+		/*
+		 * DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		 * def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+		 * TransactionStatus status = transactionManager.getTransaction(def);
+		 * 
+		 * try { String SQL = "INSERT INTO program (name, active) VALUES (?, ?)";
+		 * jdbcTemplate.update(SQL, program.getName(), true);
+		 * 
+		 * transactionManager.commit(status); } catch(Exception e) {
+		 * System.out.println("Error in creating program record, rolling back");
+		 * transactionManager.rollback(status);
+		 * 
+		 * throw e; }
+		 */
 		
-		try {
-			String SQL = "INSERT INTO program (name, active) VALUES (?, ?)";
-			jdbcTemplate.update(SQL, program.getName(), true);
-			
-			transactionManager.commit(status);
-		} catch(Exception e) {
-			System.out.println("Error in creating program record, rolling back");
-			transactionManager.rollback(status);
-			
-			throw e;
-		}
 	}
 	
 	@Override
 	public void createOutcome(StudentOutcome outcome) {
-		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
-		TransactionStatus status = transactionManager.getTransaction(def);
-		
-		try {
-			System.out.println(outcome);
-			String SQL = "INSERT INTO student_outcome (name, prog_id, active) VALUES (?, ?, ?)";
-			jdbcTemplate.update(SQL, outcome.getName(), outcome.getProgramId(), true);
-			
-			transactionManager.commit(status);
-		} catch(Exception e) {
-			System.out.println("Error in creating student outcome record, rolling back");
-			transactionManager.rollback(status);
-			
-			throw e;
-		}
+		/*
+		 * DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		 * def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+		 * TransactionStatus status = transactionManager.getTransaction(def);
+		 * 
+		 * try { System.out.println(outcome); String SQL =
+		 * "INSERT INTO student_outcome (name, prog_id, active) VALUES (?, ?, ?)";
+		 * jdbcTemplate.update(SQL, outcome.getName(), outcome.getProgramId(), true);
+		 * 
+		 * transactionManager.commit(status); } catch(Exception e) {
+		 * System.out.println("Error in creating student outcome record, rolling back");
+		 * transactionManager.rollback(status);
+		 * 
+		 * throw e; }
+		 */
 	}
 
 	@Override
 	public void removeProgram(Program program) {
-		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
-		TransactionStatus status = transactionManager.getTransaction(def);
-		
-		try {
-			String SQL = "DELETE FROM program WHERE id=?";
-			jdbcTemplate.update(SQL, program.getId());
-			
-			SQL = "UPDATE student_outcome SET active=false WHERE prog_id=?";
-			jdbcTemplate.update(SQL, program.getId());
-			
-			transactionManager.commit(status);
-		} catch(Exception e) {
-			System.out.println("Error in deactivating program record, rolling back");
-			transactionManager.rollback(status);
-			throw e;
-		}
+		/*
+		 * DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		 * def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+		 * TransactionStatus status = transactionManager.getTransaction(def);
+		 * 
+		 * try { String SQL = "DELETE FROM program WHERE id=?"; jdbcTemplate.update(SQL,
+		 * program.getId());
+		 * 
+		 * SQL = "UPDATE student_outcome SET active=false WHERE prog_id=?";
+		 * jdbcTemplate.update(SQL, program.getId());
+		 * 
+		 * transactionManager.commit(status); } catch(Exception e) {
+		 * System.out.println("Error in deactivating program record, rolling back");
+		 * transactionManager.rollback(status); throw e; }
+		 */
 	}
 	
 	@Override
 	public void removeOutcome(StudentOutcome outcome) {
-		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
-		TransactionStatus status = transactionManager.getTransaction(def);
-		
-		try {
-			String SQL = "DELETE FROM student_outcome WHERE id=?";
-			jdbcTemplate.update(SQL, outcome.getId());
-			
-			transactionManager.commit(status);
-		} catch(Exception e) {
-			System.out.println("Error in deleting student outcome record, rolling back");
-			transactionManager.rollback(status);
-			throw e;
-		}
+		/*
+		 * DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		 * def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+		 * TransactionStatus status = transactionManager.getTransaction(def);
+		 * 
+		 * try { String SQL = "DELETE FROM student_outcome WHERE id=?";
+		 * jdbcTemplate.update(SQL, outcome.getId());
+		 * 
+		 * transactionManager.commit(status); } catch(Exception e) {
+		 * System.out.println("Error in deleting student outcome record, rolling back");
+		 * transactionManager.rollback(status); throw e; }
+		 */
 	}
 
 	@Override
 	public Program updateProgram(Program program) {
-		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
-		TransactionStatus status = transactionManager.getTransaction(def);
-		
-		try {
-			String SQL = "UPDATE program SET active=? WHERE id=?";
-			jdbcTemplate.update(SQL, program.isActive(), program.getId());
-			
-			SQL = "UPDATE student_outcome SET active=? WHERE prog_id=?";
-			jdbcTemplate.update(SQL, program.isActive(), program.getId());
-			
-			transactionManager.commit(status);
-			return program;
-		} catch(Exception e) {
-			System.out.println("Error in updating program record, rolling back");
-			transactionManager.rollback(status);
-			
-			return null;
-		}
+		/*
+		 * DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		 * def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+		 * TransactionStatus status = transactionManager.getTransaction(def);
+		 * 
+		 * try { String SQL = "UPDATE program SET active=? WHERE id=?";
+		 * jdbcTemplate.update(SQL, program.isActive(), program.getId());
+		 * 
+		 * SQL = "UPDATE student_outcome SET active=? WHERE prog_id=?";
+		 * jdbcTemplate.update(SQL, program.isActive(), program.getId());
+		 * 
+		 * transactionManager.commit(status); return program; } catch(Exception e) {
+		 * System.out.println("Error in updating program record, rolling back");
+		 * transactionManager.rollback(status);
+		 * 
+		 * return null; }
+		 */
+		return null;
 	}
 	
 	@Override
 	public StudentOutcome updateOutcome(StudentOutcome outcome) {
-		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
-		TransactionStatus status = transactionManager.getTransaction(def);
-		
-		try {
-			String SQL = "UPDATE student_outcome SET active=? WHERE id=?";
-			jdbcTemplate.update(SQL, outcome.isActive(), outcome.getId());
-			
-			transactionManager.commit(status);
-			return outcome;
-		} catch(Exception e) {
-			System.out.println("Error in updating student outcome record, rolling back");
-			transactionManager.rollback(status);
-			
-			return null;
-		}
+		/*
+		 * DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		 * def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+		 * TransactionStatus status = transactionManager.getTransaction(def);
+		 * 
+		 * try { String SQL = "UPDATE student_outcome SET active=? WHERE id=?";
+		 * jdbcTemplate.update(SQL, outcome.isActive(), outcome.getId());
+		 * 
+		 * transactionManager.commit(status); return outcome; } catch(Exception e) {
+		 * System.out.println("Error in updating student outcome record, rolling back");
+		 * transactionManager.rollback(status);
+		 * 
+		 * return null; }
+		 */
+		return null;
 	}
 
 	@Override
 	public List<Program> getAllPrograms() {
-		try {
-			String SQL = "SELECT * FROM program";
-			ArrayList<Program> programs = (ArrayList<Program>) jdbcTemplate.query(
-					SQL, new ProgramMapper());
-			
-			for(Program program: programs) {
-				program.setOutcomes(getAllOutcomesForProgram(program.getId()));
-			}
-			return programs;
-		} catch (EmptyResultDataAccessException e) {
-			return null;
-		}
+		/*
+		 * try { String SQL = "SELECT * FROM program"; ArrayList<Program> programs =
+		 * (ArrayList<Program>) jdbcTemplate.query( SQL, new ProgramMapper());
+		 * 
+		 * for(Program program: programs) {
+		 * program.setOutcomes(getAllOutcomesForProgram(program.getId())); } return
+		 * programs; } catch (EmptyResultDataAccessException e) { return null; }
+		 */
+		return null;
 	}
 	
 	@Override
 	public List<StudentOutcome> getAllOutcomesForProgram(int id){
-		try {
-			String SQL = "SELECT * FROM student_outcome WHERE prog_id = ?";
-			ArrayList<StudentOutcome> outcomes = (ArrayList<StudentOutcome>) jdbcTemplate.query(
-					SQL, new StudentOutcomeMapper(), id);
-			
-			return outcomes;
-		} catch (Exception e) {
-			System.out.println("Error in getting outcomes for program.");
-			return null;
-		}
+		/*
+		 * try { String SQL = "SELECT * FROM student_outcome WHERE prog_id = ?";
+		 * ArrayList<StudentOutcome> outcomes = (ArrayList<StudentOutcome>)
+		 * jdbcTemplate.query( SQL, new StudentOutcomeMapper(), id);
+		 * 
+		 * return outcomes; } catch (Exception e) {
+		 * System.out.println("Error in getting outcomes for program."); return null; }
+		 */
+		return null;
 	}
 	
 	@Override
 	public List<Program> getActivePrograms() {
-		try {
-			String SQL = "SELECT * FROM program WHERE active = true";
-			ArrayList<Program> programs = (ArrayList<Program>) jdbcTemplate.query(
-					SQL, new ProgramMapper());
-			
-			for(Program program: programs) {
-				program.setOutcomes(getActiveOutcomesForProgram(program.getId()));
-			}
-			return programs;
-		} catch (EmptyResultDataAccessException e) {
-			return null;
-		}
+		TypedQuery<Program> query = em.createQuery("SELECT p FROM Program p "
+				+ "WHERE active = true", Program.class);
+		
+		return query.getResultList();
+		/*
+		 * try { String SQL = "SELECT * FROM program WHERE active = true";
+		 * ArrayList<Program> programs = (ArrayList<Program>) jdbcTemplate.query( SQL,
+		 * new ProgramMapper());
+		 * 
+		 * for(Program program: programs) {
+		 * program.setOutcomes(getActiveOutcomesForProgram(program.getId())); } return
+		 * programs; } catch (EmptyResultDataAccessException e) { return null; }
+		 */
 	}
 	
 	// Gets all Programs that are 'active' in the system
 	@Override
 	public List<Program> getActivePrograms(String userEmail) {
-		ArrayList<Integer> programIds = new ArrayList<Integer>();
-		try {
-			String SQL = "SELECT * FROM user_program WHERE email=?";
-			programIds = (ArrayList<Integer>) jdbcTemplate.query(
-					SQL, new IdMapper(), userEmail);
-		} catch (Exception e) {
-			System.out.println("Error finding user.");
+		QUserProgram program = QUserProgram.userProgram;
+		/*queryFactory.selectFrom(document)
+		  .where(document.id.eq(20)) .fetchOne();*/
+		List<UserProgram> programs = queryFactory.selectFrom(program)
+				.where(program.email.eq(userEmail)).fetch();
+		
+		List<Program> result = new ArrayList<Program>();
+		for(UserProgram userProg : programs) {
+			Program prog = new Program();
+			prog.setName(userProg.getName());
+			prog.setOutcomes(getActiveOutcomesForProgram(userProg.getId()));
+			result.add(prog);
 		}
-		ArrayList<Program> programs = new ArrayList<Program>();
-		try {
-			String SQL = "SELECT * FROM program WHERE active = true";
-			programs = (ArrayList<Program>) jdbcTemplate.query(
-					SQL, new ProgramMapper());
-			System.out.println(programIds);
-			System.out.println("what: "+programs);
-			for(int i  = 0; i < programs.size(); i++) {
-				Program program = programs.get(i);
-				if(!programIds.contains(program.getId())) {
-					programs.remove(program);
-					i--;
-				}
-			}
-			
-			for(Program program: programs) {
-				program.setOutcomes(getActiveOutcomesForProgram(program.getId()));
-			}
-			return programs;
-		} catch (Exception e) {
-			System.out.println("Error getting Programs.");
-			
-			return null;
-		}
+		
+		return result;
 	}
 
 	// Gets all Outcomes that are 'active' in the system for a given Program
 	@Override
 	public List<StudentOutcome> getActiveOutcomesForProgram(int id) {
-		try {
-			String SQL = "SELECT * FROM student_outcome WHERE prog_id = ? and active = true";
-			ArrayList<StudentOutcome> outcomes = (ArrayList<StudentOutcome>) jdbcTemplate.query(
-					SQL, new StudentOutcomeMapper(), id);
-			
-			return outcomes;
-		} catch (Exception e) {
-			System.out.println("Error in getting outcomes for program.");
-			return null;
-		}
+		TypedQuery<StudentOutcome> query = em.createQuery("SELECT s FROM StudentOutcome s "
+				+ "WHERE prog_id=:id AND active = true", StudentOutcome.class);
+		query.setParameter("id", id);
+		
+		return query.getResultList();
+		/*
+		 * try { String SQL =
+		 * "SELECT * FROM student_outcome WHERE prog_id = ? and active = true";
+		 * ArrayList<StudentOutcome> outcomes = (ArrayList<StudentOutcome>)
+		 * jdbcTemplate.query( SQL, new StudentOutcomeMapper(), id);
+		 * 
+		 * return outcomes; } catch (Exception e) {
+		 * System.out.println("Error in getting outcomes for program."); return null; }
+		 */
 	}
 
 	@Override
 	public StudentOutcome getOutcomeById(int id) {
-		try {
-			String SQL = "SELECT * FROM student_outcome WHERE id = ?";
-			StudentOutcome outcome = jdbcTemplate.queryForObject(SQL, new StudentOutcomeMapper(), id);
-			
-			return outcome;
-		} catch (Exception e) {
-			System.out.println("Error in getting outcomes.");
-			return null;
-		}
+		/*
+		 * try { String SQL = "SELECT * FROM student_outcome WHERE id = ?";
+		 * StudentOutcome outcome = jdbcTemplate.queryForObject(SQL, new
+		 * StudentOutcomeMapper(), id);
+		 * 
+		 * return outcome; } catch (Exception e) {
+		 * System.out.println("Error in getting outcomes."); return null; }
+		 */
+		return null;
 	}
 	
 	@Override
 	public Program getProgramById(int id) {
-		try {
-			String SQL = "SELECT * FROM program WHERE id = ?";
-			Program program = jdbcTemplate.queryForObject(SQL, new ProgramMapper(), id);
-			
-			return program;
-		} catch (Exception e) {
-			return null;
-		}
+		/*
+		 * try { String SQL = "SELECT * FROM program WHERE id = ?"; Program program =
+		 * jdbcTemplate.queryForObject(SQL, new ProgramMapper(), id);
+		 * 
+		 * return program; } catch (Exception e) { return null; }
+		 */
+		return null;
 	}
 	
 	// This program mapper is unique for this class and gets more data

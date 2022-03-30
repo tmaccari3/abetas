@@ -32,16 +32,9 @@ public class FileDaoImpl implements FileDao {
 	public static String defaultTableName = "file";
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	@Autowired
-	private DataSourceTransactionManager transactionManager;
-	
-	private DataSource dataSource;
-	private JdbcTemplate jdbcTemplate;
 
 	@Autowired
 	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
-		this.jdbcTemplate = new JdbcTemplate(this.dataSource);
 	}
 
 	@Override
@@ -51,27 +44,22 @@ public class FileDaoImpl implements FileDao {
 	
 	@Override
 	public int save(String tableName, File file) {
-		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
-		TransactionStatus status = transactionManager.getTransaction(def);
-		int fileId = -1;
-		try {
-			String SQL = "INSERT INTO "
-					+ tableName 
-					+ "(file_name, file_type, file_size, author, data) "
-					+ " VALUES (?, ?, ?, ?, ?)";
-			jdbcTemplate.update(SQL, file.getFileName(), file.getFileType(), 
-					file.getFileSize(), file.getAuthor(), file.getData());
-			
-			fileId = jdbcTemplate.queryForObject("SELECT max(id) from " 
-					+ tableName, Integer.class);
-			
-			transactionManager.commit(status);
-		} catch (DataAccessException e) {
-			transactionManager.rollback(status);
-			throw e;
-		}
-		return fileId;
+		/*
+		 * DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		 * def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+		 * TransactionStatus status = transactionManager.getTransaction(def); int fileId
+		 * = -1; try { String SQL = "INSERT INTO " + tableName +
+		 * "(file_name, file_type, file_size, author, data) " +
+		 * " VALUES (?, ?, ?, ?, ?)"; jdbcTemplate.update(SQL, file.getFileName(),
+		 * file.getFileType(), file.getFileSize(), file.getAuthor(), file.getData());
+		 * 
+		 * fileId = jdbcTemplate.queryForObject("SELECT max(id) from " + tableName,
+		 * Integer.class);
+		 * 
+		 * transactionManager.commit(status); } catch (DataAccessException e) {
+		 * transactionManager.rollback(status); throw e; } return fileId;
+		 */
+		return 0;
 	}
 
 	@Override
@@ -81,14 +69,16 @@ public class FileDaoImpl implements FileDao {
 	
 	@Override
 	public File getFileById(String tableName, int id) {
-		String SQL = "SELECT id, file_name, file_type, file_size, author, data "
-                   + " FROM " + tableName
-				   + " WHERE id = ?";
-		File file = jdbcTemplate.queryForObject(SQL, new FileMapper(), id);
-	
-		logger.info("Retrieved File Id = " + file.getId());
-	
-		return file;
+		/*
+		 * String SQL = "SELECT id, file_name, file_type, file_size, author, data " +
+		 * " FROM " + tableName + " WHERE id = ?"; File file =
+		 * jdbcTemplate.queryForObject(SQL, new FileMapper(), id);
+		 * 
+		 * logger.info("Retrieved File Id = " + file.getId());
+		 * 
+		 * return file;
+		 */
+		return null;
 	}
 
 	@Override

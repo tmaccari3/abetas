@@ -31,7 +31,7 @@
 				</tr>
 				<tr th:each="user : ${users}">
 					<td th:text="${user.email}"></td>
-					<td th:text="${user.roles}"></td>
+					<td th:text="${user.formattedRoles}"></td>
 					<td>
 						<div class="option">
 							<form action="/user/edit">

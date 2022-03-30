@@ -3,7 +3,16 @@ package com.maccari.abet.domain.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.maccari.abet.utility.WebList;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /*
  * User.java 
@@ -13,26 +22,38 @@ import com.maccari.abet.utility.WebList;
  * 
  */
 
+@Entity
+@Table(name = "account")
 public class User {
+	@Id
 	private String email;
 	
-	private WebList<Program> programs;
+	@ManyToMany
+	@JoinTable(
+	  name = "user_program", 
+	  joinColumns = @JoinColumn(name = "email"), 
+	  inverseJoinColumns = @JoinColumn(name = "prog_id"))
+	private List<Program> programs;
 	
 	private String password;
 	
+	@Transient
 	private String confPassword;
 	
-	private WebList<String> roles;
-	
+	@ElementCollection
+    @CollectionTable(name = "authority", joinColumns = @JoinColumn(name = "email"))
+    @Column(name = "role")
+	private List<String> roles;
+
 	public User() {
-		roles = new WebList<String>();
-		programs = new WebList<Program>();
+		roles = new ArrayList<String>();	
+		programs = new ArrayList<Program>();
 	}
 	
 	public User(String email, List<String> roles, List<Program> programs) {
 		this.email = email;
-		this.roles = new WebList<String>((ArrayList<String>) roles);
-		this.programs = new WebList<Program>((ArrayList<Program>) programs);
+		this.roles = roles;
+		this.programs = programs;
 	}
 
 	public String getEmail() {
@@ -42,12 +63,12 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	public WebList<Program> getPrograms() {
+
+	public List<Program> getPrograms() {
 		return programs;
 	}
 
-	public void setPrograms(WebList<Program> programs) {
+	public void setPrograms(List<Program> programs) {
 		this.programs = programs;
 	}
 
@@ -66,12 +87,30 @@ public class User {
 	public void setConfPassword(String confPassword) {
 		this.confPassword = confPassword;
 	}
-
-	public WebList<String> getRoles() {
+	
+	public List<String> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(WebList<String> roles) {
+	public void setRoles(List<String> roles) {
 		this.roles = roles;
+	}
+	
+	public String formattedRoles() {
+		if(roles.size() == 0) {
+			return "N/A";
+		}
+		
+		String result = "";
+		int iter;
+		for(iter = 0; iter < roles.size() - 1; iter++) {
+			result += roles.get(iter).toString().substring(5) + ", ";
+		}
+		String item = roles.get(iter);
+		if(item != null) {
+			result += item.toString();
+		}
+		
+		return result;
 	}
 }

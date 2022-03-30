@@ -2,6 +2,13 @@ package com.maccari.abet.domain.entity;
 
 import java.util.List;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Table;
+
 /*
  * Program.java 
  * Author: Thomas Maccari
@@ -10,13 +17,18 @@ import java.util.List;
  * 
  */
 
+@Entity
+@Table(name = "program")
 public class Program {
+	@Id
 	private int id;
 	
 	private String name;
 	
 	private boolean active;
 	
+	@ElementCollection
+    @CollectionTable(name = "student_outcome", joinColumns = @JoinColumn(name = "prog_id"))
 	private List<StudentOutcome> outcomes;
 	
 	public Program() {

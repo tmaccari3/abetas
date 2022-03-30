@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.StudentOutcome;
+import com.maccari.abet.domain.entity.user.UserProgram;
 
 /*
  * ProgramDao.java 

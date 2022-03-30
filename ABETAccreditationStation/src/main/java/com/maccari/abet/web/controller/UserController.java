@@ -148,8 +148,8 @@ public class UserController {
 	public String editUser(@RequestParam(value = "email", required = true) 
 		String email, WebUser webUser, Model model, final HttpServletRequest req) {
 		User user = userService.getUserByEmail(email);
-		model.addAttribute("webUser", new WebUser(user.getEmail(), user.getRoles().getList(), 
-				user.getPrograms().getList()));
+		model.addAttribute("webUser", new WebUser(user.getEmail(), user.getRoles(), 
+				user.getPrograms()));
 	    String mapping = (String) req.getAttribute(
                 HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
 		if(mapping.contains("programs")) {
