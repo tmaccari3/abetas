@@ -64,7 +64,7 @@ public class UserController {
 		return "user/manage";
 	}
 	
-	@RequestMapping(value = "/manage/programs")
+	@RequestMapping(value = "/program/manage")
 	public String managePrograms(Model model) {
 		model.addAttribute("users", userService.getAll());
 		
@@ -174,7 +174,7 @@ public class UserController {
 		userService.update(userService.convertWebUser(webUser));
 		
 		if(mapping.contains("programs")) {
-			return "redirect:/manage/programs";
+			return "redirect:/program/manage";
 		}
 		
 		return "redirect:/manage";
@@ -187,7 +187,7 @@ public class UserController {
 		String mapping = (String) req.getAttribute(
                 HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
 		if(mapping.contains("programs")) {
-			return "redirect:/manage/programs";
+			return "redirect:/program/manage";
 		}
 		
 		return "redirect:/manage";

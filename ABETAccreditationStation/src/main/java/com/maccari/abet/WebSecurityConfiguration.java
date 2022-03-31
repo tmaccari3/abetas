@@ -35,11 +35,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/", "/home", "/login", "/403").permitAll()
 			.antMatchers("/task/index").hasAnyRole("FACULTY", "ASSESSMENT_COORD", "ADMIN")
-			.antMatchers("/task/create", "/task/edit", "/task/delete", "/task/viewCreated", "/program/index", "/program/create", 
-					"/user/edit/programs", "outcome/index", "outcome/create").hasAnyRole("ASSESSMENT_COORD")
+			.antMatchers("/task/create", "/task/edit", "/task/delete", "/task/viewCreated", "/program/**", 
+					"/outcome/**", "/user/edit/programs").hasAnyRole("ASSESSMENT_COORD")
 			.antMatchers("doc/create", "doc/edit", "/task/complete").hasAnyRole("FACULTY")
 			.antMatchers("/doc/index").hasAnyRole("ABET_READER")
-			.antMatchers("/manage", "/register", "/home/edit", "user/remove", 
+			.antMatchers("/manage/**", "/register", "/home/edit", "user/remove", 
 					"user/edit").hasAnyRole("ADMIN")
 			.and().formLogin().loginPage("/login").defaultSuccessUrl("/")
 			.and().exceptionHandling().accessDeniedPage("/403");
