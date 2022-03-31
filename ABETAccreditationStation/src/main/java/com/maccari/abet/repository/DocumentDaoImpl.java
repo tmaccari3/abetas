@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -45,9 +46,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 @Repository
 public class DocumentDaoImpl implements DocumentDao {
-	// @Autowired
-	// private DataSourceTransactionManager transactionManager;
-
 	@PersistenceContext
 	private EntityManager entityManager;
 
@@ -57,7 +55,7 @@ public class DocumentDaoImpl implements DocumentDao {
 	public void setDataSource(DataSource dataSource) {
 		this.queryFactory = new JPAQueryFactory(entityManager);
 	}
-
+	
 	// Inserts a document into the data-source
 	@Override
 	public void createDocument(Document document) {
@@ -325,5 +323,77 @@ public class DocumentDaoImpl implements DocumentDao {
 			*/
 			return null;
 		}
+	}
+
+	@Override
+	public <S extends Document> S save(S entity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <S extends Document> Iterable<S> saveAll(Iterable<S> entities) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Optional<Document> findById(Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean existsById(Long id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Iterable<Document> findAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Iterable<Document> findAllById(Iterable<Long> ids) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long count() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(Document entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteAllById(Iterable<? extends Long> ids) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteAll(Iterable<? extends Document> entities) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteAll() {
+		// TODO Auto-generated method stub
+		
 	}
 }

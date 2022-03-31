@@ -28,8 +28,6 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.QUser;
 import com.maccari.abet.domain.entity.User;
-import com.maccari.abet.domain.entity.searchable.QSearchableDocument;
-import com.maccari.abet.domain.entity.searchable.SearchableDocument;
 import com.maccari.abet.utility.WebList;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -102,26 +100,6 @@ public class UserDaoImpl implements UserDao {
 			
 			return users;
 		} catch (EmptyResultDataAccessException e) {
-			return null;
-		}*/
-	}
-	
-	// Gets all programs this user is able to access
-	private List<Program> getUserPrograms(String email) {
-		TypedQuery<Program> query = em.createQuery("SELECT p FROM Program p "
-				+ "WHERE p.email=:email", Program.class);
-		query.setParameter("email", email);
-
-		return query.getResultList();
-		/*try {
-			String SQL = "SELECT * FROM user_program WHERE email=?";
-			ArrayList<Program> programs = new ArrayList<>();
-			programs = (ArrayList<Program>) jdbcTemplate.query(SQL, new ProgramMapper(), email);
-			
-			return programs;
-		} catch (EmptyResultDataAccessException e) {
-			System.out.println("Error getting programs assigned to user.");
-			
 			return null;
 		}*/
 	}

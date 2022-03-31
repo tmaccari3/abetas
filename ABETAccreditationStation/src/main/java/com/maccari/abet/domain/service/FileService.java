@@ -24,11 +24,8 @@ public class FileService {
 	private FileDao fileDao;
 
 	public File getFileById(int id) {
-		return fileDao.getFileById(id);
-	}
-	
-	public File getFileById(String tableName, int id) {
-		return fileDao.getFileById(tableName, id);
+		//return fileDao.getFileById(id);
+		return fileDao.findById((long) id).get();
 	}
 
 	public void save(File item) {
@@ -48,7 +45,8 @@ public class FileService {
 	public void fillFiles(List<Document> documents) {
 		for(Document document : documents) {
 			if(document.getFile() != null) {
-				document.setFile(fileDao.getFileById(document.getFile().getId()));	
+				document.setFile(fileDao.findById(
+						(long) (document.getFile().getId())).get());	
 			}
 		}
 	}

@@ -38,6 +38,25 @@ public class StudentOutcomeDaoImpl implements StudentOutcomeDao {
 		
 		return Optional.ofNullable(query.getSingleResult());
 	}
+	
+	@Override
+	public StudentOutcome updateOutcome(StudentOutcome outcome) {
+		/*
+		 * DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		 * def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+		 * TransactionStatus status = transactionManager.getTransaction(def);
+		 * 
+		 * try { String SQL = "UPDATE student_outcome SET active=? WHERE id=?";
+		 * jdbcTemplate.update(SQL, outcome.isActive(), outcome.getId());
+		 * 
+		 * transactionManager.commit(status); return outcome; } catch(Exception e) {
+		 * System.out.println("Error in updating student outcome record, rolling back");
+		 * transactionManager.rollback(status);
+		 * 
+		 * return null; }
+		 */
+		return null;
+	}
 
 	@Override
 	public boolean existsById(Long id) {

@@ -4,6 +4,11 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotEmpty;
 
 /*
@@ -13,8 +18,14 @@ import javax.validation.constraints.NotEmpty;
  * Description: The domain object that represents a tuple from the document table.
  * 
  */
-
+@Entity
 public class Document {
+	@Id
+    @SequenceGenerator(name = "document_id_seq",
+                       sequenceName = "document_id_seq",
+                       allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+                    generator = "document_id_seq")
 	private int id;
 	
 	@NotEmpty(message = "*required")

@@ -2,6 +2,14 @@ package com.maccari.abet.domain.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Transient;
+
 /*
  * File.java 
  * Author: Thomas Maccari
@@ -10,13 +18,32 @@ import java.io.Serializable;
  * 
  */
 
+@Entity
 public class File implements Serializable {
+	@Transient
 	private static final long serialVersionUID = 129348938L;
+	
+	@Id
+    @SequenceGenerator(name = "file_id_seq",
+                       sequenceName = "file_id_seq",
+                       allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+                    generator = "file_id_seq")
 	private int id;
+	
+	@Column(name = "file_name")
 	private String fileName;
+	
+	@Column(name = "author")
 	private String author;
+	
+	@Column(name = "file_type")
 	private String fileType;
+	
+	@Column(name = "file_size")
 	private long fileSize;
+	
+	@Column(name = "data")
 	private byte[] data;
 	
 	public File() {

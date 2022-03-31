@@ -70,76 +70,12 @@ public class ProgramDaoImpl implements ProgramDao {
 	}
 	
 	@Override
-	public void createProgram(Program program) {
-		/*
-		 * DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-		 * def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
-		 * TransactionStatus status = transactionManager.getTransaction(def);
-		 * 
-		 * try { String SQL = "INSERT INTO program (name, active) VALUES (?, ?)";
-		 * jdbcTemplate.update(SQL, program.getName(), true);
-		 * 
-		 * transactionManager.commit(status); } catch(Exception e) {
-		 * System.out.println("Error in creating program record, rolling back");
-		 * transactionManager.rollback(status);
-		 * 
-		 * throw e; }
-		 */
+	public Optional<Program> findById(Long id) {
+		TypedQuery<Program> query = em.createQuery("SELECT p FROM Program p "
+				+ "WHERE id=:id", Program.class)
+				.setParameter("id", id.intValue());
 		
-	}
-	
-	@Override
-	public void createOutcome(StudentOutcome outcome) {
-		/*
-		 * DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-		 * def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
-		 * TransactionStatus status = transactionManager.getTransaction(def);
-		 * 
-		 * try { System.out.println(outcome); String SQL =
-		 * "INSERT INTO student_outcome (name, prog_id, active) VALUES (?, ?, ?)";
-		 * jdbcTemplate.update(SQL, outcome.getName(), outcome.getProgramId(), true);
-		 * 
-		 * transactionManager.commit(status); } catch(Exception e) {
-		 * System.out.println("Error in creating student outcome record, rolling back");
-		 * transactionManager.rollback(status);
-		 * 
-		 * throw e; }
-		 */
-	}
-
-	@Override
-	public void removeProgram(Program program) {
-		/*
-		 * DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-		 * def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
-		 * TransactionStatus status = transactionManager.getTransaction(def);
-		 * 
-		 * try { String SQL = "DELETE FROM program WHERE id=?"; jdbcTemplate.update(SQL,
-		 * program.getId());
-		 * 
-		 * SQL = "UPDATE student_outcome SET active=false WHERE prog_id=?";
-		 * jdbcTemplate.update(SQL, program.getId());
-		 * 
-		 * transactionManager.commit(status); } catch(Exception e) {
-		 * System.out.println("Error in deactivating program record, rolling back");
-		 * transactionManager.rollback(status); throw e; }
-		 */
-	}
-	
-	@Override
-	public void removeOutcome(StudentOutcome outcome) {
-		/*
-		 * DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-		 * def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
-		 * TransactionStatus status = transactionManager.getTransaction(def);
-		 * 
-		 * try { String SQL = "DELETE FROM student_outcome WHERE id=?";
-		 * jdbcTemplate.update(SQL, outcome.getId());
-		 * 
-		 * transactionManager.commit(status); } catch(Exception e) {
-		 * System.out.println("Error in deleting student outcome record, rolling back");
-		 * transactionManager.rollback(status); throw e; }
-		 */
+		return Optional.ofNullable(query.getSingleResult());
 	}
 
 	@Transactional
@@ -156,25 +92,6 @@ public class ProgramDaoImpl implements ProgramDao {
 	}
 	
 	@Override
-	public StudentOutcome updateOutcome(StudentOutcome outcome) {
-		/*
-		 * DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-		 * def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
-		 * TransactionStatus status = transactionManager.getTransaction(def);
-		 * 
-		 * try { String SQL = "UPDATE student_outcome SET active=? WHERE id=?";
-		 * jdbcTemplate.update(SQL, outcome.isActive(), outcome.getId());
-		 * 
-		 * transactionManager.commit(status); return outcome; } catch(Exception e) {
-		 * System.out.println("Error in updating student outcome record, rolling back");
-		 * transactionManager.rollback(status);
-		 * 
-		 * return null; }
-		 */
-		return null;
-	}
-
-	@Override
 	public List<Program> getAllPrograms() {
 		TypedQuery<Program> query = em.createQuery("SELECT p FROM Program p", Program.class);
 		
@@ -187,19 +104,6 @@ public class ProgramDaoImpl implements ProgramDao {
 		 * program.setOutcomes(getAllOutcomesForProgram(program.getId())); } return
 		 * programs; } catch (EmptyResultDataAccessException e) { return null; }
 		 */
-	}
-	
-	@Override
-	public List<StudentOutcome> getAllOutcomesForProgram(int id){
-		/*
-		 * try { String SQL = "SELECT * FROM student_outcome WHERE prog_id = ?";
-		 * ArrayList<StudentOutcome> outcomes = (ArrayList<StudentOutcome>)
-		 * jdbcTemplate.query( SQL, new StudentOutcomeMapper(), id);
-		 * 
-		 * return outcomes; } catch (Exception e) {
-		 * System.out.println("Error in getting outcomes for program."); return null; }
-		 */
-		return null;
 	}
 	
 	@Override
@@ -261,39 +165,6 @@ public class ProgramDaoImpl implements ProgramDao {
 		 * System.out.println("Error in getting outcomes for program."); return null; }
 		 */
 	}
-
-	@Override
-	public Optional<Program> findById(Long id) {
-		TypedQuery<Program> query = em.createQuery("SELECT p FROM Program p "
-				+ "WHERE id=:id", Program.class)
-				.setParameter("id", id.intValue());
-		
-		return Optional.ofNullable(query.getSingleResult());
-	}
-	
-	@Override
-	public Program getProgramById(int id) {
-		/*
-		 * try { String SQL = "SELECT * FROM program WHERE id = ?"; Program program =
-		 * jdbcTemplate.queryForObject(SQL, new ProgramMapper(), id);
-		 * 
-		 * return program; } catch (Exception e) { return null; }
-		 */
-		return null;
-	}
-	
-	@Override
-	public StudentOutcome getOutcomeById(int id) {
-		/*
-		 * try { String SQL = "SELECT * FROM student_outcome WHERE id = ?";
-		 * StudentOutcome outcome = jdbcTemplate.queryForObject(SQL, new
-		 * StudentOutcomeMapper(), id);
-		 * 
-		 * return outcome; } catch (Exception e) {
-		 * System.out.println("Error in getting outcomes."); return null; }
-		 */
-		return null;
-	}
 	
 	// This program mapper is unique for this class and gets more data
 	class ProgramMapper implements RowMapper<Program> {
@@ -302,7 +173,7 @@ public class ProgramDaoImpl implements ProgramDao {
 			program.setId(rs.getInt("id"));
 			program.setName(rs.getString("name"));
 			program.setActive(rs.getBoolean("active"));
-			program.setOutcomes(getAllOutcomesForProgram(program.getId()));
+			//program.setOutcomes(getAllOutcomesForProgram(program.getId()));
 			
 			return program;
 		}

@@ -2,6 +2,8 @@ package com.maccari.abet.repository;
 
 import java.util.List;
 
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import com.maccari.abet.domain.entity.Document;
@@ -15,9 +17,9 @@ import com.maccari.abet.domain.entity.web.DocumentSearch;
  * with a Document
  * 
  */
-
+@Primary
 @Repository
-public interface DocumentDao {
+public interface DocumentDao extends CrudRepository<Document, Long>{
 	List<Document> getAll();
 	
 	Document getById(final int id);

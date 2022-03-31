@@ -1,5 +1,10 @@
 package com.maccari.abet.repository;
 
+import java.util.Optional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
@@ -29,20 +34,9 @@ import com.maccari.abet.repository.mapper.FileMapper;
 
 @Repository
 public class FileDaoImpl implements FileDao {
-	public static String defaultTableName = "file";
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	@PersistenceContext
+	private EntityManager em;
 	
-
-	@Autowired
-	public void setDataSource(DataSource dataSource) {
-	}
-
-	@Override
-	public int save(File file) {
-		return save(defaultTableName, file);
-	}
-	
-	@Override
 	public int save(String tableName, File file) {
 		/*
 		 * DefaultTransactionDefinition def = new DefaultTransactionDefinition();
@@ -63,45 +57,76 @@ public class FileDaoImpl implements FileDao {
 	}
 
 	@Override
-	public File getFileById(int id) {
-		return getFileById(defaultTableName, id);
+	public <S extends File> S save(S entity) {
+		em.persist(entity);
+		
+		return entity;
 	}
-	
+
 	@Override
-	public File getFileById(String tableName, int id) {
-		/*
-		 * String SQL = "SELECT id, file_name, file_type, file_size, author, data " +
-		 * " FROM " + tableName + " WHERE id = ?"; File file =
-		 * jdbcTemplate.queryForObject(SQL, new FileMapper(), id);
-		 * 
-		 * logger.info("Retrieved File Id = " + file.getId());
-		 * 
-		 * return file;
-		 */
+	public <S extends File> Iterable<S> saveAll(Iterable<S> entities) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public int delete(File file) {
+	public Optional<File> findById(Long id) {
+		TypedQuery<File> query = em.createQuery("SELECT f FROM File f", File.class);
+		
+		return Optional.ofNullable(query.getSingleResult());
+	}
+
+	@Override
+	public boolean existsById(Long id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Iterable<File> findAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Iterable<File> findAllById(Iterable<Long> ids) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long count() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int update(File file) {
+	public void deleteById(Long id) {
 		// TODO Auto-generated method stub
-		return 0;
+		
 	}
 
 	@Override
-	public int delete(String tableName, File file) {
+	public void delete(File entity) {
 		// TODO Auto-generated method stub
-		return 0;
+		
 	}
 
 	@Override
-	public int update(String tableName, File file) {
+	public void deleteAllById(Iterable<? extends Long> ids) {
 		// TODO Auto-generated method stub
-		return 0;
+		
+	}
+
+	@Override
+	public void deleteAll(Iterable<? extends File> entities) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteAll() {
+		// TODO Auto-generated method stub
+		
 	}
 }

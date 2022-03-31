@@ -20,19 +20,7 @@ import com.maccari.abet.domain.entity.user.UserProgram;
 
 @Repository
 public interface ProgramDao extends CrudRepository<Program, Long>{
-	void createProgram(final Program program);
-	
-	void createOutcome(final StudentOutcome outcome);
-	
-	void removeProgram(final Program program);
-	
-	void removeOutcome(final StudentOutcome outcome);
-	
 	Program updateProgram(final Program program);
-	
-	StudentOutcome updateOutcome(final StudentOutcome outcome);
-	
-	Program getProgramById(int id);
 	
 	List<Program> getAllPrograms();
 	
@@ -40,9 +28,5 @@ public interface ProgramDao extends CrudRepository<Program, Long>{
 	
 	List<Program> getActivePrograms(String userEmail);
 	
-	List<StudentOutcome> getAllOutcomesForProgram(int id);
-	
 	List<StudentOutcome> getActiveOutcomesForProgram(int id);
-	
-	StudentOutcome getOutcomeById(int id);
 }

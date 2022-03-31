@@ -90,7 +90,7 @@ public class ProgramService implements Service<Program> {
 	}
 	
 	public StudentOutcome updateOutcome(StudentOutcome item) {
-		return programDao.updateOutcome(item);
+		return studentOutcomeDao.updateOutcome(item);
 	}
 	
 	public List<Program> getAllPrograms(){
@@ -128,10 +128,10 @@ public class ProgramService implements Service<Program> {
 		ArrayList<StudentOutcome> outcomes = new ArrayList<StudentOutcome>();
 		
 		for(Integer programId : task.getPrograms()) {
-			programs.add(programDao.getProgramById(programId));
+			programs.add(programDao.findById((long) programId).get());
 		}
 		for(Integer outcomeId : task.getOutcomes()) {
-			outcomes.add(programDao.getOutcomeById(outcomeId));
+			outcomes.add(studentOutcomeDao.findById((long) outcomeId).get());
 		}
 		
 		task.setFullPrograms(programs);
@@ -144,10 +144,10 @@ public class ProgramService implements Service<Program> {
 		ArrayList<StudentOutcome> outcomes = new ArrayList<StudentOutcome>();
 		
 		for(Integer programId : document.getPrograms()) {
-			programs.add(programDao.getProgramById(programId));
+			programs.add(programDao.findById((long) programId).get());
 		}
 		for(Integer outcomeId : document.getOutcomes()) {
-			outcomes.add(programDao.getOutcomeById(outcomeId));
+			outcomes.add(studentOutcomeDao.findById((long) outcomeId).get());
 		}
 		
 		document.setFullPrograms(programs);
