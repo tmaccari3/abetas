@@ -2,6 +2,7 @@ package com.maccari.abet.repository;
 
 import java.util.List;
 
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import com.maccari.abet.domain.entity.Program;
@@ -18,7 +19,7 @@ import com.maccari.abet.domain.entity.user.UserProgram;
  */
 
 @Repository
-public interface ProgramDao {
+public interface ProgramDao extends CrudRepository<Program, Long>{
 	void createProgram(final Program program);
 	
 	void createOutcome(final StudentOutcome outcome);

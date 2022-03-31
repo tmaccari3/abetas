@@ -4,15 +4,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -46,88 +50,51 @@ public class UserDaoImpl implements UserDao {
 	private EntityManager em;
 
 	@Override
-	public void createUser(User user) {
-		/*DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
-		TransactionStatus status = transactionManager.getTransaction(def);
-		
-		try {
-			String SQL = "INSERT INTO account (email, password) VALUES (?, ?)";
-			jdbcTemplate.update(SQL, user.getEmail(), user.getPassword());
-			
-			
-			SQL = "INSERT INTO authority (email, role) VALUES (?, ?)";
-			for(String role : user.getRoles().getList()) {
-				jdbcTemplate.update(SQL, user.getEmail(), role);
+	public <S extends User> S save(S entity) {
+	    if (entity.isNew()) {
+	        em.persist(entity);
+	        
+	        return entity;
+	    } else {
+	    	em.createNativeQuery("DELETE FROM authority WHERE email = ?")
+	    		.setParameter(1, entity.getEmail())
+	    		.executeUpdate();
+	    	em.createNativeQuery("DELETE FROM user_program WHERE email = ?")
+	    		.setParameter(1, entity.getEmail())
+	    		.executeUpdate();
+	    	
+			for(String role : entity.getRoles()) {
+				em.createNativeQuery("INSERT INTO authority (email, role) VALUES (?, ?)")
+					.setParameter(1, entity.getEmail())
+					.setParameter(2, role)
+					.executeUpdate();
 			}
 			
-			transactionManager.commit(status);
-		} catch(Exception e) {
-			System.out.println("Error in creating user record, rolling back");
-			transactionManager.rollback(status);
-			throw e;
-		}*/
+			for(Program program : entity.getPrograms()) {
+				em.createNativeQuery("INSERT INTO user_program (email, prog_id, "
+						+ "program, active) VALUES (?, ?, ?, ?)")
+					.setParameter(1, entity.getEmail())
+					.setParameter(2, program.getId())
+					.setParameter(3, program.getName())
+					.setParameter(4, program.isActive())
+					.executeUpdate();
+			}
+			
+	        return entity;
+	    }
 	}
 	
 	@Override
-	public void removeUser(User user) {
-		/*DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
-		TransactionStatus status = transactionManager.getTransaction(def);
-		
-		try {
-			String SQL = "DELETE FROM account WHERE email = ?";
-			jdbcTemplate.update(SQL, user.getEmail());
-			
-			transactionManager.commit(status);
-		} catch(Exception e) {
-			System.out.println("Error in removing user record, rolling back");
-			transactionManager.rollback(status);
-			throw e;
-		}*/
-	}
-	
-	@Override
-	public User updateUser(User user) {
-		/*DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-		def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
-		TransactionStatus status = transactionManager.getTransaction(def);
-		
-		try {
-			String SQL = "DELETE FROM authority WHERE email = ?";
-			jdbcTemplate.update(SQL, user.getEmail());
-			
-			SQL = "DELETE FROM user_program WHERE email = ?";
-			jdbcTemplate.update(SQL, user.getEmail());
-			
-			SQL = "INSERT INTO authority (email, role) VALUES (?, ?)";
-			for(String role : user.getRoles().getList()) {
-				jdbcTemplate.update(SQL, user.getEmail(), role);
-			}
-			
-			SQL = "INSERT INTO user_program (email, prog_id, program) VALUES (?, ?, ?)";
-			for(Program program : user.getPrograms().getList()) {
-				jdbcTemplate.update(SQL, user.getEmail(), program.getId(), 
-						program.getName());
-			}
-			
-			transactionManager.commit(status);
-			
-			return user;
-		} catch(Exception e) {
-			System.out.println("Error in removing user record, rolling back");
-			transactionManager.rollback(status);
-			throw e;
-		}*/
-		return null;
+	public void delete(User entity) {
+		em.remove(entity);
 	}
 
 	@Override
 	public List<User> getAllUsers() {
 		TypedQuery<User> query = em.createQuery("SELECT u from User u", User.class);
-		List<User> users = query.getResultList();
 		
-		return users;
+		return query.getResultList();
+
 		/*try {
 			String SQL = "SELECT * from account";
 			ArrayList<User> users = (ArrayList<User>) jdbcTemplate.query(SQL, 
@@ -137,19 +104,6 @@ public class UserDaoImpl implements UserDao {
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}*/
-	}
-	
-	private List<String> getUserRoles(String email) {
-		/*try {
-			String SQL = "SELECT role FROM authority WHERE email=?";
-			ArrayList<String> roles = new ArrayList<>();
-			roles = (ArrayList<String>) jdbcTemplate.query(SQL, new AuthMapper(), email);
-			
-			return roles;
-		} catch (EmptyResultDataAccessException e) {
-			return null;
-		}*/
-		return null;
 	}
 	
 	// Gets all programs this user is able to access
@@ -174,11 +128,17 @@ public class UserDaoImpl implements UserDao {
 	
 	@Override
 	public User getUserByEmail(String email) {
-		TypedQuery<User> query = em.createQuery("SELECT u from User u "
-				+ "WHERE u.email=:email", User.class);
-		query.setParameter("email", email);
+		try {
+			TypedQuery<User> query = em.createQuery("SELECT u from User u "
+					+ "WHERE u.email=:email", User.class);
+			query.setParameter("email", email);
 
-		return query.getSingleResult();
+			return query.getSingleResult();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			
+			return null;
+		}
 		/*try {
 			String SQL = "SELECT email FROM account WHERE email=?";
 			User user = jdbcTemplate.queryForObject(SQL, new UserMapper(), email);
@@ -203,37 +163,64 @@ public class UserDaoImpl implements UserDao {
 			return null;
 		}*/
 	}
-	
-	class UserMapper implements RowMapper<User> {
-		public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-			User user = new User();
-			user.setEmail(rs.getString("email"));
-			ArrayList<String> roles = (ArrayList<String>) 
-					getUserRoles(user.getEmail());
-			//user.setRoles(new WebList<String>(roles));
-			ArrayList<Program> programs = (ArrayList<Program>) 
-					getUserPrograms(user.getEmail());
-			//user.setPrograms(new WebList<Program>(programs));
-			
-			return user;
-		}
+
+	@Override
+	public <S extends User> Iterable<S> saveAll(Iterable<S> entities) {
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
-	class AuthMapper implements RowMapper<String> {
-		public String mapRow(ResultSet rs, int rowNum) throws SQLException {
-			String role = rs.getString("role");
-			
-			return role;
-		}
+
+	@Override
+	public Optional<User> findById(Long id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
-	class ProgramMapper implements RowMapper<Program> {
-		public Program mapRow(ResultSet rs, int rowNum) throws SQLException {
-			Program program = new Program();
-			program.setId(rs.getInt("prog_id"));
-			program.setName(rs.getString("program"));
-			
-			return program;
-		}
+
+	@Override
+	public boolean existsById(Long id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Iterable<User> findAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Iterable<User> findAllById(Iterable<Long> ids) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long count() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteAllById(Iterable<? extends Long> ids) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteAll(Iterable<? extends User> entities) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteAll() {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.User;
 import com.maccari.abet.domain.entity.web.WebUser;
 import com.maccari.abet.repository.UserDao;
@@ -37,17 +38,21 @@ public class UserService implements Service<User> {
 
 	@Override
 	public void create(User item) {
-		userDao.createUser(item);
+		//userDao.createUser(item);
+		userDao.save(item);
 	}
 
 	@Override
 	public void remove(User item) {
-		userDao.removeUser(item);
+		//userDao.removeUser(item);
+		userDao.delete(item);
 	}
 	
 	@Override
 	public User update(User item) {
-		return userDao.updateUser(item);
+		//return userDao.updateUser(item);
+		item.setUpdate(true);
+		return userDao.save(item);
 	}
 	
 	public User getUserByEmail(String email) {

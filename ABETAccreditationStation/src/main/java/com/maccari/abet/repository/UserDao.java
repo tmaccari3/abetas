@@ -2,6 +2,7 @@ package com.maccari.abet.repository;
 
 import java.util.List;
 
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import com.maccari.abet.domain.entity.User;
@@ -16,13 +17,7 @@ import com.maccari.abet.domain.entity.User;
  */
 
 @Repository
-public interface UserDao {
-	void createUser(final User user);
-	
-	void removeUser(final User user);
-	
-	User updateUser(final User user);
-	
+public interface UserDao extends CrudRepository<User, Long> {
 	List<User> getAllUsers();
 	
 	User getUserByEmail(String email);

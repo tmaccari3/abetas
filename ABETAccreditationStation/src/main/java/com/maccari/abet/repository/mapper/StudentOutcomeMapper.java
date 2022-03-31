@@ -18,7 +18,7 @@ import com.maccari.abet.domain.entity.StudentOutcome;
 public 	class StudentOutcomeMapper implements RowMapper<StudentOutcome> {
 	public StudentOutcome mapRow(ResultSet rs, int rowNum) throws SQLException {
 		StudentOutcome outcome = new StudentOutcome();
-		outcome.setProgramId(rs.getInt("outcome_id"));
+		//outcome.setProgramId(rs.getInt("outcome_id"));
 		outcome.setName(rs.getString("name"));
 		
 		return outcome;

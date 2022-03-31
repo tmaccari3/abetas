@@ -2,11 +2,12 @@ package com.maccari.abet.domain.entity;
 
 import java.util.List;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /*
@@ -21,14 +22,20 @@ import javax.persistence.Table;
 @Table(name = "program")
 public class Program {
 	@Id
+    @SequenceGenerator(name = "program_id_seq",
+                       sequenceName = "program_id_seq",
+                       allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+                    generator = "program_id_seq")
 	private int id;
 	
 	private String name;
 	
 	private boolean active;
 	
-	@ElementCollection
-    @CollectionTable(name = "student_outcome", joinColumns = @JoinColumn(name = "prog_id"))
+	/*@ElementCollection
+    @CollectionTable(name = "student_outcome", joinColumns = @JoinColumn(name = "prog_id"))*/
+	@OneToMany(mappedBy="program")
 	private List<StudentOutcome> outcomes;
 	
 	public Program() {

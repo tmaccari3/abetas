@@ -1,6 +1,7 @@
 package com.maccari.abet.web.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -36,7 +37,7 @@ public class OutcomeController {
 	public String addOutcome(StudentOutcome studentOutcome, Model model,
 			HttpSession session) {
 		Program program = programService.getById((int) session.getAttribute("PROGRAM"));
-		ArrayList<StudentOutcome> outcomes = (ArrayList<StudentOutcome>) program.getOutcomes();
+		List<StudentOutcome> outcomes =  program.getOutcomes();
 		outcomes.add(new StudentOutcome("", true));
 		model.addAttribute("program", program);
 
@@ -52,7 +53,7 @@ public class OutcomeController {
 			
 			return "/program/outcome";
 		}
-		studentOutcome.setProgramId(id);
+		studentOutcome.setProgram(programService.getById(id));
 		programService.createOutcome(studentOutcome);
 
 		return "redirect:/outcome/index?id=" + id;

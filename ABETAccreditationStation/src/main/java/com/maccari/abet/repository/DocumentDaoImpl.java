@@ -25,7 +25,6 @@ import com.maccari.abet.domain.entity.Document;
 import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.StudentOutcome;
-import com.maccari.abet.domain.entity.searchable.QSearchableDocument;
 import com.maccari.abet.domain.entity.web.DocumentSearch;
 import com.maccari.abet.repository.mapper.IdMapper;
 import com.maccari.abet.repository.mapper.ProgramMapper;

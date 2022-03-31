@@ -25,6 +25,8 @@ public class UserProgram {
 	@Column(name = "email")
 	private String email;
 	
+	private boolean active;
+	
 	@ElementCollection
     @CollectionTable(name = "student_outcome", joinColumns = @JoinColumn(name = "prog_id"))
 	private List<StudentOutcome> outcomes;
@@ -51,5 +53,13 @@ public class UserProgram {
 
 	public void setOutcomes(List<StudentOutcome> outcomes) {
 		this.outcomes = outcomes;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 }

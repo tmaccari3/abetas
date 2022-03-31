@@ -4,11 +4,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -51,6 +53,20 @@ public class ProgramDaoImpl implements ProgramDao {
 	@Autowired
 	public void setDataSource(DataSource dataSource) {
 		this.queryFactory = new JPAQueryFactory(em);
+	}
+	
+	@Override
+	public <S extends Program> S save(S entity) {
+		em.persist(entity);
+		
+		return entity;
+	}
+	
+	@Override
+	public void delete(Program entity) {
+		em.remove(entity);
+		em.createNativeQuery("UPDATE student_outcome SET active=false WHERE prog_id=?")
+			.setParameter(1, entity.getId());
 	}
 	
 	@Override
@@ -126,26 +142,17 @@ public class ProgramDaoImpl implements ProgramDao {
 		 */
 	}
 
+	@Transactional
 	@Override
 	public Program updateProgram(Program program) {
-		/*
-		 * DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-		 * def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
-		 * TransactionStatus status = transactionManager.getTransaction(def);
-		 * 
-		 * try { String SQL = "UPDATE program SET active=? WHERE id=?";
-		 * jdbcTemplate.update(SQL, program.isActive(), program.getId());
-		 * 
-		 * SQL = "UPDATE student_outcome SET active=? WHERE prog_id=?";
-		 * jdbcTemplate.update(SQL, program.isActive(), program.getId());
-		 * 
-		 * transactionManager.commit(status); return program; } catch(Exception e) {
-		 * System.out.println("Error in updating program record, rolling back");
-		 * transactionManager.rollback(status);
-		 * 
-		 * return null; }
-		 */
-		return null;
+		em.joinTransaction();
+		em.createNativeQuery("UPDATE user_program SET active=:active "
+				+ "WHERE prog_id=:id")
+			.setParameter("active", program.isActive())
+			.setParameter("id", program.getId())
+			.executeUpdate();
+		
+		return program;
 	}
 	
 	@Override
@@ -169,6 +176,9 @@ public class ProgramDaoImpl implements ProgramDao {
 
 	@Override
 	public List<Program> getAllPrograms() {
+		TypedQuery<Program> query = em.createQuery("SELECT p FROM Program p", Program.class);
+		
+		return query.getResultList();
 		/*
 		 * try { String SQL = "SELECT * FROM program"; ArrayList<Program> programs =
 		 * (ArrayList<Program>) jdbcTemplate.query( SQL, new ProgramMapper());
@@ -177,7 +187,6 @@ public class ProgramDaoImpl implements ProgramDao {
 		 * program.setOutcomes(getAllOutcomesForProgram(program.getId())); } return
 		 * programs; } catch (EmptyResultDataAccessException e) { return null; }
 		 */
-		return null;
 	}
 	
 	@Override
@@ -197,7 +206,10 @@ public class ProgramDaoImpl implements ProgramDao {
 	public List<Program> getActivePrograms() {
 		TypedQuery<Program> query = em.createQuery("SELECT p FROM Program p "
 				+ "WHERE active = true", Program.class);
-		
+		for(Program p : query.getResultList()) {
+			System.out.println("getting...");
+			System.out.println(p.isActive());
+		}
 		return query.getResultList();
 		/*
 		 * try { String SQL = "SELECT * FROM program WHERE active = true";
@@ -214,14 +226,15 @@ public class ProgramDaoImpl implements ProgramDao {
 	@Override
 	public List<Program> getActivePrograms(String userEmail) {
 		QUserProgram program = QUserProgram.userProgram;
-		/*queryFactory.selectFrom(document)
-		  .where(document.id.eq(20)) .fetchOne();*/
 		List<UserProgram> programs = queryFactory.selectFrom(program)
-				.where(program.email.eq(userEmail)).fetch();
+				.where(program.email.eq(userEmail)
+						.and(program.active.eq(true)))
+				.fetch();
 		
 		List<Program> result = new ArrayList<Program>();
 		for(UserProgram userProg : programs) {
 			Program prog = new Program();
+			prog.setId(userProg.getId());
 			prog.setName(userProg.getName());
 			prog.setOutcomes(getActiveOutcomesForProgram(userProg.getId()));
 			result.add(prog);
@@ -250,16 +263,12 @@ public class ProgramDaoImpl implements ProgramDao {
 	}
 
 	@Override
-	public StudentOutcome getOutcomeById(int id) {
-		/*
-		 * try { String SQL = "SELECT * FROM student_outcome WHERE id = ?";
-		 * StudentOutcome outcome = jdbcTemplate.queryForObject(SQL, new
-		 * StudentOutcomeMapper(), id);
-		 * 
-		 * return outcome; } catch (Exception e) {
-		 * System.out.println("Error in getting outcomes."); return null; }
-		 */
-		return null;
+	public Optional<Program> findById(Long id) {
+		TypedQuery<Program> query = em.createQuery("SELECT p FROM Program p "
+				+ "WHERE id=:id", Program.class)
+				.setParameter("id", id.intValue());
+		
+		return Optional.ofNullable(query.getSingleResult());
 	}
 	
 	@Override
@@ -269,6 +278,19 @@ public class ProgramDaoImpl implements ProgramDao {
 		 * jdbcTemplate.queryForObject(SQL, new ProgramMapper(), id);
 		 * 
 		 * return program; } catch (Exception e) { return null; }
+		 */
+		return null;
+	}
+	
+	@Override
+	public StudentOutcome getOutcomeById(int id) {
+		/*
+		 * try { String SQL = "SELECT * FROM student_outcome WHERE id = ?";
+		 * StudentOutcome outcome = jdbcTemplate.queryForObject(SQL, new
+		 * StudentOutcomeMapper(), id);
+		 * 
+		 * return outcome; } catch (Exception e) {
+		 * System.out.println("Error in getting outcomes."); return null; }
 		 */
 		return null;
 	}
@@ -291,11 +313,65 @@ public class ProgramDaoImpl implements ProgramDao {
 		public StudentOutcome mapRow(ResultSet rs, int rowNum) throws SQLException {
 			StudentOutcome outcome = new StudentOutcome();
 			outcome.setId(rs.getInt("id"));
-			outcome.setProgramId(rs.getInt("prog_id"));
+			//outcome.setProgramId(rs.getInt("prog_id"));
 			outcome.setName(rs.getString("name"));
 			outcome.setActive(rs.getBoolean("active"));
 			
 			return outcome;
 		}
+	}
+
+	@Override
+	public <S extends Program> Iterable<S> saveAll(Iterable<S> entities) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean existsById(Long id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Iterable<Program> findAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Iterable<Program> findAllById(Iterable<Long> ids) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long count() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteAllById(Iterable<? extends Long> ids) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteAll(Iterable<? extends Program> entities) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteAll() {
+		// TODO Auto-generated method stub
+		
 	}
 }

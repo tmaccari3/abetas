@@ -2,17 +2,24 @@ package com.maccari.abet.domain.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.PostLoad;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.springframework.data.domain.Persistable;
 
 /*
  * User.java 
@@ -24,7 +31,7 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "account")
-public class User {
+public class User implements Persistable<UUID> {
 	@Id
 	private String email;
 	
@@ -35,10 +42,14 @@ public class User {
 	  inverseJoinColumns = @JoinColumn(name = "prog_id"))
 	private List<Program> programs;
 	
+	
 	private String password;
 	
 	@Transient
 	private String confPassword;
+	
+	@Transient
+    private boolean update;
 	
 	@ElementCollection
     @CollectionTable(name = "authority", joinColumns = @JoinColumn(name = "email"))
@@ -95,6 +106,30 @@ public class User {
 	public void setRoles(List<String> roles) {
 		this.roles = roles;
 	}
+	
+    public boolean isUpdate() {
+        return this.update;
+    }
+
+    public void setUpdate(boolean update) {
+        this.update = update;
+    }
+	
+	@Override
+	public UUID getId() {
+		return this.getId();
+	}
+
+	@Override
+	public boolean isNew() {
+		return !this.update;
+	}
+	
+    @PrePersist
+    @PostLoad
+    void markUpdated() {
+        this.update = true;
+    }
 	
 	public String formattedRoles() {
 		if(roles.size() == 0) {

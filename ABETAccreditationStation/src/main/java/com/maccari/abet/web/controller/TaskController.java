@@ -268,7 +268,13 @@ public class TaskController {
 
 	@ModelAttribute("progTypes")
 	public ArrayList<Program> getPrograms(Principal principal) {
-		return (ArrayList<Program>) programService.getActivePrograms(principal.getName());
+		ArrayList<Program> p = (ArrayList<Program>) programService.getActivePrograms(principal.getName());
+		for(Program ps : p) {
+			System.out.println("here's what i got");
+			System.out.println(ps.getName());
+		}
+		
+		return p;
 	}
 	
 	@ModelAttribute("uploadedFile")

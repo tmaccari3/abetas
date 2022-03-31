@@ -14,6 +14,7 @@ import com.maccari.abet.domain.entity.web.WebProgram;
 import com.maccari.abet.domain.entity.web.WebTask;
 import com.maccari.abet.domain.entity.web.WebUser;
 import com.maccari.abet.repository.ProgramDao;
+import com.maccari.abet.repository.StudentOutcomeDao;
 import com.maccari.abet.utility.WebProgramOrderById;
 
 /*
@@ -33,6 +34,9 @@ public class ProgramService implements Service<Program> {
 	@Autowired
 	private ProgramDao programDao;
 	
+	@Autowired
+	private StudentOutcomeDao studentOutcomeDao;
+	
 	@Override
 	public List<Program> getAll() {
 		return programDao.getAllPrograms();
@@ -48,29 +52,36 @@ public class ProgramService implements Service<Program> {
 
 	@Override
 	public Program getById(int id) {
-		return programDao.getProgramById(id);
+		//return programDao.getProgramById(id);
+		return programDao.findById((long) id).get();
 	}
 	
 	public StudentOutcome getOutcomeById(int id) {
-		return programDao.getOutcomeById(id);
+		return studentOutcomeDao.findById((long) id).get();
 	}
 
 	@Override
 	public void create(Program item) {
-		programDao.createProgram(item);
+		//programDao.createProgram(item);
+		item.setActive(true);
+		programDao.save(item);
 	}
 	
 	public void createOutcome(StudentOutcome item) {
-		programDao.createOutcome(item);
+		//programDao.createOutcome(item);
+		item.setActive(true);
+		studentOutcomeDao.save(item);
 	}
 
 	@Override
 	public void remove(Program item) {
-		programDao.removeProgram(item);
+		//programDao.removeProgram(item);
+		programDao.delete(item);
 	}
 	
 	public void removeOutcome(StudentOutcome item) {
-		programDao.removeOutcome(item);
+		//programDao.removeOutcome(item);
+		studentOutcomeDao.delete(item);
 	}
 
 	@Override
@@ -147,7 +158,8 @@ public class ProgramService implements Service<Program> {
 	public void fillPrograms(WebUser user) {
 		ArrayList<Program> programs = new ArrayList<Program>();
 		for(Integer id : user.getProgramIds()) {
-			programs.add(programDao.getProgramById(id));
+			System.out.println("id: " + id + " found: " + programDao.findById((long) id).get());
+			programs.add(programDao.findById((long) id).get());
 		}
 		
 		user.setPrograms(programs);
@@ -174,7 +186,7 @@ public class ProgramService implements Service<Program> {
 			if(program == null) {
 				return false;
 			}
-			if(program.getId() == outcome.getProgramId()) {
+			if(program.getId() == outcome.getProgram().getId()) {
 				return true;
 			}
 		}
