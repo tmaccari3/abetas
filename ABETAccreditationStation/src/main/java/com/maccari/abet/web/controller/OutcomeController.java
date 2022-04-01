@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.StudentOutcome;
 import com.maccari.abet.domain.service.ProgramService;
 
@@ -36,7 +36,7 @@ public class OutcomeController {
 	@RequestMapping(value = "/create", params = "addRow")
 	public String addOutcome(StudentOutcome studentOutcome, Model model,
 			HttpSession session) {
-		Program program = programService.getById((int) session.getAttribute("PROGRAM"));
+		ProgramData program = programService.getById((int) session.getAttribute("PROGRAM"));
 		List<StudentOutcome> outcomes =  program.getOutcomes();
 		outcomes.add(new StudentOutcome("", true));
 		model.addAttribute("program", program);

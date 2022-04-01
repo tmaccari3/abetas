@@ -35,7 +35,7 @@ public class StudentOutcome {
 	
 	@ManyToOne
     @JoinColumn(name = "prog_id", nullable = false)
-	private Program program;
+	private ProgramData program;
 	
 	@NotEmpty(message = "Required")
 	@Size(min = 1, max = 252, message = "Name must be between 1 and 252 characters.")
@@ -64,11 +64,11 @@ public class StudentOutcome {
 		this.id = id;
 	}
 
-	public Program getProgram() {
+	public ProgramData getProgram() {
 		return program;
 	}
 
-	public void setProgram(Program program) {
+	public void setProgram(ProgramData program) {
 		this.program = program;
 	}
 

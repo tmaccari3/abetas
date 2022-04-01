@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.ProgramData;
 
 /*
  * ProgramMapper.java 
@@ -15,9 +15,9 @@ import com.maccari.abet.domain.entity.Program;
  * 
  */
 
-public 	class ProgramMapper implements RowMapper<Program> {
-	public Program mapRow(ResultSet rs, int rowNum) throws SQLException {
-		Program program = new Program();
+public 	class ProgramMapper implements RowMapper<ProgramData> {
+	public ProgramData mapRow(ResultSet rs, int rowNum) throws SQLException {
+		ProgramData program = new ProgramData();
 		program.setId(rs.getInt("program_id"));
 		program.setName(rs.getString("name"));
 		

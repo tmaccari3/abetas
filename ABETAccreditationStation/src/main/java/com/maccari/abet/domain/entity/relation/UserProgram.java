@@ -1,4 +1,4 @@
-package com.maccari.abet.domain.entity.user;
+package com.maccari.abet.domain.entity.relation;
 
 import java.util.List;
 
@@ -10,11 +10,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
+import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.StudentOutcome;
 
 @Entity
 @Table(name = "user_program")
-public class UserProgram {
+public class UserProgram implements Program {
 	@Id
 	@Column(name = "prog_id")
 	private int id;

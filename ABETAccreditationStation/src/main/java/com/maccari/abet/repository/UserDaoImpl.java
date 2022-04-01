@@ -25,7 +25,7 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.QUser;
 import com.maccari.abet.domain.entity.User;
 import com.maccari.abet.utility.WebList;
@@ -68,7 +68,7 @@ public class UserDaoImpl implements UserDao {
 					.executeUpdate();
 			}
 			
-			for(Program program : entity.getPrograms()) {
+			for(ProgramData program : entity.getPrograms()) {
 				em.createNativeQuery("INSERT INTO user_program (email, prog_id, "
 						+ "program, active) VALUES (?, ?, ?, ?)")
 					.setParameter(1, entity.getEmail())

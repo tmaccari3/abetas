@@ -71,7 +71,9 @@ public class FileDaoImpl implements FileDao {
 
 	@Override
 	public Optional<File> findById(Long id) {
-		TypedQuery<File> query = em.createQuery("SELECT f FROM File f", File.class);
+		TypedQuery<File> query = em.createQuery("SELECT f FROM File f"
+				+ " WHERE f.id=:id", File.class);
+			query.setParameter("id", id.intValue());
 		
 		return Optional.ofNullable(query.getSingleResult());
 	}

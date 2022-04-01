@@ -7,7 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.ProgramData;
 
 /*
  * DocumentSearch.java 
@@ -24,7 +24,7 @@ public class WebUser {
 	
 	private List<Integer> programIds;
 	
-	private List<Program> programs;
+	private List<ProgramData> programs;
 
 	private List<String> roles;
 	
@@ -38,12 +38,12 @@ public class WebUser {
 		this.programIds = new ArrayList<Integer>();
 	}
 	
-	public WebUser(String email, List<String> roles, List<Program> programs) {
+	public WebUser(String email, List<String> roles, List<ProgramData> programs) {
 		this.email = email;
 		this.roles = roles;
 		this.programs = programs;
 		this.programIds = new ArrayList<Integer>();
-		for(Program program : this.programs) {
+		for(ProgramData program : this.programs) {
 			this.programIds.add(program.getId());
 		}
 	}
@@ -70,11 +70,11 @@ public class WebUser {
 		this.roles = roles;
 	}
 
-	public List<Program> getPrograms() {
+	public List<ProgramData> getPrograms() {
 		return programs;
 	}
 
-	public void setPrograms(List<Program> programs) {
+	public void setPrograms(List<ProgramData> programs) {
 		this.programs = programs;
 	}
 

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.web.WebProgram;
 import com.maccari.abet.domain.service.ProgramService;
 
@@ -74,7 +74,7 @@ public class ProgramController {
 	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "deactivate")
 	public String deactivateProgram(@RequestParam(value = "deactivate", required = true) 
 		int id, Model model) {
-		Program program = programService.getById(id);
+		ProgramData program = programService.getById(id);
 		program.setActive(false);
 		programService.update(program);
 
@@ -84,7 +84,7 @@ public class ProgramController {
 	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "reactivate")
 	public String reactivateProgram(@RequestParam(value = "reactivate", required = true) 
 		int id, Model model) {
-		Program program = programService.getById(id);
+		ProgramData program = programService.getById(id);
 		program.setActive(true);
 		programService.update(program);
 

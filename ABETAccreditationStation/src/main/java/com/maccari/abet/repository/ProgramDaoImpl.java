@@ -22,11 +22,10 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import com.maccari.abet.domain.entity.Program;
-import com.maccari.abet.domain.entity.QProgram;
+import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.StudentOutcome;
-import com.maccari.abet.domain.entity.user.QUserProgram;
-import com.maccari.abet.domain.entity.user.UserProgram;
+import com.maccari.abet.domain.entity.relation.QUserProgram;
+import com.maccari.abet.domain.entity.relation.UserProgram;
 import com.maccari.abet.repository.mapper.IdMapper;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -56,23 +55,23 @@ public class ProgramDaoImpl implements ProgramDao {
 	}
 	
 	@Override
-	public <S extends Program> S save(S entity) {
+	public <S extends ProgramData> S save(S entity) {
 		em.persist(entity);
 		
 		return entity;
 	}
 	
 	@Override
-	public void delete(Program entity) {
+	public void delete(ProgramData entity) {
 		em.remove(entity);
 		em.createNativeQuery("UPDATE student_outcome SET active=false WHERE prog_id=?")
 			.setParameter(1, entity.getId());
 	}
 	
 	@Override
-	public Optional<Program> findById(Long id) {
-		TypedQuery<Program> query = em.createQuery("SELECT p FROM Program p "
-				+ "WHERE id=:id", Program.class)
+	public Optional<ProgramData> findById(Long id) {
+		TypedQuery<ProgramData> query = em.createQuery("SELECT p FROM ProgramData p "
+				+ "WHERE id=:id", ProgramData.class)
 				.setParameter("id", id.intValue());
 		
 		return Optional.ofNullable(query.getSingleResult());
@@ -80,7 +79,7 @@ public class ProgramDaoImpl implements ProgramDao {
 
 	@Transactional
 	@Override
-	public Program updateProgram(Program program) {
+	public ProgramData updateProgram(ProgramData program) {
 		em.joinTransaction();
 		em.createNativeQuery("UPDATE user_program SET active=:active "
 				+ "WHERE prog_id=:id")
@@ -92,8 +91,9 @@ public class ProgramDaoImpl implements ProgramDao {
 	}
 	
 	@Override
-	public List<Program> getAllPrograms() {
-		TypedQuery<Program> query = em.createQuery("SELECT p FROM Program p", Program.class);
+	public List<ProgramData> getAllPrograms() {
+		TypedQuery<ProgramData> query = em.createQuery("SELECT p FROM ProgramData p", 
+				ProgramData.class);
 		
 		return query.getResultList();
 		/*
@@ -107,13 +107,10 @@ public class ProgramDaoImpl implements ProgramDao {
 	}
 	
 	@Override
-	public List<Program> getActivePrograms() {
-		TypedQuery<Program> query = em.createQuery("SELECT p FROM Program p "
-				+ "WHERE active = true", Program.class);
-		for(Program p : query.getResultList()) {
-			System.out.println("getting...");
-			System.out.println(p.isActive());
-		}
+	public List<ProgramData> getActivePrograms() {
+		TypedQuery<ProgramData> query = em.createQuery("SELECT p FROM ProgramData p "
+				+ "WHERE active = true", ProgramData.class);
+		
 		return query.getResultList();
 		/*
 		 * try { String SQL = "SELECT * FROM program WHERE active = true";
@@ -128,16 +125,16 @@ public class ProgramDaoImpl implements ProgramDao {
 	
 	// Gets all Programs that are 'active' in the system
 	@Override
-	public List<Program> getActivePrograms(String userEmail) {
+	public List<ProgramData> getActivePrograms(String userEmail) {
 		QUserProgram program = QUserProgram.userProgram;
 		List<UserProgram> programs = queryFactory.selectFrom(program)
 				.where(program.email.eq(userEmail)
 						.and(program.active.eq(true)))
 				.fetch();
 		
-		List<Program> result = new ArrayList<Program>();
+		List<ProgramData> result = new ArrayList<ProgramData>();
 		for(UserProgram userProg : programs) {
-			Program prog = new Program();
+			ProgramData prog = new ProgramData();
 			prog.setId(userProg.getId());
 			prog.setName(userProg.getName());
 			prog.setOutcomes(getActiveOutcomesForProgram(userProg.getId()));
@@ -167,9 +164,9 @@ public class ProgramDaoImpl implements ProgramDao {
 	}
 	
 	// This program mapper is unique for this class and gets more data
-	class ProgramMapper implements RowMapper<Program> {
-		public Program mapRow(ResultSet rs, int rowNum) throws SQLException {
-			Program program = new Program();
+	class ProgramMapper implements RowMapper<ProgramData> {
+		public ProgramData mapRow(ResultSet rs, int rowNum) throws SQLException {
+			ProgramData program = new ProgramData();
 			program.setId(rs.getInt("id"));
 			program.setName(rs.getString("name"));
 			program.setActive(rs.getBoolean("active"));
@@ -193,7 +190,7 @@ public class ProgramDaoImpl implements ProgramDao {
 	}
 
 	@Override
-	public <S extends Program> Iterable<S> saveAll(Iterable<S> entities) {
+	public <S extends ProgramData> Iterable<S> saveAll(Iterable<S> entities) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -205,13 +202,13 @@ public class ProgramDaoImpl implements ProgramDao {
 	}
 
 	@Override
-	public Iterable<Program> findAll() {
+	public Iterable<ProgramData> findAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Iterable<Program> findAllById(Iterable<Long> ids) {
+	public Iterable<ProgramData> findAllById(Iterable<Long> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -235,7 +232,7 @@ public class ProgramDaoImpl implements ProgramDao {
 	}
 
 	@Override
-	public void deleteAll(Iterable<? extends Program> entities) {
+	public void deleteAll(Iterable<? extends ProgramData> entities) {
 		// TODO Auto-generated method stub
 		
 	}

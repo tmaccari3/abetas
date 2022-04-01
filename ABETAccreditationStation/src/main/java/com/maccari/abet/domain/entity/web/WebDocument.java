@@ -8,7 +8,9 @@ import javax.validation.constraints.NotEmpty;
 
 import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.StudentOutcome;
+import com.maccari.abet.domain.entity.relation.DocumentProgram;
 
 /*
  * WebDocument.java 
@@ -24,30 +26,30 @@ public class WebDocument {
 
 	@NotEmpty(message = "*required")
 	private String title;
-	
+
 	private String author;
-	
+
 	private List<Integer> programs;
 
 	private List<Integer> outcomes;
-	
+
 	private List<Program> fullPrograms;
 
 	private List<StudentOutcome> fullOutcomes;
-	
+
 	private List<String> tags;
-	
+
 	@NotEmpty(message = "*required")
 	private String description;
-	
+
 	private Timestamp submitDate;
-	
+
 	private File uploadedFile;
-	
+
 	private int taskId;
-	
+
 	private boolean task;
-	
+
 	public WebDocument() {
 		programs = new ArrayList<Integer>();
 		outcomes = new ArrayList<Integer>();
@@ -94,7 +96,7 @@ public class WebDocument {
 	public void setOutcomes(List<Integer> outcomes) {
 		this.outcomes = outcomes;
 	}
-
+	
 	public List<Program> getFullPrograms() {
 		return fullPrograms;
 	}

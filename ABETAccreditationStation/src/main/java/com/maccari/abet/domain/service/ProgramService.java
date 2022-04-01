@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.StudentOutcome;
+import com.maccari.abet.domain.entity.relation.DocumentProgram;
 import com.maccari.abet.domain.entity.web.WebDocument;
 import com.maccari.abet.domain.entity.web.WebProgram;
 import com.maccari.abet.domain.entity.web.WebTask;
@@ -30,7 +32,7 @@ import com.maccari.abet.utility.WebProgramOrderById;
  */
 
 @Component
-public class ProgramService implements Service<Program> {
+public class ProgramService implements Service<ProgramData> {
 	@Autowired
 	private ProgramDao programDao;
 	
@@ -38,20 +40,20 @@ public class ProgramService implements Service<Program> {
 	private StudentOutcomeDao studentOutcomeDao;
 	
 	@Override
-	public List<Program> getAll() {
+	public List<ProgramData> getAll() {
 		return programDao.getAllPrograms();
 	}
 	
-	public List<Program> getActivePrograms(){
+	public List<ProgramData> getActivePrograms(){
 		return programDao.getActivePrograms();
 	}
 	
-	public List<Program> getActivePrograms(String userEmail){
+	public List<ProgramData> getActivePrograms(String userEmail){
 		return programDao.getActivePrograms(userEmail);
 	}
 
 	@Override
-	public Program getById(int id) {
+	public ProgramData getById(int id) {
 		//return programDao.getProgramById(id);
 		return programDao.findById((long) id).get();
 	}
@@ -61,7 +63,7 @@ public class ProgramService implements Service<Program> {
 	}
 
 	@Override
-	public void create(Program item) {
+	public void create(ProgramData item) {
 		//programDao.createProgram(item);
 		item.setActive(true);
 		programDao.save(item);
@@ -74,7 +76,7 @@ public class ProgramService implements Service<Program> {
 	}
 
 	@Override
-	public void remove(Program item) {
+	public void remove(ProgramData item) {
 		//programDao.removeProgram(item);
 		programDao.delete(item);
 	}
@@ -85,7 +87,7 @@ public class ProgramService implements Service<Program> {
 	}
 
 	@Override
-	public Program update(Program item) {
+	public ProgramData update(ProgramData item) {
 		return programDao.updateProgram(item);
 	}
 	
@@ -93,16 +95,16 @@ public class ProgramService implements Service<Program> {
 		return studentOutcomeDao.updateOutcome(item);
 	}
 	
-	public List<Program> getAllPrograms(){
+	public List<ProgramData> getAllPrograms(){
 		return programDao.getAllPrograms();
 	}
 	
 	// Gets all program, converts them to WebPrograms, and sorts them by id
 	public List<WebProgram> getAllWebPrograms() {
 		List<WebProgram> webPrograms = new ArrayList<WebProgram>();
-		List<Program> programs = programDao.getAllPrograms();
+		List<ProgramData> programs = programDao.getAllPrograms();
 		
-		for(Program program : programs) {
+		for(ProgramData program : programs) {
 			webPrograms.add(new WebProgram(program));
 		}
 		
@@ -112,8 +114,8 @@ public class ProgramService implements Service<Program> {
 	}
 	
 	// Converts the given WebProgram to a Program
-	public Program convertWebProgram(WebProgram webProgram) {
-		Program program = new Program();
+	public ProgramData convertWebProgram(WebProgram webProgram) {
+		ProgramData program = new ProgramData();
 		program.setId(webProgram.getId());
 		program.setName(webProgram.getName());
 		program.setOutcomes(webProgram.getOutcomes());
@@ -121,6 +123,8 @@ public class ProgramService implements Service<Program> {
 		
 		return program;
 	}
+	
+	// Converts other program implementations to a Program
 	
 	// Fills the program and student outcome lists for a given task
 	public void fillPrograms(WebTask task) {
@@ -156,7 +160,7 @@ public class ProgramService implements Service<Program> {
 	
 	// Fills the program and student outcome lists for a given user
 	public void fillPrograms(WebUser user) {
-		ArrayList<Program> programs = new ArrayList<Program>();
+		ArrayList<ProgramData> programs = new ArrayList<ProgramData>();
 		for(Integer id : user.getProgramIds()) {
 			System.out.println("id: " + id + " found: " + programDao.findById((long) id).get());
 			programs.add(programDao.findById((long) id).get());

@@ -40,7 +40,7 @@ public class User implements Persistable<UUID> {
 	  name = "user_program", 
 	  joinColumns = @JoinColumn(name = "email"), 
 	  inverseJoinColumns = @JoinColumn(name = "prog_id"))
-	private List<Program> programs;
+	private List<ProgramData> programs;
 	
 	
 	private String password;
@@ -58,10 +58,10 @@ public class User implements Persistable<UUID> {
 
 	public User() {
 		roles = new ArrayList<String>();	
-		programs = new ArrayList<Program>();
+		programs = new ArrayList<ProgramData>();
 	}
 	
-	public User(String email, List<String> roles, List<Program> programs) {
+	public User(String email, List<String> roles, List<ProgramData> programs) {
 		this.email = email;
 		this.roles = roles;
 		this.programs = programs;
@@ -75,11 +75,11 @@ public class User implements Persistable<UUID> {
 		this.email = email;
 	}
 
-	public List<Program> getPrograms() {
+	public List<ProgramData> getPrograms() {
 		return programs;
 	}
 
-	public void setPrograms(List<Program> programs) {
+	public void setPrograms(List<ProgramData> programs) {
 		this.programs = programs;
 	}
 

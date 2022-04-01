@@ -5,7 +5,7 @@ import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.StudentOutcome;
 
 /*
@@ -40,7 +40,7 @@ public class WebProgram {
 		this.newRow = newRow;
 	}
 	
-	public WebProgram(Program program) {
+	public WebProgram(ProgramData program) {
 		this.id = program.getId();
 		this.name = program.getName();
 		this.active = program.isActive();

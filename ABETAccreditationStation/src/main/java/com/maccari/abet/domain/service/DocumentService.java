@@ -1,5 +1,6 @@
 package com.maccari.abet.domain.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,9 @@ import org.springframework.stereotype.Component;
 import com.maccari.abet.domain.entity.Document;
 import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.StudentOutcome;
+import com.maccari.abet.domain.entity.relation.DocumentProgram;
 import com.maccari.abet.domain.entity.web.DocumentSearch;
 import com.maccari.abet.domain.entity.web.WebDocument;
 import com.maccari.abet.repository.DocumentDao;
@@ -47,12 +50,13 @@ public class DocumentService implements Service<Document> {
 
 	@Override
 	public Document getById(int id) {
-		return docDao.getById(id);
+		//return docDao.getById(id);
+		return docDao.findById((long) id).get();
 	}
 	
 	// Retrieves the document as well as its designated file.
 	public Document getFullDocById(int id) {
-		Document document = getById(id);
+		Document document = docDao.findById((long) id).get();
 		File file = document.getFile();
 		if (file != null) {
 			document.setFile(fileService.getFileById(file.getId()));
@@ -67,7 +71,8 @@ public class DocumentService implements Service<Document> {
 
 	@Override
 	public void create(Document item) {
-		docDao.createDocument(item);
+		//docDao.createDocument(item);
+		docDao.save(item);
 	}
 
 	@Override
@@ -89,11 +94,17 @@ public class DocumentService implements Service<Document> {
 	// Converts the given WebDocument to a Document
 	public Document webDoctoDoc(WebDocument webDoc) {
 		Document document = new Document();
+		ArrayList<DocumentProgram> docProgs = new ArrayList<DocumentProgram>();
+		for(Program program : webDoc.getFullPrograms()) {
+			DocumentProgram docProg = new DocumentProgram();
+			docProg.setProgramId(program.getId());
+			docProg.setName(program.getName());
+		}
 		
 		document.setId(webDoc.getId());
 		document.setTitle(webDoc.getTitle());
 		document.setAuthor(webDoc.getAuthor());
-		document.setPrograms(webDoc.getFullPrograms());
+		document.setPrograms(docProgs);
 		document.setOutcomes(webDoc.getFullOutcomes());
 		document.setTags(webDoc.getTags());
 		document.setSubmitDate(webDoc.getSubmitDate());

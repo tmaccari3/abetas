@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,10 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.maccari.abet.domain.entity.Document;
 import com.maccari.abet.domain.entity.File;
-import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.ProgramData;
+import com.maccari.abet.domain.entity.QDocument;
 import com.maccari.abet.domain.entity.StudentOutcome;
+import com.maccari.abet.domain.entity.relation.UserProgram;
 import com.maccari.abet.domain.entity.web.DocumentSearch;
 import com.maccari.abet.repository.mapper.IdMapper;
 import com.maccari.abet.repository.mapper.ProgramMapper;
@@ -47,13 +50,24 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 @Repository
 public class DocumentDaoImpl implements DocumentDao {
 	@PersistenceContext
-	private EntityManager entityManager;
+	private EntityManager em;
 
 	private JPAQueryFactory queryFactory;
 
 	@Autowired
 	public void setDataSource(DataSource dataSource) {
-		this.queryFactory = new JPAQueryFactory(entityManager);
+		this.queryFactory = new JPAQueryFactory(em);
+	}
+	
+	@Override
+	public <S extends Document> S save(S entity) {
+		Instant instant = Instant.now(); Timestamp ts = instant != null ?
+				Timestamp.from(instant) : null;
+		entity.setSubmitDate(ts);
+		
+		em.persist(entity);
+		
+		return entity;
 	}
 	
 	// Inserts a document into the data-source
@@ -178,7 +192,28 @@ public class DocumentDaoImpl implements DocumentDao {
 		 * 
 		 * return docs; } catch (EmptyResultDataAccessException e) { return null; }
 		 */
-		return null;
+			ArrayList<Document> d = new ArrayList<Document>();
+			d.add(new Document());
+		return d;
+	}
+	
+	@Override
+	public Optional<Document> findById(Long id) {
+		int fileId = (int) em.createNativeQuery("SELECT file_id FROM document_file"
+				+ " WHERE doc_id=:id")
+				.setParameter("id", id.intValue())
+				.getSingleResult();
+		File file = new File();
+		file.setId(fileId);
+		
+		TypedQuery<Document> query = em.createQuery("SELECT d FROM Document d "
+				+ "WHERE d.id=:id", Document.class);
+			query.setParameter("id", id.intValue());
+			
+		Document document = query.getSingleResult();
+		document.setFile(file);
+		
+		return Optional.ofNullable(document);
 	}
 
 	@Override
@@ -189,11 +224,22 @@ public class DocumentDaoImpl implements DocumentDao {
 		 * 
 		 * return doc; } catch (EmptyResultDataAccessException e) { return null; }
 		 */
+		
 		return null;
 	}
 
 	@Override
 	public List<Document> getRecentDocuments(int amount) {
+		QDocument document = QDocument.document;
+		/*List<UserProgram> programs = queryFactory.selectFrom(program)
+				.where(program.email.eq(userEmail)
+						.and(program.active.eq(true)))
+				.fetch();*/
+		List<Document> documents = queryFactory.selectFrom(document)
+				.orderBy(document.submitDate.desc())
+				.fetch();
+		
+		return documents;
 		/*
 		 * ArrayList<Document> docs = new ArrayList<>(); try { String SQL =
 		 * "SELECT * FROM document ORDER BY submit_date DESC LIMIT ?"; docs =
@@ -202,7 +248,6 @@ public class DocumentDaoImpl implements DocumentDao {
 		 * 
 		 * return docs;
 		 */
-		return null;
 	}
 
 	@Override
@@ -326,19 +371,7 @@ public class DocumentDaoImpl implements DocumentDao {
 	}
 
 	@Override
-	public <S extends Document> S save(S entity) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public <S extends Document> Iterable<S> saveAll(Iterable<S> entities) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Optional<Document> findById(Long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

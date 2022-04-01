@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.HandlerMapping;
 
-import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.User;
 import com.maccari.abet.domain.entity.web.WebEmail;
 import com.maccari.abet.domain.entity.web.WebUser;
@@ -203,8 +203,8 @@ public class UserController {
 	}
 	
 	@ModelAttribute("progTypes")
-	public ArrayList<Program> getPrograms() {
-		return (ArrayList<Program>) programService.getActivePrograms();
+	public ArrayList<ProgramData> getPrograms() {
+		return (ArrayList<ProgramData>) programService.getActivePrograms();
 	}
 	
 	@ModelAttribute("roleTypes")

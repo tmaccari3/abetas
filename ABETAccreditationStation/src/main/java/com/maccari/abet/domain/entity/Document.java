@@ -4,12 +4,23 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
+
+import com.maccari.abet.domain.entity.relation.DocumentProgram;
 
 /*
  * Document.java 
@@ -19,6 +30,7 @@ import javax.validation.constraints.NotEmpty;
  * 
  */
 @Entity
+@Table(name = "document")
 public class Document {
 	@Id
     @SequenceGenerator(name = "document_id_seq",
@@ -33,19 +45,26 @@ public class Document {
 	
 	private String author;
 	
-	private List<Program> programs;
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "doc_id")
+	private List<DocumentProgram> programs;
 
+	@Transient
 	private List<StudentOutcome> outcomes;
 	
+	@Transient
 	private List<String> tags;
 	
 	@NotEmpty(message = "*required")
 	private String description;
 	
+	@Column(name = "submit_date")
 	private Timestamp submitDate;
 	
+	@Transient
 	private File file;
 	
+	@Column(name = "task_id")
 	private int taskId;
 	
 	private boolean task;
@@ -78,11 +97,11 @@ public class Document {
 		this.author = author;
 	}
 
-	public List<Program> getPrograms() {
+	public List<DocumentProgram> getPrograms() {
 		return programs;
 	}
 
-	public void setPrograms(List<Program> programs) {
+	public void setPrograms(List<DocumentProgram> programs) {
 		this.programs = programs;
 	}
 

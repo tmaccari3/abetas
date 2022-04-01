@@ -17,6 +17,7 @@ import com.maccari.abet.domain.entity.web.DocumentSearch;
  * with a Document
  * 
  */
+
 @Primary
 @Repository
 public interface DocumentDao extends CrudRepository<Document, Long>{

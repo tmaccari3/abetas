@@ -23,7 +23,7 @@ import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.maccari.abet.domain.entity.File;
-import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.web.DocumentSearch;
 import com.maccari.abet.domain.entity.web.WebDocument;
 import com.maccari.abet.domain.service.DocumentService;
@@ -73,6 +73,7 @@ public class DocumentController {
 	public String documentDetails(@RequestParam(value = "id", required = true) 
 		int id, Model model) {
 		model.addAttribute("document", docService.getFullDocById(id));
+		//model.addAttribute("document", docService.getById(id));
 
 		return "document/details";
 	}
@@ -147,7 +148,7 @@ public class DocumentController {
 	}
 	
 	@ModelAttribute("progTypes")
-	public ArrayList<Program> getPrograms(Principal principal) {
-		return (ArrayList<Program>) programService.getActivePrograms(principal.getName());
+	public ArrayList<ProgramData> getPrograms(Principal principal) {
+		return (ArrayList<ProgramData>) programService.getActivePrograms(principal.getName());
 	}
 }

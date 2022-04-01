@@ -2,7 +2,7 @@ package com.maccari.abet.utility;
 
 import java.util.Comparator;
 
-import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.ProgramData;
 
 /*
  * ProgramComparator.java 
@@ -14,10 +14,10 @@ import com.maccari.abet.domain.entity.Program;
  * 
  */
 
-public class ProgramComparator implements Comparator<Program>{
+public class ProgramComparator implements Comparator<ProgramData>{
 
 	@Override
-	public int compare(Program p1, Program p2) {
+	public int compare(ProgramData p1, ProgramData p2) {
 		if(p1.getId() == p2.getId()) {
 			return 0;
 		}

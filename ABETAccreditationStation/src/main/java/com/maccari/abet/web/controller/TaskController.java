@@ -23,7 +23,7 @@ import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.maccari.abet.domain.entity.File;
-import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.Task;
 import com.maccari.abet.domain.entity.web.WebEmail;
 import com.maccari.abet.domain.entity.web.WebTask;
@@ -267,9 +267,9 @@ public class TaskController {
 	}
 
 	@ModelAttribute("progTypes")
-	public ArrayList<Program> getPrograms(Principal principal) {
-		ArrayList<Program> p = (ArrayList<Program>) programService.getActivePrograms(principal.getName());
-		for(Program ps : p) {
+	public ArrayList<ProgramData> getPrograms(Principal principal) {
+		ArrayList<ProgramData> p = (ArrayList<ProgramData>) programService.getActivePrograms(principal.getName());
+		for(ProgramData ps : p) {
 			System.out.println("here's what i got");
 			System.out.println(ps.getName());
 		}
