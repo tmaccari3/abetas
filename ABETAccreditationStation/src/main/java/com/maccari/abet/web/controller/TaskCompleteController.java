@@ -91,7 +91,7 @@ public class TaskCompleteController {
 		
 		webDocument.setUploadedFile((File) session.getAttribute("UPLOADED_FILE"));
 		//webDocument.setFullPrograms(task.getPrograms());
-		webDocument.setFullOutcomes(task.getOutcomes());
+		//webDocument.setFullOutcomes(task.getOutcomes());
 		docValidator.validate(webDocument, bindingResult);
 		
 		if(bindingResult.hasErrors()) {

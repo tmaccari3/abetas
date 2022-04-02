@@ -27,7 +27,7 @@ import com.maccari.abet.domain.entity.Document;
 import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.QDocument;
-import com.maccari.abet.domain.entity.StudentOutcome;
+import com.maccari.abet.domain.entity.StudentOutcomeData;
 import com.maccari.abet.domain.entity.relation.UserProgram;
 import com.maccari.abet.domain.entity.web.DocumentSearch;
 import com.maccari.abet.repository.mapper.IdMapper;
@@ -231,10 +231,6 @@ public class DocumentDaoImpl implements DocumentDao {
 	@Override
 	public List<Document> getRecentDocuments(int amount) {
 		QDocument document = QDocument.document;
-		/*List<UserProgram> programs = queryFactory.selectFrom(program)
-				.where(program.email.eq(userEmail)
-						.and(program.active.eq(true)))
-				.fetch();*/
 		List<Document> documents = queryFactory.selectFrom(document)
 				.orderBy(document.submitDate.desc())
 				.fetch();

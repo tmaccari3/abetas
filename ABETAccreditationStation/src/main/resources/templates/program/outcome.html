@@ -9,14 +9,14 @@
 </head>
 <body layout:fragment="content">
 	<form action="#" th:action="@{/outcome/create}"
-		th:object="${studentOutcome}" method="post">
+		th:object="${webStudentOutcome}" method="post">
 		<br>
 		<div class="error" th:if="${#fields.hasErrors('name')}"
 			th:errors="*{name}"> name error</div>
 		<div class="container">
 			<div class="options-container">
 				<div class="option">
-					<p th:text="'Student Outcome List for: ' + ${program.name}">
+					<p th:text="'Student Outcome List for: ' + ${progName}">
 						Student Outcome List</p>
 				</div>
 				<div class="option">
@@ -32,7 +32,7 @@
 						<th>Active</th>
 						<th>Options</th>
 					</tr>
-					<tr th:each="outcome,rowIter : ${program.outcomes}">
+					<tr th:each="outcome,rowIter : ${outcomes}">
 						<td th:if="${!outcome.newRow}" th:text="${outcome.name}">Name</td>
 						<td th:if="${outcome.newRow}">
 							<input class="program-input" type="text" th:field="*{name}" />

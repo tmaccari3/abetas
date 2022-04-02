@@ -1,46 +1,47 @@
 package com.maccari.abet.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import com.maccari.abet.domain.entity.StudentOutcome;
+import com.maccari.abet.domain.entity.StudentOutcomeData;
 
 public class StudentOutcomeDaoImpl implements StudentOutcomeDao {
 	@PersistenceContext
 	private EntityManager em;
 	
 	@Override
-	public <S extends StudentOutcome> S save(S entity) {
+	public <S extends StudentOutcomeData> S save(S entity) {
 		em.persist(entity);
 		
 		return entity;
 	}
 
 	@Override
-	public <S extends StudentOutcome> Iterable<S> saveAll(Iterable<S> entities) {
+	public <S extends StudentOutcomeData> Iterable<S> saveAll(Iterable<S> entities) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Override
-	public void delete(StudentOutcome entity) {
+	public void delete(StudentOutcomeData entity) {
 		em.remove(entity);
 	}
 
 	@Override
-	public Optional<StudentOutcome> findById(Long id) {
-		TypedQuery<StudentOutcome> query = em.createQuery("SELECT s FROM StudentOutcome s "
-				+ "WHERE id=:id", StudentOutcome.class);
+	public Optional<StudentOutcomeData> findById(Long id) {
+		TypedQuery<StudentOutcomeData> query = em.createQuery("SELECT s FROM StudentOutcomeData s "
+				+ "WHERE id=:id", StudentOutcomeData.class);
 		query.setParameter("id", id.intValue());
 		
 		return Optional.ofNullable(query.getSingleResult());
 	}
 	
 	@Override
-	public StudentOutcome updateOutcome(StudentOutcome outcome) {
+	public StudentOutcomeData updateOutcome(StudentOutcomeData outcome) {
 		/*
 		 * DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		 * def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
@@ -65,13 +66,13 @@ public class StudentOutcomeDaoImpl implements StudentOutcomeDao {
 	}
 
 	@Override
-	public Iterable<StudentOutcome> findAll() {
+	public Iterable<StudentOutcomeData> findAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Iterable<StudentOutcome> findAllById(Iterable<Long> ids) {
+	public Iterable<StudentOutcomeData> findAllById(Iterable<Long> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -95,7 +96,7 @@ public class StudentOutcomeDaoImpl implements StudentOutcomeDao {
 	}
 
 	@Override
-	public void deleteAll(Iterable<? extends StudentOutcome> entities) {
+	public void deleteAll(Iterable<? extends StudentOutcomeData> entities) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -105,5 +106,4 @@ public class StudentOutcomeDaoImpl implements StudentOutcomeDao {
 		// TODO Auto-generated method stub
 		
 	}
-
 }

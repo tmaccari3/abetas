@@ -5,8 +5,9 @@ import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.ProgramData;
-import com.maccari.abet.domain.entity.StudentOutcome;
+import com.maccari.abet.domain.entity.StudentOutcomeData;
 
 /*
  * DocumentSearch.java 
@@ -17,7 +18,7 @@ import com.maccari.abet.domain.entity.StudentOutcome;
  * 
  */
 
-public class WebProgram {
+public class WebProgram implements Program {
 	private int id;
 	
 	@NotEmpty(message = "Required")
@@ -26,7 +27,7 @@ public class WebProgram {
 	
 	private boolean active;
 	
-	private List<StudentOutcome> outcomes;
+	private List<StudentOutcomeData> outcomes;
 	
 	private boolean newRow;
 	
@@ -72,11 +73,11 @@ public class WebProgram {
 		this.active = active;
 	}
 	
-	public List<StudentOutcome> getOutcomes() {
+	public List<StudentOutcomeData> getOutcomes() {
 		return outcomes;
 	}
 	
-	public void setOutcomes(List<StudentOutcome> outcomes) {
+	public void setOutcomes(List<StudentOutcomeData> outcomes) {
 		this.outcomes = outcomes;
 	}
 

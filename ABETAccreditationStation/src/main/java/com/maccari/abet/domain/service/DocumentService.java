@@ -11,7 +11,9 @@ import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.StudentOutcome;
+import com.maccari.abet.domain.entity.StudentOutcomeData;
 import com.maccari.abet.domain.entity.relation.DocumentProgram;
+import com.maccari.abet.domain.entity.relation.DocumentStudentOutcome;
 import com.maccari.abet.domain.entity.web.DocumentSearch;
 import com.maccari.abet.domain.entity.web.WebDocument;
 import com.maccari.abet.repository.DocumentDao;
@@ -95,17 +97,24 @@ public class DocumentService implements Service<Document> {
 	public Document webDoctoDoc(WebDocument webDoc) {
 		Document document = new Document();
 		ArrayList<DocumentProgram> docProgs = new ArrayList<DocumentProgram>();
+		ArrayList<DocumentStudentOutcome> docOutcomes = new ArrayList<DocumentStudentOutcome>();
 		for(Program program : webDoc.getFullPrograms()) {
 			DocumentProgram docProg = new DocumentProgram();
 			docProg.setProgramId(program.getId());
 			docProg.setName(program.getName());
 		}
 		
+		for(StudentOutcome outcome : webDoc.getFullOutcomes()) {
+			DocumentStudentOutcome docOutcome = new DocumentStudentOutcome();
+			docOutcome.setOutcomeId(outcome.getId());
+			docOutcome.setName(outcome.getName());
+		}
+		
 		document.setId(webDoc.getId());
 		document.setTitle(webDoc.getTitle());
 		document.setAuthor(webDoc.getAuthor());
 		document.setPrograms(docProgs);
-		document.setOutcomes(webDoc.getFullOutcomes());
+		document.setOutcomes(docOutcomes);
 		document.setTags(webDoc.getTags());
 		document.setSubmitDate(webDoc.getSubmitDate());
 		document.setDescription(webDoc.getDescription());

@@ -13,6 +13,7 @@ import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.StudentOutcome;
+import com.maccari.abet.domain.entity.StudentOutcomeData;
 import com.maccari.abet.domain.entity.Task;
 
 /*
@@ -62,8 +63,8 @@ public class WebTask {
 		this.coordinator = task.getCoordinator();
 		this.title = task.getTitle();
 		this.assignees = task.getAssignees();
-		this.fullPrograms = task.getPrograms();
-		this.fullOutcomes = task.getOutcomes();
+		//this.fullPrograms = task.getPrograms();
+		//this.fullOutcomes = task.getOutcomes();
 		this.description = task.getDescription();
 		this.dueDate = task.getDueDate();
 		this.uploadedFile = task.getFile();

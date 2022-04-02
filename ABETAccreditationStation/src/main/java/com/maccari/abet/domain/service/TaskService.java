@@ -10,6 +10,7 @@ import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.StudentOutcome;
+import com.maccari.abet.domain.entity.StudentOutcomeData;
 import com.maccari.abet.domain.entity.Task;
 import com.maccari.abet.domain.entity.web.WebTask;
 import com.maccari.abet.repository.TaskDao;
@@ -101,8 +102,8 @@ public class TaskService implements Service<Task> {
 		task.setAssignees(webTask.getAssignees());
 		task.setDescription(webTask.getDescription());
 		task.setCoordinator(webTask.getCoordinator());
-		task.setPrograms(webTask.getFullPrograms());
-		task.setOutcomes(webTask.getFullOutcomes());
+		//task.setPrograms(webTask.getFullPrograms());
+		//task.setOutcomes(webTask.getFullOutcomes());
 		task.setDueDate(webTask.getDueDate());
 		task.setFile(webTask.getUploadedFile());
 

@@ -4,6 +4,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import com.maccari.abet.domain.entity.StudentOutcome;
+import com.maccari.abet.domain.entity.StudentOutcomeData;
 
 /*
  * DocumentSearch.java 
@@ -14,8 +15,10 @@ import com.maccari.abet.domain.entity.StudentOutcome;
  * 
  */
 
-public class WebStudentOutcome {
+public class WebStudentOutcome implements StudentOutcome {
 	private int id;
+	
+	private int progId;
 	
 	@NotEmpty(message = "Required")
 	@Size(min=1, max=100, message = "Name must be between 1 and 100 characters.")
@@ -35,9 +38,10 @@ public class WebStudentOutcome {
 		this.newRow = newRow;
 	}
 	
-	public WebStudentOutcome(StudentOutcome studentOutcome) {
+	public WebStudentOutcome(StudentOutcomeData studentOutcome) {
 		this.id = studentOutcome.getId();
 		this.name = studentOutcome.getName();
+		this.progId = studentOutcome.getProgId();
 		this.active = studentOutcome.isActive();
 		this.newRow = false;
 	}
@@ -72,5 +76,13 @@ public class WebStudentOutcome {
 	
 	public void setNewRow(boolean newRow) {
 		this.newRow = newRow;
+	}
+
+	public int getProgId() {
+		return progId;
+	}
+
+	public void setProgId(int progId) {
+		this.progId = progId;
 	}
 }

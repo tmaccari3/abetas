@@ -11,7 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 import com.maccari.abet.domain.entity.Program;
-import com.maccari.abet.domain.entity.StudentOutcome;
+import com.maccari.abet.domain.entity.StudentOutcomeData;
 
 @Entity
 @Table(name = "user_program")
@@ -30,7 +30,7 @@ public class UserProgram implements Program {
 	
 	@ElementCollection
     @CollectionTable(name = "student_outcome", joinColumns = @JoinColumn(name = "prog_id"))
-	private List<StudentOutcome> outcomes;
+	private List<StudentOutcomeData> outcomes;
 
 	public int getId() {
 		return id;
@@ -48,11 +48,11 @@ public class UserProgram implements Program {
 		this.name = name;
 	}
 
-	public List<StudentOutcome> getOutcomes() {
+	public List<StudentOutcomeData> getOutcomes() {
 		return outcomes;
 	}
 
-	public void setOutcomes(List<StudentOutcome> outcomes) {
+	public void setOutcomes(List<StudentOutcomeData> outcomes) {
 		this.outcomes = outcomes;
 	}
 

@@ -23,7 +23,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.maccari.abet.domain.entity.ProgramData;
-import com.maccari.abet.domain.entity.StudentOutcome;
+import com.maccari.abet.domain.entity.StudentOutcomeData;
 import com.maccari.abet.domain.entity.relation.QUserProgram;
 import com.maccari.abet.domain.entity.relation.UserProgram;
 import com.maccari.abet.repository.mapper.IdMapper;
@@ -146,9 +146,9 @@ public class ProgramDaoImpl implements ProgramDao {
 
 	// Gets all Outcomes that are 'active' in the system for a given Program
 	@Override
-	public List<StudentOutcome> getActiveOutcomesForProgram(int id) {
-		TypedQuery<StudentOutcome> query = em.createQuery("SELECT s FROM StudentOutcome s "
-				+ "WHERE prog_id=:id AND active = true", StudentOutcome.class);
+	public List<StudentOutcomeData> getActiveOutcomesForProgram(int id) {
+		TypedQuery<StudentOutcomeData> query = em.createQuery("SELECT s FROM StudentOutcomeData s "
+				+ "WHERE prog_id=:id AND active = true", StudentOutcomeData.class);
 		query.setParameter("id", id);
 		
 		return query.getResultList();
@@ -177,9 +177,9 @@ public class ProgramDaoImpl implements ProgramDao {
 	}
 	
 	// This outcome mapper is unique for this class and gets more data
-	class StudentOutcomeMapper implements RowMapper<StudentOutcome> {
-		public StudentOutcome mapRow(ResultSet rs, int rowNum) throws SQLException {
-			StudentOutcome outcome = new StudentOutcome();
+	class StudentOutcomeMapper implements RowMapper<StudentOutcomeData> {
+		public StudentOutcomeData mapRow(ResultSet rs, int rowNum) throws SQLException {
+			StudentOutcomeData outcome = new StudentOutcomeData();
 			outcome.setId(rs.getInt("id"));
 			//outcome.setProgramId(rs.getInt("prog_id"));
 			outcome.setName(rs.getString("name"));

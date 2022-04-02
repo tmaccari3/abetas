@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.maccari.abet.domain.entity.ProgramData;
-import com.maccari.abet.domain.entity.StudentOutcome;
+import com.maccari.abet.domain.entity.StudentOutcomeData;
+import com.maccari.abet.domain.entity.web.WebStudentOutcome;
 import com.maccari.abet.domain.service.ProgramService;
 
 @Controller
@@ -26,35 +27,41 @@ public class OutcomeController {
 	
 	@RequestMapping(value = "/index")
 	public String manage(@RequestParam(value = "id", required = true) int id,
-			StudentOutcome studentOutcome, Model model, HttpSession session) {
-		model.addAttribute("program", programService.getById(id));
+			WebStudentOutcome webStudentOutcome, Model model, HttpSession session) {
+		ProgramData program = programService.getById(id);
+		model.addAttribute("outcomes", programService.getAllWebOutcomes(program));
+		model.addAttribute("progName", program.getName());
 		session.setAttribute("PROGRAM", id);
 		
 		return "program/outcome";
 	}
 
 	@RequestMapping(value = "/create", params = "addRow")
-	public String addOutcome(StudentOutcome studentOutcome, Model model,
+	public String addOutcome(WebStudentOutcome webStudentOutcome, Model model,
 			HttpSession session) {
-		ProgramData program = programService.getById((int) session.getAttribute("PROGRAM"));
-		List<StudentOutcome> outcomes =  program.getOutcomes();
-		outcomes.add(new StudentOutcome("", true));
-		model.addAttribute("program", program);
+		int progId = (int) session.getAttribute("PROGRAM");
+		ProgramData program = programService.getById(progId);
+		List<WebStudentOutcome> outcomes = programService.getAllWebOutcomes(program);
+		outcomes.add(new WebStudentOutcome("", true));
+		model.addAttribute("outcomes", outcomes);
+		model.addAttribute("progName", program.getName());
 
 		return "program/outcome";
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "submit")
-	public String submitStudentOutcome(@Valid StudentOutcome studentOutcome, 
+	public String submitStudentOutcome(@Valid WebStudentOutcome webStudentOutcome, 
 			BindingResult bindingResult, HttpSession session, Model model) {
 		int id = (int) session.getAttribute("PROGRAM");
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("program", programService.getById(id));
+			ProgramData program = programService.getById(id);
+			model.addAttribute("outcomes", programService.getAllWebOutcomes(program));
+			model.addAttribute("progName", program.getName());
 			
 			return "/program/outcome";
 		}
-		studentOutcome.setProgram(programService.getById(id));
-		programService.createOutcome(studentOutcome);
+		webStudentOutcome.setProgId(id);
+		programService.createOutcome(programService.convertWebOutcome(webStudentOutcome));
 
 		return "redirect:/outcome/index?id=" + id;
 	}
@@ -78,7 +85,7 @@ public class OutcomeController {
 	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "deactivate")
 	public String deactivateStudentOutcome(@RequestParam(value = "deactivate", required = true) 
 		int id, Model model, HttpSession session) {
-		StudentOutcome studentOutcome = programService.getOutcomeById(id);
+		StudentOutcomeData studentOutcome = programService.getOutcomeById(id);
 		studentOutcome.setActive(false);
 		programService.updateOutcome(studentOutcome);
 		int programId = (int) session.getAttribute("PROGRAM");
@@ -89,7 +96,7 @@ public class OutcomeController {
 	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "reactivate")
 	public String reactivateStudentOutcome(@RequestParam(value = "reactivate", required = true) 
 		int id, HttpSession session) {
-		StudentOutcome studentOutcome = programService.getOutcomeById(id);
+		StudentOutcomeData studentOutcome = programService.getOutcomeById(id);
 		studentOutcome.setActive(true);
 		programService.updateOutcome(studentOutcome);
 		int programId = (int) session.getAttribute("PROGRAM");

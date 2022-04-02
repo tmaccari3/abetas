@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.ProgramData;
+import com.maccari.abet.domain.entity.StudentOutcomeData;
 import com.maccari.abet.domain.entity.Task;
 import com.maccari.abet.domain.entity.web.WebEmail;
 import com.maccari.abet.domain.entity.web.WebTask;

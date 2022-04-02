@@ -2,13 +2,17 @@ package com.maccari.abet.domain.entity;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 /*
  * Program.java 
@@ -33,8 +37,9 @@ public class ProgramData implements Program {
 	
 	private boolean active;
 	
-	@OneToMany(mappedBy = "program")
-	private List<StudentOutcome> outcomes;
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "prog_id")
+	private List<StudentOutcomeData> outcomes;
 	
 	public ProgramData() {
 		
@@ -63,10 +68,10 @@ public class ProgramData implements Program {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-	public List<StudentOutcome> getOutcomes() {
+	public List<StudentOutcomeData> getOutcomes() {
 		return outcomes;
 	}
-	public void setOutcomes(List<StudentOutcome> outcomes) {
+	public void setOutcomes(List<StudentOutcomeData> outcomes) {
 		this.outcomes = outcomes;
 	}
 	

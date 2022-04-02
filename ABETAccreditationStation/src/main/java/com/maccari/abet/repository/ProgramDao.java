@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import com.maccari.abet.domain.entity.ProgramData;
-import com.maccari.abet.domain.entity.StudentOutcome;
+import com.maccari.abet.domain.entity.StudentOutcomeData;
 import com.maccari.abet.domain.entity.relation.UserProgram;
 
 /*
@@ -28,5 +28,5 @@ public interface ProgramDao extends CrudRepository<ProgramData, Long>{
 	
 	List<ProgramData> getActivePrograms(String userEmail);
 	
-	List<StudentOutcome> getActiveOutcomesForProgram(int id);
+	List<StudentOutcomeData> getActiveOutcomesForProgram(int id);
 }

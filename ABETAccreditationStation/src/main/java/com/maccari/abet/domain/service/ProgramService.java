@@ -10,9 +10,11 @@ import org.springframework.stereotype.Component;
 import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.StudentOutcome;
+import com.maccari.abet.domain.entity.StudentOutcomeData;
 import com.maccari.abet.domain.entity.relation.DocumentProgram;
 import com.maccari.abet.domain.entity.web.WebDocument;
 import com.maccari.abet.domain.entity.web.WebProgram;
+import com.maccari.abet.domain.entity.web.WebStudentOutcome;
 import com.maccari.abet.domain.entity.web.WebTask;
 import com.maccari.abet.domain.entity.web.WebUser;
 import com.maccari.abet.repository.ProgramDao;
@@ -58,7 +60,7 @@ public class ProgramService implements Service<ProgramData> {
 		return programDao.findById((long) id).get();
 	}
 	
-	public StudentOutcome getOutcomeById(int id) {
+	public StudentOutcomeData getOutcomeById(int id) {
 		return studentOutcomeDao.findById((long) id).get();
 	}
 
@@ -69,7 +71,7 @@ public class ProgramService implements Service<ProgramData> {
 		programDao.save(item);
 	}
 	
-	public void createOutcome(StudentOutcome item) {
+	public void createOutcome(StudentOutcomeData item) {
 		//programDao.createOutcome(item);
 		item.setActive(true);
 		studentOutcomeDao.save(item);
@@ -81,7 +83,7 @@ public class ProgramService implements Service<ProgramData> {
 		programDao.delete(item);
 	}
 	
-	public void removeOutcome(StudentOutcome item) {
+	public void removeOutcome(StudentOutcomeData item) {
 		//programDao.removeOutcome(item);
 		studentOutcomeDao.delete(item);
 	}
@@ -91,7 +93,7 @@ public class ProgramService implements Service<ProgramData> {
 		return programDao.updateProgram(item);
 	}
 	
-	public StudentOutcome updateOutcome(StudentOutcome item) {
+	public StudentOutcomeData updateOutcome(StudentOutcomeData item) {
 		return studentOutcomeDao.updateOutcome(item);
 	}
 	
@@ -99,7 +101,7 @@ public class ProgramService implements Service<ProgramData> {
 		return programDao.getAllPrograms();
 	}
 	
-	// Gets all program, converts them to WebPrograms, and sorts them by id
+	// Gets all programs, converts them to WebPrograms, and sorts them by id
 	public List<WebProgram> getAllWebPrograms() {
 		List<WebProgram> webPrograms = new ArrayList<WebProgram>();
 		List<ProgramData> programs = programDao.getAllPrograms();
@@ -113,6 +115,19 @@ public class ProgramService implements Service<ProgramData> {
 		return webPrograms;
 	}
 	
+	// Gets all outcomes for a program, converts them to WebOutcomes
+	public List<WebStudentOutcome> getAllWebOutcomes(ProgramData program) {
+		List<WebStudentOutcome> webStudentOutcomes = new ArrayList<WebStudentOutcome>();
+		
+		for(StudentOutcomeData outcome : program.getOutcomes()) {
+			webStudentOutcomes.add(new WebStudentOutcome(outcome));
+		}
+		
+		//Collections.sort(webPrograms, new WebProgramOrderById());
+		
+		return webStudentOutcomes;
+	}
+	
 	// Converts the given WebProgram to a Program
 	public ProgramData convertWebProgram(WebProgram webProgram) {
 		ProgramData program = new ProgramData();
@@ -124,7 +139,16 @@ public class ProgramService implements Service<ProgramData> {
 		return program;
 	}
 	
-	// Converts other program implementations to a Program
+	// Converts given WebStudentOutcomes to StudentOutcomes
+	public StudentOutcomeData convertWebOutcome(WebStudentOutcome webOutcome) {
+		StudentOutcomeData outcome = new StudentOutcomeData();
+		outcome.setId(webOutcome.getId());
+		outcome.setProgId(webOutcome.getProgId());
+		outcome.setName(webOutcome.getName());
+		outcome.setActive(webOutcome.isActive());
+		
+		return outcome;
+	}
 	
 	// Fills the program and student outcome lists for a given task
 	public void fillPrograms(WebTask task) {
@@ -190,7 +214,7 @@ public class ProgramService implements Service<ProgramData> {
 			if(program == null) {
 				return false;
 			}
-			if(program.getId() == outcome.getProgram().getId()) {
+			if(program.getId() == outcome.getProgId()) {
 				return true;
 			}
 		}

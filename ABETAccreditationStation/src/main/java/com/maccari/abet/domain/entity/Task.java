@@ -27,9 +27,9 @@ public class Task {
 
 	private List<String> assignees;
 
-	private List<Program> programs;
+	private List<ProgramData> programs;
 
-	private List<StudentOutcome> outcomes;
+	private List<StudentOutcomeData> outcomes;
 
 	@NotEmpty(message = "*required")
 	private String description;
@@ -48,8 +48,8 @@ public class Task {
 	
 	public Task() {
 		assignees = new ArrayList<String>();
-		programs = new ArrayList<Program>();
-		outcomes = new ArrayList<StudentOutcome>();
+		programs = new ArrayList<ProgramData>();
+		outcomes = new ArrayList<StudentOutcomeData>();
 	}
 	
 	public Task(List<String> assignees) {
@@ -88,19 +88,19 @@ public class Task {
 		this.assignees = assignees;
 	}
 
-	public List<Program> getPrograms() {
+	public List<ProgramData> getPrograms() {
 		return programs;
 	}
 
-	public void setPrograms(List<Program> programs) {
+	public void setPrograms(List<ProgramData> programs) {
 		this.programs = programs;
 	}
 
-	public List<StudentOutcome> getOutcomes() {
+	public List<StudentOutcomeData> getOutcomes() {
 		return outcomes;
 	}
 
-	public void setOutcomes(List<StudentOutcome> outcomes) {
+	public void setOutcomes(List<StudentOutcomeData> outcomes) {
 		this.outcomes = outcomes;
 	}
 

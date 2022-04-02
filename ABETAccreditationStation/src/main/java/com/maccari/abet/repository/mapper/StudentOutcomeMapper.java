@@ -13,11 +13,11 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.maccari.abet.domain.entity.StudentOutcome;
+import com.maccari.abet.domain.entity.StudentOutcomeData;
 
-public 	class StudentOutcomeMapper implements RowMapper<StudentOutcome> {
-	public StudentOutcome mapRow(ResultSet rs, int rowNum) throws SQLException {
-		StudentOutcome outcome = new StudentOutcome();
+public 	class StudentOutcomeMapper implements RowMapper<StudentOutcomeData> {
+	public StudentOutcomeData mapRow(ResultSet rs, int rowNum) throws SQLException {
+		StudentOutcomeData outcome = new StudentOutcomeData();
 		//outcome.setProgramId(rs.getInt("outcome_id"));
 		outcome.setName(rs.getString("name"));
 		

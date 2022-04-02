@@ -21,6 +21,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 
 import com.maccari.abet.domain.entity.relation.DocumentProgram;
+import com.maccari.abet.domain.entity.relation.DocumentStudentOutcome;
 
 /*
  * Document.java 
@@ -49,8 +50,9 @@ public class Document {
 	@JoinColumn(name = "doc_id")
 	private List<DocumentProgram> programs;
 
-	@Transient
-	private List<StudentOutcome> outcomes;
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "doc_id")
+	private List<DocumentStudentOutcome> outcomes;
 	
 	@Transient
 	private List<String> tags;
@@ -105,11 +107,11 @@ public class Document {
 		this.programs = programs;
 	}
 
-	public List<StudentOutcome> getOutcomes() {
+	public List<DocumentStudentOutcome> getOutcomes() {
 		return outcomes;
 	}
 
-	public void setOutcomes(List<StudentOutcome> outcomes) {
+	public void setOutcomes(List<DocumentStudentOutcome> outcomes) {
 		this.outcomes = outcomes;
 	}
 
