@@ -1,9 +1,5 @@
 @charset "ISO-8859-1";
 
-body {
-	overflow-y: hidden;
-}
-
 .review-container {
 	display: inline-block;
 	min-width: 901px;

@@ -35,7 +35,9 @@ import com.maccari.abet.domain.entity.StudentOutcomeData;
 import com.maccari.abet.domain.entity.Tag;
 import com.maccari.abet.domain.entity.relation.DocumentProgram;
 import com.maccari.abet.domain.entity.relation.DocumentStudentOutcome;
+import com.maccari.abet.domain.entity.relation.DocumentTag;
 import com.maccari.abet.domain.entity.relation.QDocumentProgram;
+import com.maccari.abet.domain.entity.relation.QDocumentTag;
 import com.maccari.abet.domain.entity.relation.UserProgram;
 import com.maccari.abet.domain.entity.web.DocumentSearch;
 import com.maccari.abet.repository.mapper.IdMapper;
@@ -98,11 +100,11 @@ public class DocumentDaoImpl implements DocumentDao {
 			em.persist(outcome);
 		}
 		
-		for(String tag : entity.getTags()) {
+		for(DocumentTag tag : entity.getTags()) {
 			em.createNativeQuery("INSERT INTO document_tag (doc_id, tag) "
 					+ "VALUES (?, ?)")
 				.setParameter(1, id)
-				.setParameter(2, tag)
+				.setParameter(2, tag.getName())
 				.executeUpdate();
 		}
 		
@@ -207,11 +209,13 @@ public class DocumentDaoImpl implements DocumentDao {
 	public List<Document> getBySearch(DocumentSearch search) {
 		QDocument document = QDocument.document;
 		QDocumentProgram documentProgram = QDocumentProgram.documentProgram;
+		QDocumentTag documentTag = QDocumentTag.documentTag;
 		List<Document> documents = new ArrayList<Document>();
 		JPAQuery<Document> query = queryFactory.selectFrom(document)
 			.innerJoin(document.programs, documentProgram)
-			.on(document.id.eq(documentProgram.docId));
-			//.innerJoin(document);
+			.on(document.id.eq(documentProgram.docId))
+			.innerJoin(document.tags, documentTag)
+			.on(document.id.eq(documentTag.docId));
 			//.where(document.programs.contains(documentProgram));
 		
 		
@@ -230,12 +234,13 @@ public class DocumentDaoImpl implements DocumentDao {
 			predicate.or(documentProgram.programId.eq(progId));
 		}
 		
-		/*for() {
-			
-		}*/
+		for(String tag : search.getTags()) {
+			predicate.or(documentTag.name.eq(tag));
+		}
 		
 		documents = query.where(predicate)
 				.limit(search.getSearchCount())
+				.distinct()
 				.fetch();
 		
 		return documents;

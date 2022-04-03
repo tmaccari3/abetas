@@ -118,7 +118,7 @@ public class DocumentService implements Service<Document> {
 		document.setAuthor(webDoc.getAuthor());
 		document.setPrograms(docProgs);
 		document.setOutcomes(docOutcomes);
-		document.setTags(webDoc.getTags());
+		document.setTags(webDoc.getFullTags());
 		document.setSubmitDate(webDoc.getSubmitDate());
 		document.setDescription(webDoc.getDescription());
 		document.setFile(webDoc.getUploadedFile());

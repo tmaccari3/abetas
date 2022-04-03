@@ -23,6 +23,7 @@ import javax.validation.constraints.NotEmpty;
 
 import com.maccari.abet.domain.entity.relation.DocumentProgram;
 import com.maccari.abet.domain.entity.relation.DocumentStudentOutcome;
+import com.maccari.abet.domain.entity.relation.DocumentTag;
 import com.querydsl.core.annotations.QueryTransient;
 
 /*
@@ -56,10 +57,9 @@ public class Document {
 	@JoinColumn(name = "doc_id")
 	private List<DocumentStudentOutcome> outcomes;
 	
-	@ElementCollection
-    @CollectionTable(name = "document_tag", joinColumns = @JoinColumn(name = "doc_id"))
-    @Column(name = "tag")
-	private List<String> tags;
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "doc_id")
+	private List<DocumentTag> tags;
 	
 	@NotEmpty(message = "*required")
 	private String description;
@@ -119,11 +119,11 @@ public class Document {
 		this.outcomes = outcomes;
 	}
 
-	public List<String> getTags() {
+	public List<DocumentTag> getTags() {
 		return tags;
 	}
 
-	public void setTags(List<String> tags) {
+	public void setTags(List<DocumentTag> tags) {
 		this.tags = tags;
 	}
 

@@ -40,6 +40,7 @@ public class DocumentSearch {
 	public DocumentSearch() {
 		this.programs = new ArrayList<Integer>();
 		this.outcomes = new ArrayList<Integer>();
+		this.tags = new ArrayList<String>();
 	}
 
 	public Date getToDate() {

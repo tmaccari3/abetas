@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.maccari.abet.domain.entity.StudentOutcome;
 
@@ -14,6 +15,7 @@ import com.maccari.abet.domain.entity.StudentOutcome;
 @Table(name = "document_outcome")
 @IdClass(DocumentStudentOutcome.class)
 public class DocumentStudentOutcome implements StudentOutcome, Serializable {
+	@Transient
 	private static final long serialVersionUID = 743508590339605375L;
 
 	@Id

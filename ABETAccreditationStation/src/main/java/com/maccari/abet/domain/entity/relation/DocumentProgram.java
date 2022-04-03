@@ -8,12 +8,14 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.maccari.abet.domain.entity.Program;
 
 @Entity
 @Table(name = "document_program")
 public class DocumentProgram implements Program, Serializable {
+	@Transient
 	private static final long serialVersionUID = 4749221601789689592L;
 
 	@Id

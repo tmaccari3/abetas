@@ -12,6 +12,7 @@ import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.StudentOutcome;
 import com.maccari.abet.domain.entity.StudentOutcomeData;
 import com.maccari.abet.domain.entity.relation.DocumentProgram;
+import com.maccari.abet.domain.entity.relation.DocumentTag;
 
 /*
  * WebDocument.java 
@@ -161,5 +162,15 @@ public class WebDocument {
 
 	public void setTags(List<String> tags) {
 		this.tags = tags;
+	}
+	
+	public List<DocumentTag> getFullTags() {
+		ArrayList<DocumentTag> fullTags = new ArrayList<DocumentTag>();
+		
+		for(String tag : tags) {
+			fullTags.add(new DocumentTag(tag));
+		}
+		
+		return fullTags;
 	}
 }
