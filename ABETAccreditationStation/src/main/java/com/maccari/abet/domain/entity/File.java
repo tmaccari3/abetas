@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 /*
@@ -19,6 +20,7 @@ import javax.persistence.Transient;
  */
 
 @Entity
+@Table(name = "file")
 public class File implements Serializable {
 	@Transient
 	private static final long serialVersionUID = 129348938L;

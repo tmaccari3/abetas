@@ -7,6 +7,10 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.maccari.abet.domain.entity.Program;
+import com.maccari.abet.domain.entity.ProgramData;
+import com.maccari.abet.domain.entity.relation.DocumentProgram;
+
 /*
  * DocumentSearch.java 
  * Author: Thomas Maccari
@@ -41,7 +45,7 @@ public class DocumentSearch {
 	public Date getToDate() {
 		return toDate;
 	}
-
+	
 	public void setToDate(Date toDate) {
 		this.toDate = toDate;
 	}
@@ -93,7 +97,7 @@ public class DocumentSearch {
 	public void setRecentCount(int recentCount) {
 		this.recentCount = recentCount;
 	}
-
+	
 	public String getFormattedDate(Date date) {
 		if(date == null) {
 			return "";

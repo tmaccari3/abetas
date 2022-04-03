@@ -56,6 +56,7 @@ public class WebDocument {
 		outcomes = new ArrayList<Integer>();
 		fullPrograms = new ArrayList<Program>();
 		fullOutcomes = new ArrayList<StudentOutcome>();
+		tags = new ArrayList<String>();
 	}
 
 	public int getId() {

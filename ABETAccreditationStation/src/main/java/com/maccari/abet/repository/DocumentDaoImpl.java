@@ -1,5 +1,6 @@
 package com.maccari.abet.repository;
 
+import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -10,6 +11,7 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 
@@ -25,15 +27,23 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.maccari.abet.domain.entity.Document;
 import com.maccari.abet.domain.entity.File;
+import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.QDocument;
+import com.maccari.abet.domain.entity.QTag;
 import com.maccari.abet.domain.entity.StudentOutcomeData;
+import com.maccari.abet.domain.entity.Tag;
+import com.maccari.abet.domain.entity.relation.DocumentProgram;
+import com.maccari.abet.domain.entity.relation.DocumentStudentOutcome;
+import com.maccari.abet.domain.entity.relation.QDocumentProgram;
 import com.maccari.abet.domain.entity.relation.UserProgram;
 import com.maccari.abet.domain.entity.web.DocumentSearch;
 import com.maccari.abet.repository.mapper.IdMapper;
 import com.maccari.abet.repository.mapper.ProgramMapper;
 import com.maccari.abet.repository.mapper.StringMapper;
 import com.maccari.abet.repository.mapper.StudentOutcomeMapper;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 /*
@@ -63,9 +73,47 @@ public class DocumentDaoImpl implements DocumentDao {
 	public <S extends Document> S save(S entity) {
 		Instant instant = Instant.now(); Timestamp ts = instant != null ?
 				Timestamp.from(instant) : null;
+		
 		entity.setSubmitDate(ts);
 		
-		em.persist(entity);
+		Integer tempId = (Integer) em.createNativeQuery("INSERT INTO document (author, title, description, " +
+				 "submit_date, task_id, task) VALUES (?, ?, ?, ?, ?, ?) RETURNING id")
+		.setParameter(1, entity.getAuthor())
+		.setParameter(2, entity.getTitle())
+		.setParameter(3, entity.getDescription())
+		.setParameter(4, ts)
+		.setParameter(5, entity.getTaskId())
+		.setParameter(6, entity.isTask())
+		.getSingleResult();
+		
+		int id = tempId.intValue();
+		
+		for(DocumentProgram program : entity.getPrograms()) {
+			program.setDocId(id);
+			em.persist(program);
+		}
+		
+		for(DocumentStudentOutcome outcome : entity.getOutcomes()) {
+			outcome.setDocId(id);
+			em.persist(outcome);
+		}
+		
+		for(String tag : entity.getTags()) {
+			em.createNativeQuery("INSERT INTO document_tag (doc_id, tag) "
+					+ "VALUES (?, ?)")
+				.setParameter(1, id)
+				.setParameter(2, tag)
+				.executeUpdate();
+		}
+		
+		em.persist(entity.getFile());
+		em.flush();
+		
+		em.createNativeQuery("INSERT INTO document_file (file_id, doc_id) "
+				+ "VALUES (?, ?)")
+			.setParameter(1, entity.getFile().getId())
+			.setParameter(2, id)
+			.executeUpdate();
 		
 		return entity;
 	}
@@ -157,44 +205,40 @@ public class DocumentDaoImpl implements DocumentDao {
 	// Given search criteria, build a query to get documents that satisfy them
 	@Override
 	public List<Document> getBySearch(DocumentSearch search) {
-		/*
-		 * QSearchableDocument document = QSearchableDocument.searchableDocument;
-		 * SearchableDocument doc = queryFactory.selectFrom(document)
-		 * .where(document.id.eq(20)) .fetchOne(); System.out.println(doc.getId());
-		 * Iterable<Document> docsIter = docSearchDao.findAll(filterBySearch);
-		 * List<Document> docs = new ArrayList<Document>(); docsIter.forEach(docs::add);
-		 * ArrayList<Document> docs = new ArrayList<>(); //SELECT id, task_id, title,
-		 * author, description, submit_date, task FROM document d INNER JOIN
-		 * document_program dp ON d.id = dp.doc_id INNER JOIN document_tag dt ON d.id =
-		 * dt.doc_id try { String SQL = "SELECT id, task_id, title, author, " +
-		 * "description, submit_date, task FROM document d " +
-		 * "INNER JOIN document_program dp " + "ON d.id = dp.doc_id " +
-		 * "INNER JOIN document_tag dt " + "ON d.id = dt.doc_id "; int size =
-		 * search.getPrograms().size(); boolean dates = search.getToDate() != null ||
-		 * search.getFromDate() != null; boolean programs = size > 0; if(dates ||
-		 * programs) { SQL += " WHERE"; }
-		 * 
-		 * if(size == 0) { } else if(size == 1) { SQL += " dp.program_id = " +
-		 * search.getPrograms().get(0); } else { int i; for(i = 0; i < size - 1; i++) {
-		 * SQL += " dp.program_id = " + search.getPrograms().get(i) + " or"; } SQL +=
-		 * " dp.program_id = " + search.getPrograms().get(i); } if(search.getToDate() !=
-		 * null && search.getFromDate() != null) { SQL += " submit_date >= '" +
-		 * search.getFormattedDate(search.getFromDate()) + "' and submit_date <= '" +
-		 * search.getFormattedDate(search.getToDate()) + "'"; } else
-		 * if(search.getFromDate() != null) { System.out.println(search.getFromDate());
-		 * if(size > 0) { SQL += " and"; } SQL += " submit_date >= '" +
-		 * search.getFormattedDate(search.getFromDate()) + "'"; } else
-		 * if(search.getToDate() != null) { if(size > 0) { SQL += " and"; } SQL +=
-		 * " submit_date <= '" + search.getFormattedDate(search.getToDate()) + "'"; }
-		 * SQL += " GROUP BY id LIMIT ?"; System.out.println(SQL); docs =
-		 * (ArrayList<Document>) jdbcTemplate.query(SQL, new MediumDocMapper(),
-		 * search.getSearchCount());
-		 * 
-		 * return docs; } catch (EmptyResultDataAccessException e) { return null; }
-		 */
-			ArrayList<Document> d = new ArrayList<Document>();
-			d.add(new Document());
-		return d;
+		QDocument document = QDocument.document;
+		QDocumentProgram documentProgram = QDocumentProgram.documentProgram;
+		List<Document> documents = new ArrayList<Document>();
+		JPAQuery<Document> query = queryFactory.selectFrom(document)
+			.innerJoin(document.programs, documentProgram)
+			.on(document.id.eq(documentProgram.docId));
+			//.innerJoin(document);
+			//.where(document.programs.contains(documentProgram));
+		
+		
+		if(search.getToDate() != null) {
+			Timestamp ts = new Timestamp(search.getToDate().getTime());
+			query.where(document.submitDate.loe(ts));
+		}
+		
+		if(search.getFromDate() != null) {
+			Timestamp ts = new Timestamp(search.getFromDate().getTime());
+			query.where(document.submitDate.goe(ts));
+		}
+		
+		BooleanBuilder predicate = new BooleanBuilder();
+		for(int progId : search.getPrograms()) {
+			predicate.or(documentProgram.programId.eq(progId));
+		}
+		
+		/*for() {
+			
+		}*/
+		
+		documents = query.where(predicate)
+				.limit(search.getSearchCount())
+				.fetch();
+		
+		return documents;
 	}
 	
 	@Override
@@ -233,6 +277,7 @@ public class DocumentDaoImpl implements DocumentDao {
 		QDocument document = QDocument.document;
 		List<Document> documents = queryFactory.selectFrom(document)
 				.orderBy(document.submitDate.desc())
+				.limit(amount)
 				.fetch();
 		
 		return documents;
@@ -260,6 +305,10 @@ public class DocumentDaoImpl implements DocumentDao {
 
 	@Override
 	public List<String> getAllTags() {
+		Query query = em.createQuery("SELECT name FROM Tag", String.class);
+		List<String> tags = (List<String>) query.getResultList();
+		
+		return tags;
 		/*
 		 * ArrayList<String> tags = new ArrayList<>(); try { String SQL =
 		 * "SELECT * FROM tag"; tags = (ArrayList<String>) jdbcTemplate.query(SQL, new
@@ -269,7 +318,6 @@ public class DocumentDaoImpl implements DocumentDao {
 		 * 
 		 * return null; }
 		 */
-		return null;
 	}
 
 	// A simple mapper that gets only the document info stored in the document table

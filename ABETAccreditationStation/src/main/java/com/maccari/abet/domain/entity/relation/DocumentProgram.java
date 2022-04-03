@@ -1,25 +1,23 @@
 package com.maccari.abet.domain.entity.relation;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.maccari.abet.domain.entity.Program;
 
 @Entity
 @Table(name = "document_program")
-@IdClass(DocumentProgram.class)
 public class DocumentProgram implements Program, Serializable {
 	private static final long serialVersionUID = 4749221601789689592L;
 
 	@Id
-    @Column(name = "doc_id")
+	@Column(name = "doc_id")
 	private int docId;
 	
 	@Id
@@ -28,6 +26,14 @@ public class DocumentProgram implements Program, Serializable {
 	
 	private String name;
 
+	public DocumentProgram() {
+		
+	}
+	
+	public DocumentProgram(int programId) {
+		this.programId = programId;
+	}
+	
 	public int getDocId() {
 		return docId;
 	}
@@ -55,5 +61,22 @@ public class DocumentProgram implements Program, Serializable {
 	@Override
 	public int getId() {
 		return this.programId;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(docId, programId);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DocumentProgram other = (DocumentProgram) obj;
+		return docId == other.docId && programId == other.programId;
 	}
 }

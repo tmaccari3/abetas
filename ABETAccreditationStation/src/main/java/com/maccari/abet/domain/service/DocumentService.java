@@ -102,14 +102,17 @@ public class DocumentService implements Service<Document> {
 			DocumentProgram docProg = new DocumentProgram();
 			docProg.setProgramId(program.getId());
 			docProg.setName(program.getName());
+			docProgs.add(docProg);
 		}
 		
 		for(StudentOutcome outcome : webDoc.getFullOutcomes()) {
 			DocumentStudentOutcome docOutcome = new DocumentStudentOutcome();
 			docOutcome.setOutcomeId(outcome.getId());
-			docOutcome.setName(outcome.getName());
+			docOutcome.setName(outcome.getName());;
+			docOutcome.setProgId(outcome.getProgId());
+			docOutcomes.add(docOutcome);
 		}
-		
+
 		document.setId(webDoc.getId());
 		document.setTitle(webDoc.getTitle());
 		document.setAuthor(webDoc.getAuthor());

@@ -2,6 +2,7 @@ package com.maccari.abet.domain.entity;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -22,6 +23,7 @@ import javax.validation.constraints.NotEmpty;
 
 import com.maccari.abet.domain.entity.relation.DocumentProgram;
 import com.maccari.abet.domain.entity.relation.DocumentStudentOutcome;
+import com.querydsl.core.annotations.QueryTransient;
 
 /*
  * Document.java 
@@ -54,7 +56,9 @@ public class Document {
 	@JoinColumn(name = "doc_id")
 	private List<DocumentStudentOutcome> outcomes;
 	
-	@Transient
+	@ElementCollection
+    @CollectionTable(name = "document_tag", joinColumns = @JoinColumn(name = "doc_id"))
+    @Column(name = "tag")
 	private List<String> tags;
 	
 	@NotEmpty(message = "*required")

@@ -176,7 +176,7 @@ public class ProgramService implements Service<ProgramData> {
 		}
 		for(Integer outcomeId : document.getOutcomes()) {
 			outcomes.add(studentOutcomeDao.findById((long) outcomeId).get());
-		}
+		} 
 		
 		document.setFullPrograms(programs);
 		document.setFullOutcomes(outcomes);
