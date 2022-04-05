@@ -23,8 +23,6 @@ import com.maccari.abet.domain.entity.web.DocumentSearch;
 public interface DocumentDao extends CrudRepository<Document, Long>{
 	List<Document> getAll();
 	
-	Document getById(final int id);
-	
 	List<Document> getBySearch(final DocumentSearch search);
 	
 	List<Document> getRecentDocuments(final int amount);

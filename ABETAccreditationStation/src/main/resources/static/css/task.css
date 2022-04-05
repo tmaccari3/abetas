@@ -93,6 +93,7 @@
 }
 
 .task-file-container {
+	margin: auto;
 	vertical-align: top;
 	width: 49%;
 }

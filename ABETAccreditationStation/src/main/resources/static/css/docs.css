@@ -62,6 +62,10 @@
 	width: 100%;
 }
 
+.doc-file-tag-containter {
+	margin: auto;
+}
+
 .doc-file-container {
 	display: inline-block;
 	vertical-align: top;
