@@ -1,4 +1,4 @@
-package com.maccari.abet.domain.entity.relation;
+package com.maccari.abet.domain.entity.relation.document;
 
 import java.io.Serializable;
 

@@ -21,9 +21,9 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 
-import com.maccari.abet.domain.entity.relation.DocumentProgram;
-import com.maccari.abet.domain.entity.relation.DocumentStudentOutcome;
-import com.maccari.abet.domain.entity.relation.DocumentTag;
+import com.maccari.abet.domain.entity.relation.document.DocumentProgram;
+import com.maccari.abet.domain.entity.relation.document.DocumentStudentOutcome;
+import com.maccari.abet.domain.entity.relation.document.DocumentTag;
 import com.querydsl.core.annotations.QueryTransient;
 
 /*

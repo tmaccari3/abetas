@@ -11,7 +11,7 @@ import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.StudentOutcome;
 import com.maccari.abet.domain.entity.StudentOutcomeData;
-import com.maccari.abet.domain.entity.relation.DocumentProgram;
+import com.maccari.abet.domain.entity.relation.document.DocumentProgram;
 import com.maccari.abet.domain.entity.web.WebDocument;
 import com.maccari.abet.domain.entity.web.WebProgram;
 import com.maccari.abet.domain.entity.web.WebStudentOutcome;

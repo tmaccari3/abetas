@@ -1,4 +1,4 @@
-package com.maccari.abet.domain.entity.relation.id;
+package com.maccari.abet.domain.entity.relation.document.id;
 
 public class DocumentStudentOutcomeId {
 	private int docId;

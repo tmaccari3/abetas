@@ -2,6 +2,7 @@ package com.maccari.abet.repository;
 
 import java.util.List;
 
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import com.maccari.abet.domain.entity.Task;
@@ -16,7 +17,7 @@ import com.maccari.abet.domain.entity.Task;
  */
 
 @Repository
-public interface TaskDao {
+public interface TaskDao extends CrudRepository<Task, Long> {
 	int createTask(final Task task);
 	
 	void removeTask(final Task task);
