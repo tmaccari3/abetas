@@ -7,6 +7,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 
 /*
@@ -17,7 +25,15 @@ import javax.validation.constraints.NotEmpty;
  * 
  */
 
+@Entity
+@Table(name = "task")
 public class Task {
+	@Id
+    @SequenceGenerator(name = "task_id_seq",
+                       sequenceName = "task_id_seq",
+                       allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+                    generator = "task_id_seq")
 	private int id;
 
 	private String coordinator;
@@ -25,19 +41,25 @@ public class Task {
 	@NotEmpty(message = "*required")
 	private String title;
 
+	@Transient
 	private List<String> assignees;
 
+	@Transient
 	private List<ProgramData> programs;
 
+	@Transient
 	private List<StudentOutcomeData> outcomes;
 
 	@NotEmpty(message = "*required")
 	private String description;
 	
+	@Column(name = "assign_date")
 	private Timestamp assignDate;
 	
+	@Column(name = "submit_date")
 	private Timestamp submitDate;
 	
+	@Column(name = "due_date")
 	private Date dueDate;
 	
 	private File file;

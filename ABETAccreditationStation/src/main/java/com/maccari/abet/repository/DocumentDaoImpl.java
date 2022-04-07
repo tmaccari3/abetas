@@ -199,8 +199,6 @@ public class DocumentDaoImpl implements DocumentDao {
 			.on(document.id.eq(documentProgram.docId))
 			.innerJoin(document.tags, documentTag)
 			.on(document.id.eq(documentTag.docId));
-			//.where(document.programs.contains(documentProgram));
-		
 		
 		if(search.getToDate() != null) {
 			Timestamp ts = new Timestamp(search.getToDate().getTime());

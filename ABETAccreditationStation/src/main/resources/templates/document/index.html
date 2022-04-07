@@ -84,9 +84,6 @@
 					<div class="inline top">
 						<h6>Search Documentation</h6>
 					</div>
-					<div class="search-button-container inline top">
-						<button class="abetas-button" name="id" type="submit">Search</button>
-					</div>
 					<br>
 					<div class="inline top">
 						<label>From Date:</label> <input type="date"
@@ -152,8 +149,8 @@
 									<div class="title">
 										<h6>Submitted for a Task:</h6>
 									</div>
-									<div th:if="${document.taskId == 0}">Yes</div>
-									<div th:if="${document.taskId ne 0}">No</div>
+									<div th:if="${document.taskId == 0}">No</div>
+									<div th:if="${document.taskId ne 0}">Yes</div>
 								</div>
 							</div>
 						</div>
@@ -176,19 +173,26 @@
 			</div>
 			<div class="search-filter-container">
 				<div>
-					<h6>Filter Search</h6>
-					<label class="top">Programs: </label> <select class="program-multi"
-						th:field="*{programs}" multiple="multiple">
-						<option th:each="aProg : ${progTypes}" th:field="*{programs}"
-							th:value="${aProg.id}" th:text="${aProg.name}">Part name</option>
-					</select> <label class="top">Tags: </label>
+					<div class="inline">
+						<h6>Filter Search</h6>
+					</div>
+					<div class="search-button-container inline top">
+						<button class="abetas-button" name="id" type="submit">Search</button>
+					</div>
+					<div>
+						<label class="top">Programs: </label> <select
+							class="program-multi" th:field="*{programs}" multiple="multiple">
+							<option th:each="aProg : ${progTypes}" th:field="*{programs}"
+								th:value="${aProg.id}" th:text="${aProg.name}">Part
+								name</option>
+						</select>
+					</div>
+					<label class="top">Tags: </label>
 					<ul style="padding-left: 10px">
-						<li th:each="tag: ${tags}">
-							<input type="checkbox"
-								th:field="*{tags}" th:value="${tag}"/> 
-							<label th:for="${#ids.prev('tags')}" th:text="${tag}">Default
-								Tag</label> 
-						</li>
+						<li th:each="tag: ${tags}"><input type="checkbox"
+							th:field="*{tags}" th:value="${tag}" /> <label
+							th:for="${#ids.prev('tags')}" th:text="${tag}">Default
+								Tag</label></li>
 					</ul>
 				</div>
 			</div>
