@@ -98,18 +98,16 @@ public class DocumentService implements Service<Document> {
 		Document document = new Document();
 		ArrayList<DocumentProgram> docProgs = new ArrayList<DocumentProgram>();
 		ArrayList<DocumentStudentOutcome> docOutcomes = new ArrayList<DocumentStudentOutcome>();
+		
 		for(Program program : webDoc.getFullPrograms()) {
-			DocumentProgram docProg = new DocumentProgram();
-			docProg.setProgramId(program.getId());
-			docProg.setName(program.getName());
+			DocumentProgram docProg = new DocumentProgram(program.getId(), 
+					program.getName());
 			docProgs.add(docProg);
 		}
 		
 		for(StudentOutcome outcome : webDoc.getFullOutcomes()) {
-			DocumentStudentOutcome docOutcome = new DocumentStudentOutcome();
-			docOutcome.setOutcomeId(outcome.getId());
-			docOutcome.setName(outcome.getName());;
-			docOutcome.setProgId(outcome.getProgId());
+			DocumentStudentOutcome docOutcome = new DocumentStudentOutcome(outcome.getId(),
+					outcome.getProgId(), outcome.getName());
 			docOutcomes.add(docOutcome);
 		}
 

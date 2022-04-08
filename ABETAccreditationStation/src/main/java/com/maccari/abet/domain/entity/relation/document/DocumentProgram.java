@@ -36,6 +36,11 @@ public class DocumentProgram implements Program, Serializable {
 		this.programId = programId;
 	}
 	
+	public DocumentProgram(int programId, String name) {
+		this.programId = programId;
+		this.name = name;
+	}
+
 	public int getDocId() {
 		return docId;
 	}

@@ -193,7 +193,7 @@ public class DocumentDaoImpl implements DocumentDao {
 		QDocument document = QDocument.document;
 		QDocumentProgram documentProgram = QDocumentProgram.documentProgram;
 		QDocumentTag documentTag = QDocumentTag.documentTag;
-		List<Document> documents = new ArrayList<Document>();
+		
 		JPAQuery<Document> query = queryFactory.selectFrom(document)
 			.innerJoin(document.programs, documentProgram)
 			.on(document.id.eq(documentProgram.docId))
@@ -219,12 +219,10 @@ public class DocumentDaoImpl implements DocumentDao {
 			predicate.or(documentTag.name.eq(tag));
 		}
 		
-		documents = query.where(predicate)
+		return query.where(predicate)
 				.limit(search.getSearchCount())
 				.distinct()
 				.fetch();
-		
-		return documents;
 	}
 	
 	@Override
@@ -237,8 +235,8 @@ public class DocumentDaoImpl implements DocumentDao {
 		file.setId(fileId);
 		
 		TypedQuery<Document> query = em.createQuery("SELECT d FROM Document d "
-				+ "WHERE d.id=:id", Document.class);
-			query.setParameter("id", id.intValue());
+				+ "WHERE d.id=:id", Document.class)
+				.setParameter("id", id.intValue());
 			
 		Document document = query.getSingleResult();
 		document.setFile(file);

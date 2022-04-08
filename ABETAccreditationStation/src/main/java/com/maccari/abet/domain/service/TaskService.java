@@ -12,6 +12,8 @@ import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.StudentOutcome;
 import com.maccari.abet.domain.entity.StudentOutcomeData;
 import com.maccari.abet.domain.entity.Task;
+import com.maccari.abet.domain.entity.relation.task.TaskProgram;
+import com.maccari.abet.domain.entity.relation.task.TaskStudentOutcome;
 import com.maccari.abet.domain.entity.web.WebTask;
 import com.maccari.abet.repository.TaskDao;
 import com.maccari.abet.repository.UserDao;
@@ -45,7 +47,8 @@ public class TaskService implements Service<Task> {
 
 	@Override
 	public Task getById(int id) {
-		return taskDao.getTaskById(id);
+		//return taskDao.getTaskById(id);
+		return taskDao.findById((long) id).get();
 	}
 
 	public Task getFullTaskById(int id) {
@@ -60,16 +63,19 @@ public class TaskService implements Service<Task> {
 
 	@Override
 	public void create(Task item) {
-		taskDao.createTask(item);
+		//taskDao.createTask(item);
+		taskDao.save(item);
 	}
 	
 	public int createAndGetId(Task item) {
-		return taskDao.createTask(item);
+		//return taskDao.createTask(item);
+		return taskDao.save(item).getId();
 	}
 
 	@Override
 	public void remove(Task item) {
-		taskDao.removeTask(item);
+		//taskDao.removeTask(item);
+		taskDao.delete(item);
 	}
 
 	@Override
@@ -96,14 +102,28 @@ public class TaskService implements Service<Task> {
 	// Converts a given WebTask to a Task
 	public Task webTaskToTask(WebTask webTask) {
 		Task task = new Task();
-
+		List<TaskProgram> taskProgs = new ArrayList<TaskProgram>();
+		List<TaskStudentOutcome> taskOutcomes = new ArrayList<TaskStudentOutcome>();
+		
+		for(Program program : webTask.getFullPrograms()) {
+			TaskProgram taskprog = new TaskProgram(program.getId(), 
+					program.getName());
+			taskProgs.add(taskprog);
+		}
+		
+		for(StudentOutcome outcome: webTask.getFullOutcomes()) {
+			TaskStudentOutcome taskOutcome = new TaskStudentOutcome(outcome.getId(),
+					outcome.getProgId(), outcome.getName());
+			taskOutcomes.add(taskOutcome);
+		}
+		
 		task.setId(webTask.getId());
 		task.setTitle(webTask.getTitle());
-		task.setAssignees(webTask.getAssignees());
+		task.setAssignees(webTask.getFullAssignees());
 		task.setDescription(webTask.getDescription());
 		task.setCoordinator(webTask.getCoordinator());
-		//task.setPrograms(webTask.getFullPrograms());
-		//task.setOutcomes(webTask.getFullOutcomes());
+		task.setPrograms(taskProgs);
+		task.setOutcomes(taskOutcomes);
 		task.setDueDate(webTask.getDueDate());
 		task.setFile(webTask.getUploadedFile());
 

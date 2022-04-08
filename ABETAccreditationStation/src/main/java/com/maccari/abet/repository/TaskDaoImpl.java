@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +25,20 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.ProgramData;
+import com.maccari.abet.domain.entity.QTask;
 import com.maccari.abet.domain.entity.StudentOutcomeData;
 import com.maccari.abet.domain.entity.Task;
+import com.maccari.abet.domain.entity.relation.task.QTaskAssignee;
+import com.maccari.abet.domain.entity.relation.task.TaskAssignee;
+import com.maccari.abet.domain.entity.relation.task.TaskProgram;
+import com.maccari.abet.domain.entity.relation.task.TaskStudentOutcome;
 import com.maccari.abet.repository.mapper.IdMapper;
 import com.maccari.abet.repository.mapper.ProgramMapper;
 import com.maccari.abet.repository.mapper.StringMapper;
 import com.maccari.abet.repository.mapper.StudentOutcomeMapper;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 /*
  * TaskDaoImpl.java 
@@ -46,7 +55,64 @@ import com.maccari.abet.repository.mapper.StudentOutcomeMapper;
 public class TaskDaoImpl implements TaskDao {
 	@PersistenceContext
 	private EntityManager em;
+	
+	private JPAQueryFactory queryFactory;
 
+	@Autowired
+	public void setDataSource(DataSource dataSource) {
+		this.queryFactory = new JPAQueryFactory(em);
+	}
+
+	@Override
+	public <S extends Task> S save(S entity) {
+		Instant instant = Instant.now(); Timestamp ts = instant != null ?
+				Timestamp.from(instant) : null;
+		
+		entity.setAssignDate(ts);
+		
+		Integer tempId = (Integer) em.createNativeQuery("INSERT INTO task (coordinator, "
+				+ "title, assign_date, description, due_date, submitted, "
+				+ "complete) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id")
+		.setParameter(1, entity.getCoordinator())
+		.setParameter(2, entity.getTitle())
+		.setParameter(3, ts)
+		.setParameter(4, entity.getDescription())
+		.setParameter(5, entity.getDueDate())
+		.setParameter(6, entity.isSubmitted())
+		.setParameter(7, entity.isComplete())
+		.getSingleResult();
+		
+		int id = tempId.intValue();
+		
+		for(TaskProgram program : entity.getPrograms()) {
+			program.setTaskId(id);
+			em.persist(program);
+		}
+		
+		for(TaskStudentOutcome outcome : entity.getOutcomes()) {
+			outcome.setTaskId(id);
+			em.persist(outcome);
+		}
+		
+		for(TaskAssignee assignee : entity.getAssignees()){
+			assignee.setTaskId(id);
+			em.persist(assignee);
+		}
+		
+		if(entity.getFile() != null) {
+			em.persist(entity.getFile());
+			em.flush();
+			
+			em.createNativeQuery("INSERT INTO task_file (file_id, task_id) "
+					+ "VALUES (?, ?)")
+				.setParameter(1, entity.getFile().getId())
+				.setParameter(2, id)
+				.executeUpdate();	
+		}
+		
+		return entity;
+	}
+	
 	// Inserts a task into the data-source
 	@Override
 	public int createTask(Task task) {
@@ -199,6 +265,11 @@ public class TaskDaoImpl implements TaskDao {
 	}
 
 	@Override
+	public void delete(Task entity) {
+		em.remove(entity);
+	}
+	
+	@Override
 	public void removeTask(Task task) {
 		/*
 		 * DefaultTransactionDefinition def = new DefaultTransactionDefinition();
@@ -213,6 +284,13 @@ public class TaskDaoImpl implements TaskDao {
 		 * transactionManager.rollback(status); throw e; }
 		 */
 	}
+	
+	@Override
+	public Iterable<Task> findAll() {
+		TypedQuery<Task> query = em.createQuery("SELECT t FROM Task t", Task.class);
+		
+		return query.getResultList();
+	}
 
 	@Override
 	public List<Task> getAllTasks() {
@@ -225,6 +303,31 @@ public class TaskDaoImpl implements TaskDao {
 		 * return tasks;
 		 */
 		return null;
+	}
+	
+	@Override
+	public Optional<Task> findById(Long id) {
+		int fileId = 0;
+		File file = null;
+		try {
+			fileId = (int) em.createNativeQuery("SELECT file_id FROM task_file"
+					+ " WHERE task_id=:id")
+					.setParameter("id", id.intValue())
+					.getSingleResult();
+			file = new File();
+			file.setId(fileId);
+		} catch (Exception e) {
+			System.out.println("Task has no file.");
+		}
+		
+		TypedQuery<Task> query = em.createQuery("SELECT t FROM Task t "
+				+ "WHERE t.id=:id", Task.class)
+				.setParameter("id", id.intValue());
+		
+		Task task = query.getSingleResult();
+		task.setFile(file);
+		
+		return Optional.ofNullable(task);
 	}
 
 	@Override
@@ -248,42 +351,24 @@ public class TaskDaoImpl implements TaskDao {
 
 	@Override
 	public List<Task> getAssignedTasks(String email) {
-		/*
-		 * try { List<Task> tasks = new ArrayList<Task>(); List<Integer> taskIds =
-		 * getAssignedTaskIds(email); System.out.println(taskIds); String SQL =
-		 * "SELECT * FROM task WHERE id = ?";
-		 * 
-		 * for (Integer id : taskIds) { tasks.add(jdbcTemplate.queryForObject(SQL, new
-		 * SimpleTaskMapper(), id)); }
-		 * 
-		 * return tasks; } catch (Exception e) {
-		 * System.out.println("Error getting assigned tasks.");
-		 * 
-		 * return null; }
-		 */
-		return null;
-	}
-
-	// Get the ids of all Tasks assigned to a given email (user)
-	private List<Integer> getAssignedTaskIds(String email) {
-		/*
-		 * try { String SQL = "SELECT id FROM assigned WHERE assignee = ?";
-		 * List<Integer> taskIds = jdbcTemplate.query(SQL, new IdMapper(), email);
-		 * 
-		 * return taskIds; } catch (EmptyResultDataAccessException e) { return null; }
-		 */
-		return null;
+		QTask task = QTask.task;
+		QTaskAssignee assignee = QTaskAssignee.taskAssignee;
+		JPAQuery<Task> query = queryFactory.selectFrom(task)
+				.innerJoin(task.assignees, assignee)
+				.on(task.id.eq(assignee.taskId))
+				.where(assignee.email.eq(email));
+		
+		return query.distinct()
+				.fetch();
 	}
 
 	@Override
 	public List<Task> getCreatedTasks(String email) {
-		/*
-		 * try { String SQL = "SELECT * FROM task WHERE coordinator = ?"; List<Task>
-		 * tasks = jdbcTemplate.query(SQL, new SimpleTaskMapper(), email);
-		 * 
-		 * return tasks; } catch (EmptyResultDataAccessException e) { return null; }
-		 */
-		return null;
+		TypedQuery<Task> query = em.createQuery("SELECT t FROM Task t "
+				+ "WHERE t.coordinator=:email", Task.class)
+				.setParameter("email", email);
+		
+		return query.getResultList();
 	}
 
 	// A simple mapper that gets only the task info stored in the task table
@@ -351,19 +436,7 @@ public class TaskDaoImpl implements TaskDao {
 	}
 
 	@Override
-	public <S extends Task> S save(S entity) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public <S extends Task> Iterable<S> saveAll(Iterable<S> entities) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Optional<Task> findById(Long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -372,12 +445,6 @@ public class TaskDaoImpl implements TaskDao {
 	public boolean existsById(Long id) {
 		// TODO Auto-generated method stub
 		return false;
-	}
-
-	@Override
-	public Iterable<Task> findAll() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -394,12 +461,6 @@ public class TaskDaoImpl implements TaskDao {
 
 	@Override
 	public void deleteById(Long id) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void delete(Task entity) {
 		// TODO Auto-generated method stub
 		
 	}

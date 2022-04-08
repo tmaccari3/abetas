@@ -194,9 +194,9 @@ public class ProgramService implements Service<ProgramData> {
 	}
 	
 	// Checks is the outcomes and programs are valid selections for a user
-	public boolean checkPrograms(List<Program> programs, List<StudentOutcome> outcomes,
+	public boolean checkPrograms(List<? extends Program> programs, List<? extends StudentOutcome> list,
 			String userEmail) {
-		for(StudentOutcome outcome : outcomes) {
+		for(StudentOutcome outcome : list) {
 			if(!isInProgram(programs, outcome)) {
 				return true;
 			}
@@ -206,7 +206,7 @@ public class ProgramService implements Service<ProgramData> {
 	}
 	
 	// Determines if a selected outcome belongs to one of the selected programs
-	private boolean isInProgram(List<Program> programs, StudentOutcome outcome) {
+	private boolean isInProgram(List<? extends Program> programs, StudentOutcome outcome) {
 		if(outcome == null) {
 			return false;
 		}

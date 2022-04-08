@@ -30,6 +30,16 @@ public class DocumentStudentOutcome implements StudentOutcome, Serializable {
 	private int progId;
 	
 	private String name;
+	
+	public DocumentStudentOutcome() {
+		
+	}
+	
+	public DocumentStudentOutcome(int outcomeId, int progId, String name) {
+		this.outcomeId = outcomeId;
+		this.progId = progId;
+		this.name = name;
+	}
 
 	public int getDocId() {
 		return docId;

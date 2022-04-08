@@ -26,6 +26,7 @@ import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.StudentOutcomeData;
 import com.maccari.abet.domain.entity.Task;
+import com.maccari.abet.domain.entity.relation.task.TaskAssignee;
 import com.maccari.abet.domain.entity.web.WebEmail;
 import com.maccari.abet.domain.entity.web.WebTask;
 import com.maccari.abet.domain.service.FileService;
@@ -156,7 +157,7 @@ public class TaskController {
 		
 		session.removeAttribute("UPLOADED_FILE");
 		
-		scheduleReminders(webTask);
+		//scheduleReminders(webTask);
 
 		return "redirect:/";
 	}
@@ -233,9 +234,9 @@ public class TaskController {
 		Task task = taskService.getById(id);
 		taskService.remove(task);
 		
-		for(String assignee : task.getAssignees()) {
+		for(TaskAssignee assignee : task.getAssignees()) {
 			System.out.println("About to delete: " + assignee + task.getId());
-			reminderService.deleteJob(assignee + task.getId());
+			reminderService.deleteJob(assignee.getEmail() + task.getId());
 		}
 		
 		return "redirect:/task/viewCreated";

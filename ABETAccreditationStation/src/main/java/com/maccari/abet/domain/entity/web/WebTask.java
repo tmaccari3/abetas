@@ -15,6 +15,7 @@ import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.StudentOutcome;
 import com.maccari.abet.domain.entity.StudentOutcomeData;
 import com.maccari.abet.domain.entity.Task;
+import com.maccari.abet.domain.entity.relation.task.TaskAssignee;
 
 /*
  * DocumentSearch.java 
@@ -39,9 +40,9 @@ public class WebTask {
 
 	private List<Integer> outcomes;
 	
-	private List<Program> fullPrograms;
+	private List<? extends Program> fullPrograms;
 
-	private List<StudentOutcome> fullOutcomes;
+	private List<? extends StudentOutcome> fullOutcomes;
 	
 	@NotNull(message = "*required")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -61,10 +62,12 @@ public class WebTask {
 	public WebTask(Task task) {
 		this.id = task.getId();
 		this.coordinator = task.getCoordinator();
-		this.title = task.getTitle();
-		this.assignees = task.getAssignees();
-		//this.fullPrograms = task.getPrograms();
-		//this.fullOutcomes = task.getOutcomes();
+		this.title = task.getTitle(); 
+		for(TaskAssignee assignee : task.getAssignees()) {
+			this.assignees.add(assignee.getEmail());
+		}
+		this.fullPrograms = task.getPrograms();
+		this.fullOutcomes = task.getOutcomes();
 		this.description = task.getDescription();
 		this.dueDate = task.getDueDate();
 		this.uploadedFile = task.getFile();
@@ -126,7 +129,7 @@ public class WebTask {
 		this.description = description;
 	}
 
-	public List<Program> getFullPrograms() {
+	public List<? extends Program> getFullPrograms() {
 		return fullPrograms;
 	}
 
@@ -134,7 +137,7 @@ public class WebTask {
 		this.fullPrograms = fullPrograms;
 	}
 
-	public List<StudentOutcome> getFullOutcomes() {
+	public List<? extends StudentOutcome> getFullOutcomes() {
 		return fullOutcomes;
 	}
 
@@ -156,6 +159,16 @@ public class WebTask {
 
 	public void setDueDate(Date dueDate) {
 		this.dueDate = dueDate;
+	}
+	
+	public List<TaskAssignee> getFullAssignees() {
+		ArrayList<TaskAssignee> fullAssignees = new ArrayList<TaskAssignee>();
+		
+		for(String assignee : assignees) {
+			fullAssignees.add(new TaskAssignee(assignee));
+		}
+		
+		return fullAssignees;
 	}
 
 	//for debugging

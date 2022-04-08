@@ -4,11 +4,15 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.maccari.abet.domain.entity.Program;
 
+@Entity
+@Table(name = "task_program")
 public class TaskProgram implements Program, Serializable {
 	@Transient
 	private static final long serialVersionUID = -4859976926484594317L;
@@ -21,12 +25,21 @@ public class TaskProgram implements Program, Serializable {
 	@Column(name = "program_id")
 	private int programId;
 	
+	private String name;
+	
+	public TaskProgram() {
+		
+	}
+	
 	public TaskProgram(int programId) {
 		this.programId = programId;
 	}
-
-	private String name;
 	
+	public TaskProgram(int programId, String name) {
+		this.programId = programId;
+		this.name = name;
+	}
+
 	public int getTaskId() {
 		return taskId;
 	}
