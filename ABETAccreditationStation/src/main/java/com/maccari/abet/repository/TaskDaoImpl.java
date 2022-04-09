@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -37,6 +38,7 @@ import com.maccari.abet.repository.mapper.ProgramMapper;
 import com.maccari.abet.repository.mapper.StringMapper;
 import com.maccari.abet.repository.mapper.StudentOutcomeMapper;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.Query;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -64,6 +66,7 @@ public class TaskDaoImpl implements TaskDao {
 	}
 
 	@Override
+	@Transactional
 	public <S extends Task> S save(S entity) {
 		Instant instant = Instant.now(); Timestamp ts = instant != null ?
 				Timestamp.from(instant) : null;
@@ -81,6 +84,8 @@ public class TaskDaoImpl implements TaskDao {
 		.setParameter(6, entity.isSubmitted())
 		.setParameter(7, entity.isComplete())
 		.getSingleResult();
+		
+		System.out.println("saving: " + tempId);
 		
 		int id = tempId.intValue();
 		
@@ -197,7 +202,10 @@ public class TaskDaoImpl implements TaskDao {
 	}
 
 	@Override
+	@Transactional
 	public Task updateTask(Task task) {
+		deleteById((long) task.getId());
+		save(task);
 		/*
 		 * DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		 * def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
@@ -233,7 +241,12 @@ public class TaskDaoImpl implements TaskDao {
 	}
 
 	@Override
+	@Transactional
 	public void updateSubmitted(Task task) {
+		em.createNativeQuery("UPDATE task SET submitted = ? WHERE id = ?")
+			.setParameter(1, task.isSubmitted())
+			.setParameter(2, task.getId())
+			.executeUpdate();
 		/*
 		 * DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		 * def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
@@ -249,7 +262,12 @@ public class TaskDaoImpl implements TaskDao {
 	}
 
 	@Override
+	@Transactional
 	public void updateComplete(Task task) {
+		em.createNativeQuery("UPDATE task SET complete = ? WHERE id = ?")
+			.setParameter(1, task.isComplete())
+			.setParameter(2, task.getId())
+			.executeUpdate();
 		/*
 		 * DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		 * def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
@@ -265,24 +283,17 @@ public class TaskDaoImpl implements TaskDao {
 	}
 
 	@Override
+	@Transactional
 	public void delete(Task entity) {
 		em.remove(entity);
 	}
 	
 	@Override
-	public void removeTask(Task task) {
-		/*
-		 * DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-		 * def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
-		 * TransactionStatus status = transactionManager.getTransaction(def);
-		 * 
-		 * try { String SQL = "DELETE FROM task WHERE id = ?"; jdbcTemplate.update(SQL,
-		 * task.getId());
-		 * 
-		 * transactionManager.commit(status); } catch (Exception e) {
-		 * System.out.println("Error in removing task record, rolling back");
-		 * transactionManager.rollback(status); throw e; }
-		 */
+	@Transactional
+	public void deleteById(Long id) {
+		em.createNativeQuery("DELETE FROM task WHERE id=:id")
+			.setParameter("id", id.intValue())
+			.executeUpdate();
 	}
 	
 	@Override
@@ -371,70 +382,6 @@ public class TaskDaoImpl implements TaskDao {
 		return query.getResultList();
 	}
 
-	// A simple mapper that gets only the task info stored in the task table
-	class SimpleTaskMapper implements RowMapper<Task> {
-		public Task mapRow(ResultSet rs, int rowNum) throws SQLException {
-			Task task = new Task();
-			task.setId(rs.getInt("id"));
-			task.setTitle(rs.getString("title"));
-			task.setCoordinator(rs.getString("coordinator"));
-			task.setAssignDate(rs.getObject("assign_date", Timestamp.class));
-			task.setSubmitted(rs.getBoolean("submitted"));
-			task.setComplete(rs.getBoolean("complete"));
-			task.setSubmitDate(rs.getObject("submit_date", Timestamp.class));
-
-			return task;
-		}
-	}
-
-	// The complete task mapper that obtains all info related to a task
-	class FullTaskMapper implements RowMapper<Task> {
-		public Task mapRow(ResultSet rs, int rowNum) throws SQLException {
-			/*
-			 * Task task = new Task(); task.setId(rs.getInt("id"));
-			 * task.setTitle(rs.getString("title"));
-			 * task.setCoordinator(rs.getString("coordinator"));
-			 * task.setDescription(rs.getString("description"));
-			 * task.setAssignDate(rs.getObject("assign_date", Timestamp.class));
-			 * task.setSubmitted(rs.getBoolean("submitted"));
-			 * task.setDueDate(rs.getDate("due_date"));
-			 * task.setComplete(rs.getBoolean("complete"));
-			 * task.setSubmitDate(rs.getObject("submit_date", Timestamp.class));
-			 * 
-			 * try { String SQL = "SELECT assignee FROM assigned WHERE id = ?";
-			 * task.setAssignees(jdbcTemplate.query(SQL, new StringMapper(), task.getId()));
-			 * } catch (Exception e) { task.setAssignees(null); }
-			 * 
-			 * try { String SQL = "SELECT * FROM task_program WHERE task_id = ?";
-			 * task.setPrograms(jdbcTemplate.query(SQL, new ProgramMapper(), task.getId()));
-			 * } catch (Exception e) {
-			 * System.out.println("Error in getting programs for task.");
-			 * 
-			 * task.setPrograms(null); }
-			 * 
-			 * try { String SQL = "SELECT * FROM task_outcome WHERE task_id = ?";
-			 * task.setOutcomes(jdbcTemplate.query(SQL, new StudentOutcomeMapper(),
-			 * task.getId())); } catch (Exception e) {
-			 * System.out.println("Error in getting outcomes for task.");
-			 * 
-			 * task.setPrograms(null); }
-			 * 
-			 * try { String SQL = "SELECT * FROM task_file WHERE task_id = ?"; int fileId =
-			 * jdbcTemplate.query(SQL, new IdMapper(), task.getId()).get(0);
-			 * 
-			 * File file = new File(); file.setId(fileId); task.setFile(file);
-			 * 
-			 * } catch (Exception e) {
-			 * System.out.println("Error in getting file for task.");
-			 * 
-			 * task.setFile(null); }
-			 * 
-			 * return task;
-			 */
-			return null;
-		}
-	}
-
 	@Override
 	public <S extends Task> Iterable<S> saveAll(Iterable<S> entities) {
 		// TODO Auto-generated method stub
@@ -457,12 +404,6 @@ public class TaskDaoImpl implements TaskDao {
 	public long count() {
 		// TODO Auto-generated method stub
 		return 0;
-	}
-
-	@Override
-	public void deleteById(Long id) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

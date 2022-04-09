@@ -20,8 +20,6 @@ import com.maccari.abet.domain.entity.Task;
 public interface TaskDao extends CrudRepository<Task, Long> {
 	int createTask(final Task task);
 	
-	void removeTask(final Task task);
-	
 	Task updateTask(final Task task);
 	
 	void updateSubmitted(final Task task);

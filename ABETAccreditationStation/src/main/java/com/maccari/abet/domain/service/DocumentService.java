@@ -12,6 +12,7 @@ import com.maccari.abet.domain.entity.Program;
 import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.StudentOutcome;
 import com.maccari.abet.domain.entity.StudentOutcomeData;
+import com.maccari.abet.domain.entity.Task;
 import com.maccari.abet.domain.entity.relation.document.DocumentProgram;
 import com.maccari.abet.domain.entity.relation.document.DocumentStudentOutcome;
 import com.maccari.abet.domain.entity.web.DocumentSearch;
@@ -133,6 +134,19 @@ public class DocumentService implements Service<Document> {
 		}
 		for(StudentOutcome outcome : webDoc.getFullOutcomes()) {
 			webDoc.getOutcomes().add(outcome.getId());
+		}
+	}
+	
+	// Fills the document's programs/outcomes with the values held in the task's
+	public void fillDocWithTask(WebDocument webDoc, Task task) {
+		for(Program program : task.getPrograms()) {
+			webDoc.getFullPrograms().add(new DocumentProgram(program.getId(),
+					program.getName()));
+		}
+		
+		for(StudentOutcome outcome : task.getOutcomes()) {
+			webDoc.getFullOutcomes().add(new DocumentStudentOutcome(outcome.getId(),
+					outcome.getProgId(), outcome.getName()));
 		}
 	}
 }

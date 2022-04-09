@@ -227,13 +227,7 @@ public class DocumentDaoImpl implements DocumentDao {
 	
 	@Override
 	public Optional<Document> findById(Long id) {
-		int fileId = (int) em.createNativeQuery("SELECT file_id FROM document_file"
-				+ " WHERE doc_id=:id")
-				.setParameter("id", id.intValue())
-				.getSingleResult();
-		File file = new File();
-		file.setId(fileId);
-		
+		File file = getFileForDocument(id.intValue());
 		TypedQuery<Document> query = em.createQuery("SELECT d FROM Document d "
 				+ "WHERE d.id=:id", Document.class)
 				.setParameter("id", id.intValue());
@@ -258,6 +252,16 @@ public class DocumentDaoImpl implements DocumentDao {
 
 	@Override
 	public List<Document> getDocsForTask(int taskId) {
+		QDocument document = QDocument.document;
+		List<Document> documents = queryFactory.selectFrom(document)
+				.where(document.taskId.eq(taskId))
+				.fetch();
+		
+		for(Document doc : documents) {
+			doc.setFile(getFileForDocument(doc.getId()));
+		}
+		
+		return documents;
 		/*
 		 * ArrayList<Document> docs = new ArrayList<>(); try { String SQL =
 		 * "SELECT * FROM document WHERE task_id = ?"; docs = (ArrayList<Document>)
@@ -265,7 +269,6 @@ public class DocumentDaoImpl implements DocumentDao {
 		 * 
 		 * return docs; } catch (EmptyResultDataAccessException e) { return null; }
 		 */
-		return null;
 	}
 
 	@Override
@@ -275,21 +278,16 @@ public class DocumentDaoImpl implements DocumentDao {
 		
 		return tags;
 	}
-
-	// A simple mapper that gets only the document info stored in the document table
-	class SimpleDocMapper implements RowMapper<Document> {
-		public Document mapRow(ResultSet rs, int rowNum) throws SQLException {
-			Document document = new Document();
-			document.setId(rs.getInt("id"));
-			document.setTaskId(rs.getInt("task_id"));
-			document.setTitle(rs.getString("title"));
-			document.setAuthor(rs.getString("author"));
-			document.setDescription(rs.getString("description"));
-			document.setSubmitDate(rs.getObject("submit_date", Timestamp.class));
-			document.setTask(rs.getBoolean("task"));
-
-			return document;
-		}
+	
+	private File getFileForDocument(int docId) {
+		int fileId = (int) em.createNativeQuery("SELECT file_id FROM document_file"
+				+ " WHERE doc_id=:id")
+				.setParameter("id", docId)
+				.getSingleResult();
+		File file = new File();
+		file.setId(fileId);
+		
+		return file;
 	}
 	
 	@Override

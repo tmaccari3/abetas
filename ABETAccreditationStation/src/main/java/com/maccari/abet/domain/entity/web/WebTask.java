@@ -62,7 +62,8 @@ public class WebTask {
 	public WebTask(Task task) {
 		this.id = task.getId();
 		this.coordinator = task.getCoordinator();
-		this.title = task.getTitle(); 
+		this.title = task.getTitle();
+		this.assignees = new ArrayList<String>();
 		for(TaskAssignee assignee : task.getAssignees()) {
 			this.assignees.add(assignee.getEmail());
 		}
