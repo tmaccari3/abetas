@@ -122,6 +122,7 @@ public class TaskController {
 			uploadedFile.setFileSize(file.getSize());
 			uploadedFile.setData(file.getBytes());
 		} catch (IOException e) {
+			System.out.println("Error uploading file.");
 			e.printStackTrace();
 		}
 		

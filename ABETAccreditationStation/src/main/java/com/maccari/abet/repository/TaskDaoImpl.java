@@ -206,6 +206,8 @@ public class TaskDaoImpl implements TaskDao {
 	public Task updateTask(Task task) {
 		deleteById((long) task.getId());
 		save(task);
+		
+		return task;
 		/*
 		 * DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		 * def.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
@@ -237,7 +239,6 @@ public class TaskDaoImpl implements TaskDao {
 		 * System.out.println("Error in updating task record, rolling back");
 		 * transactionManager.rollback(status); throw e; }
 		 */
-		return null;
 	}
 
 	@Override
