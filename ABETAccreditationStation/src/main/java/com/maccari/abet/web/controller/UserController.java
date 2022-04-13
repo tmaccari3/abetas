@@ -32,6 +32,7 @@ import com.maccari.abet.domain.service.EmailServiceImpl;
 import com.maccari.abet.domain.service.ProgramService;
 import com.maccari.abet.domain.service.UserService;
 import com.maccari.abet.web.validation.UserValidator;
+import com.maccari.abet.web.validation.WebEmailValidator;
 import com.maccari.abet.web.validation.WebUserValidator;
 
 @Controller
@@ -47,6 +48,9 @@ public class UserController {
 	
 	@Autowired
 	private WebUserValidator webUserValidator;
+	
+	@Autowired
+	private WebEmailValidator emailValidator;
 	
 	@Autowired
 	private EmailServiceImpl emailService;
@@ -78,6 +82,7 @@ public class UserController {
 	
 	@RequestMapping(value = "/register/request", method = RequestMethod.POST, params = "submit")
 	public String submitEmail(@Valid WebEmail email, BindingResult bindingResult) {
+		emailValidator.validate(email, bindingResult);
 		if(bindingResult.hasErrors()) {
 			return "user/request";
 		}

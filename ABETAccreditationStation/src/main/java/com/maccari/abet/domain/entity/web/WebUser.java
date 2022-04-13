@@ -28,10 +28,10 @@ public class WebUser {
 
 	private List<String> roles;
 	
-	@Size(min=8, max=15, message = "Password must be between 8 and 15 characters.")
+	@Size(min=8, message = "Password must be at least 8 characters.")
 	private String password;
 	
-	@Size(min=8, max=15, message = "Password must be between 8 and 15 characters.")
+	@Size(min=8, message = "Password must be at least 8 characters.")
 	private String confPassword;
 
 	public WebUser() {

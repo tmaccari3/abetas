@@ -42,10 +42,11 @@ public class EmailServiceImpl implements EmailService {
 	public void sendRegistrationEmail(WebEmail email) throws MessagingException {
 		MimeMessage message = emailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		String password = "\nRequested password: " + email.getPassword();
 
 		helper.setTo(email.getTo());
 		helper.setSubject(email.getSubject() + ": " + email.getFrom());
-		helper.setText(email.getBody());
+		helper.setText(email.getBody() + password);		
 
 		emailSender.send(message);
 	}
