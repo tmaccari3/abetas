@@ -1,5 +1,6 @@
 package com.maccari.abet.domain.entity.web;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -172,12 +173,14 @@ public class WebTask {
 		return fullAssignees;
 	}
 
-	//for debugging
+	// For email body convenience
 	public String toString() {
 		String result = "";
 		
-		result += title + "\n";
-		result += assignees + "\n" + programs;
+		result += title + "\n\n";
+		result += "Due:" + new SimpleDateFormat("yyyy-MM-dd").format(dueDate) + "\n";
+		result += "Assigned by: " + coordinator + "\n";
+		result += description;
 		
 		return result;
 	}

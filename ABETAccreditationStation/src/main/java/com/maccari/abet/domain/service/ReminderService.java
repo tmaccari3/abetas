@@ -50,7 +50,9 @@ public class ReminderService {
 		this.scheduler = schedulerFactory.getObject();
 	}
 	
-	public void sendImmediately(WebEmail email) {
+	public void sendImmediately(WebEmail email, WebTask task) {
+		email.setSubject("ABET Accrediation Station: Task Notification");
+		email.setBody(task.toString());
 		emailService.sendEmail(email.getTo(), email.getFrom(), email.getSubject(), 
 			email.getBody());
 	}
@@ -61,6 +63,8 @@ public class ReminderService {
 			// Set group name to sender email + task id for a unique key combination
 			JobDetail job = jobFactoryProvider.getObject(email.getTo() + task.getId())
 					.getObject();
+			email.setSubject("ABET Accrediation Station: Task Notification");
+			email.setBody(task.toString());
 			
 			job.getJobDataMap().put("from", email.getFrom());
 			job.getJobDataMap().put("to", email.getTo());
@@ -83,7 +87,7 @@ public class ReminderService {
 	// Given the group, delete the job by its key.
 	public void deleteJob(String group) {
 		// The job factory produces jobs with a set name. 
-		// Combine this with the given group and the get the job's key.
+		// Combine this with the given group to get the job's key.
 		JobKey key = new JobKey(JTNameContainer.getJobName(), group);
 		try {
 			scheduler.deleteJob(key);

@@ -158,7 +158,7 @@ public class TaskController {
 		
 		session.removeAttribute("UPLOADED_FILE");
 		
-		//scheduleReminders(webTask);
+		scheduleReminders(webTask);
 
 		return "redirect:/";
 	}
@@ -258,13 +258,11 @@ public class TaskController {
 	
 	public void scheduleReminders(WebTask task) {
 		WebEmail email = new WebEmail();
-		email.setSubject("Test Reminder");
-		email.setBody("This is a test.");
 		
 		for(String emailAddress : task.getAssignees()) {
 			System.out.println("Scheduling for " + emailAddress + "...");
 			email.setTo(emailAddress);
-			reminderService.sendImmediately(email);
+			reminderService.sendImmediately(email, task);
 			reminderService.scheduleReminder(email, task);
 		}
 	}

@@ -15,18 +15,12 @@
 <title>Review Documentation</title>
 </head>
 <body style="overflow-y: hidden" layout:fragment="content">
-	<script type="text/javascript">
-		$(function() {
-			$(".chzn-select").chosen();
-		});
-	</script>
 	<form class="search-form" action="#" th:action="@{/doc/index}"
 		th:object="${documentSearch}" method="post">
 		<div class="review-container">
 			<div class="recent-container">
 				<div class="recent-title">Recent Submissions</div>
 				<div class="recent-document" th:each="document : ${recentDocuments}">
-					<!-- <div class="click" onClick="document.forms['doc'].submit();"> -->
 					<div class="task-title">
 						<div class="task-title-main">
 							<div>
@@ -76,7 +70,6 @@
 					</div>
 					<a th:href="@{/doc/details?id={id}(id=${document.id})}">See
 						more</a> <br>
-					<!--  </div> -->
 				</div>
 			</div>
 			<div class="search-container">
@@ -86,13 +79,6 @@
 					</div>
 					<br>
 					<div class="inline top">
-						<label>From Date:</label> <input type="date"
-							th:field="*{fromDate}" />
-					</div>
-					<div class="inline top">
-						<label>To Date:</label> <input type="date" th:field="*{toDate}" />
-					</div>
-					<div class="inline top">
 						<label>Max Rows:</label> <input class="count" type="number"
 							th:field="*{searchCount}" />
 					</div>
@@ -101,20 +87,11 @@
 							Rows:</div>
 						<div class="inline actual-rows" th:text="${searchDocuments.size}"></div>
 					</div>
-					<!-- <div class="program-multi inline top">
-						<label class="inline top">Programs:</label> 
-						<select class="chzn-select" multiple="true"
-							data-placeholder="Select Programs..." style="width: 200px">
-							<option th:each="aProg : ${progTypes}" th:value="${aProg.id}"
-								th:text="${aProg.name}" th:field="*{programs}"></option>
-						</select>
-					</div> -->
 				</div>
 				<div class="search-result-container">
 					<div class="recent-document"
 						th:if="!${#lists.isEmpty(searchDocuments)}"
 						th:each="document : ${searchDocuments}">
-						<!-- <div class="click" onClick="document.forms['doc'].submit();"> -->
 						<div class="task-title">
 							<div class="task-title-main">
 								<div>
@@ -164,7 +141,6 @@
 						</div>
 						<a th:href="@{/doc/details?id={id}(id=${document.id})}">See
 							more</a> <br>
-						<!-- </div> -->
 					</div>
 					<div class="empty-result"
 						th:if="${#lists.isEmpty(searchDocuments)}">No Documents
@@ -194,6 +170,14 @@
 							th:for="${#ids.prev('tags')}" th:text="${tag}">Default
 								Tag</label></li>
 					</ul>
+					<h6>Submission Date: </h6>
+					<div class="inline top">
+						<label>From Date:</label> <input type="date"
+							th:field="*{fromDate}" />
+					</div>
+					<div class="inline top">
+						<label>To Date:</label> <input type="date" th:field="*{toDate}" />
+					</div>
 				</div>
 			</div>
 		</div>
