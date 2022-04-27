@@ -77,8 +77,9 @@
 					<div class="inline top">
 						<h6>Search Documentation</h6>
 					</div>
+					<div class="full-text-search">Quick Search</div>
 					<br>
-					<div class="inline top">
+					<div class="inline">
 						<label>Max Rows:</label> <input class="count" type="number"
 							th:field="*{searchCount}" />
 					</div>
@@ -86,6 +87,9 @@
 						<div class="inline" style="vertical-align: middle">Actual
 							Rows:</div>
 						<div class="inline actual-rows" th:text="${searchDocuments.size}"></div>
+					</div>
+					<div class="full-text-search">
+						<input type="text" th:field="*{fullTextSearch}" />
 					</div>
 				</div>
 				<div class="search-result-container">
@@ -170,7 +174,7 @@
 							th:for="${#ids.prev('tags')}" th:text="${tag}">Default
 								Tag</label></li>
 					</ul>
-					<h6>Submission Date: </h6>
+					<h6>Submission Date:</h6>
 					<div class="inline top">
 						<label>From Date:</label> <input type="date"
 							th:field="*{fromDate}" />

@@ -44,7 +44,10 @@ public class DocumentService implements Service<Document> {
 	}
 	
 	public List<Document> getBySearch(DocumentSearch search) {
-		return docDao.getBySearch(search);
+		if(search.getFullTextSearch().equals("")) {
+			return docDao.getBySearch(search);
+		}
+		return docDao.getByFullTextSearch(search);
 	}
 	
 	public List<Document> getRecentDocuments(int amount) {

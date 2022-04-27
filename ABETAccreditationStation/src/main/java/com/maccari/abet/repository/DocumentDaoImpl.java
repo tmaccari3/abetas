@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -212,17 +213,55 @@ public class DocumentDaoImpl implements DocumentDao {
 		
 		BooleanBuilder predicate = new BooleanBuilder();
 		for(int progId : search.getPrograms()) {
-			predicate.or(documentProgram.programId.eq(progId));
+			predicate.and(documentProgram.programId.eq(progId));
 		}
 		
 		for(String tag : search.getTags()) {
-			predicate.or(documentTag.name.eq(tag));
+			predicate.and(documentTag.name.eq(tag));
 		}
 		
 		return query.where(predicate)
 				.limit(search.getSearchCount())
 				.distinct()
 				.fetch();
+	}
+	
+	@Override
+	public List<Document> getByFullTextSearch(DocumentSearch search) {
+		Scanner searchScan = new Scanner(search.getFullTextSearch());
+		String tsQuery = "";
+		while(searchScan.hasNext()) {
+			tsQuery += searchScan.next();
+			if(searchScan.hasNext()) {
+				tsQuery += " | ";
+			}
+		}
+		searchScan.close();
+		Query query = em.createNativeQuery("SELECT d_id " 
+				+ "FROM (SELECT document.id AS d_id, "
+						+ "to_tsvector(document.title) || "
+				        + "to_tsvector(document.description) || "
+						+ "to_tsvector(coalesce(string_agg(document_program.name, ' '))) || "
+				        + "to_tsvector(coalesce(string_agg(document_outcome.name, ' '))) || "
+				        + "to_tsvector(coalesce(string_agg(document_tag.tag, ' '))) "
+				        + "AS doc "
+					+ "FROM document "
+					+ "JOIN document_program ON document_program.doc_id = document.id "
+				    + "JOIN document_outcome ON document_outcome.doc_id = document.id "
+				    + "JOIN document_tag on document_tag.doc_id = document.id "
+				    + "GROUP BY document.id) d_search "
+				+ "WHERE d_search.doc @@ to_tsquery(:tsQuery)"
+				+ "LIMIT :count")
+				.setParameter("tsQuery", tsQuery)
+				.setParameter("count", search.getSearchCount());
+		
+		List<Integer> ids = query.getResultList();
+		
+		TypedQuery<Document> docQuery = em.createQuery("SELECT d FROM Document d "
+				+ "WHERE d.id IN :ids", Document.class)
+				.setParameter("ids", ids);
+		
+		return docQuery.getResultList();
 	}
 	
 	@Override
@@ -273,7 +312,7 @@ public class DocumentDaoImpl implements DocumentDao {
 
 	@Override
 	public List<String> getAllTags() {
-		Query query = em.createQuery("SELECT name FROM Tag", String.class);
+		TypedQuery<String> query = em.createQuery("SELECT name FROM Tag", String.class);
 		List<String> tags = (List<String>) query.getResultList();
 		
 		return tags;

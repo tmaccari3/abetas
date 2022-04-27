@@ -37,6 +37,8 @@ public class DocumentSearch {
 	
 	private int recentCount = 20;
 	
+	private String fullTextSearch = ""; 
+	
 	public DocumentSearch() {
 		this.programs = new ArrayList<Integer>();
 		this.outcomes = new ArrayList<Integer>();
@@ -99,6 +101,14 @@ public class DocumentSearch {
 		this.recentCount = recentCount;
 	}
 	
+	public String getFullTextSearch() {
+		return fullTextSearch;
+	}
+
+	public void setFullTextSearch(String fullTextSearch) {
+		this.fullTextSearch = fullTextSearch;
+	}
+
 	public String getFormattedDate(Date date) {
 		if(date == null) {
 			return "";

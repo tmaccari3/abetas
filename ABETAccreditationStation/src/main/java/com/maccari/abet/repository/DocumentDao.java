@@ -25,6 +25,8 @@ public interface DocumentDao extends CrudRepository<Document, Long>{
 	
 	List<Document> getBySearch(final DocumentSearch search);
 	
+	List<Document> getByFullTextSearch(final DocumentSearch search);
+	
 	List<Document> getRecentDocuments(final int amount);
 	
 	void createDocument(final Document document);
