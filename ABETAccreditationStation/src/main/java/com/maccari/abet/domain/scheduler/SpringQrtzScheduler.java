@@ -101,7 +101,7 @@ public class SpringQrtzScheduler {
 
         logger.info("Configuring trigger to fire every {} seconds", interval);
 
-        triggerFactory.setRepeatInterval((interval + 10) * 1000);
+        triggerFactory.setRepeatInterval((interval) * 1000);
         triggerFactory.setRepeatCount(repeatCount);
         triggerFactory.setStartDelay(5);
         triggerFactory.setName(triggerName);

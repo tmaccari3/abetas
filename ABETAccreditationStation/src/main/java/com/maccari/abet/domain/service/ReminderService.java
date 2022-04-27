@@ -74,7 +74,7 @@ public class ReminderService {
 			// Produce a trigger with group name same as job, interval of execution 
 		    // and the amount of times to repeat the trigger
 			SimpleTriggerFactoryBean triggerFactory = triggerFactoryProvider
-					.getObject(null, email.getTo() + task.getId(), 2, 10);
+					.getObject(null, email.getTo() + task.getId(), 2, 60);
 			Trigger trigger = triggerFactory.getObject();
 
 			scheduler.start();
