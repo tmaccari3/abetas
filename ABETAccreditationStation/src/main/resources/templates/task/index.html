@@ -38,7 +38,7 @@
 								</button>
 							</form>
 						</div>
-						<div class="option">
+						<div th:if="${!task.submitted}" class="option">
 							<form action="/task/doc/complete">
 								<button class="abetas-button" name="id" th:value="${task.id}"
 									type="submit">

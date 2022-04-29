@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,9 +45,14 @@ public class TaskCompleteController {
 	private FileService fileService;
 	
 	@RequestMapping(value = "/complete")
-	public String completeTask(@RequestParam(value = "id", required = true)
-			int id, WebDocument webDocument, Model model, HttpSession session) {
+	public String completeTask(@RequestParam(value = "id", required = true) int id, 
+			@RequestHeader(value="referer", defaultValue="") String referer,
+			WebDocument webDocument, Model model, HttpSession session) {
 		Task task = getTaskById(id);
+		if(referer == null || referer.isEmpty() || task.isSubmitted()) {
+        	return "redirect:/error/";
+        }
+		
 		model.addAttribute("task", task);
 		session.setAttribute("TASK_ID", task.getId());
 		
@@ -128,9 +134,14 @@ public class TaskCompleteController {
 	}
 	
 	@RequestMapping(value = "/submit")
-	public String completeTask(@RequestParam(value = "id", required = true)
-		int id, Model model, HttpSession session) {
+	public String completeTask(@RequestParam(value = "id", required = true) int id, 
+			@RequestHeader(value="referer", defaultValue="") String referer,
+			Model model, HttpSession session) {
 		Task task = getTaskById(id);
+		if(referer == null || referer.isEmpty() || task.isComplete()) {
+        	return "redirect:/error/";
+        }
+		
 		ArrayList<Document> documents = (ArrayList<Document>) docService.getDocsForTask(id);
 		fileService.fillFiles(documents);
 		model.addAttribute("documents", documents);

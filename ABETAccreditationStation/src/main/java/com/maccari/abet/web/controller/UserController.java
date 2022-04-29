@@ -18,7 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -127,7 +129,12 @@ public class UserController {
 	
 	@RequestMapping(value = "/user/remove")
 	public String displayUser(@RequestParam(value = "email", required = true) 
-		String email, Model model) {
+			String email, @RequestHeader(value="referer", defaultValue="") String referer, 
+			Model model) {
+		if(referer == null || referer.isEmpty()) {
+        	return "redirect:/error/";
+        }
+		
 		model.addAttribute("user", userService.getUserByEmail(email));
 		
 		return "user/remove";
@@ -135,7 +142,7 @@ public class UserController {
 	
 	@RequestMapping(value = "/user/remove", method = RequestMethod.POST)
 	public String removeUser(@RequestParam(value = "email", required = true) 
-		String email, Model model) {
+			String email, Model model) {
 		if(email.isEmpty() || email == null) {
 			return "redirect:/manage";
 		}
@@ -151,7 +158,12 @@ public class UserController {
 	
 	@RequestMapping(value = {"/user/edit", "/user/edit/programs"})
 	public String editUser(@RequestParam(value = "email", required = true) 
-		String email, WebUser webUser, Model model, final HttpServletRequest req) {
+			String email, @RequestHeader(value="referer", defaultValue="") String referer,
+			WebUser webUser, Model model, final HttpServletRequest req) {
+		if(referer == null || referer.isEmpty()) {
+        	return "redirect:/error/";
+        }
+		
 		User user = userService.getUserByEmail(email);
 		model.addAttribute("webUser", new WebUser(user.getEmail(), user.getRoles(), 
 				user.getPrograms()));
@@ -163,7 +175,8 @@ public class UserController {
 		return "user/edit";
 	}
 	
-	@RequestMapping(value = {"/user/edit", "/user/edit/programs"}, method = RequestMethod.POST, params = "submit")
+	@RequestMapping(value = {"/user/edit", "/user/edit/programs"}, 
+			method = RequestMethod.POST, params = "submit")
 	public String editUser(@Valid WebUser webUser, BindingResult bindingResult,
 			final HttpServletRequest req) {
 		webUserValidator.validate(webUser, bindingResult);

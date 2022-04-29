@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,6 +29,7 @@ import com.maccari.abet.domain.entity.web.DocumentSearch;
 import com.maccari.abet.domain.entity.web.WebDocument;
 import com.maccari.abet.domain.service.DocumentService;
 import com.maccari.abet.domain.service.ProgramService;
+import com.maccari.abet.exception.IllegalDownloadException;
 import com.maccari.abet.web.validation.DocumentValidator;
 
 @Controller
@@ -70,10 +72,13 @@ public class DocumentController {
 	}
 	
 	@GetMapping(value = "/details")
-	public String documentDetails(@RequestParam(value = "id", required = true) 
-		int id, Model model) {
+	public String documentDetails(@RequestParam(value = "id", required = true) int id, 
+			@RequestHeader(value="referer", defaultValue="") String referer, Model model) {
+		if(referer == null || referer.isEmpty()) {
+        	return "redirect:/error/";
+        }
+		
 		model.addAttribute("document", docService.getFullDocById(id));
-		//model.addAttribute("document", docService.getById(id));
 
 		return "document/details";
 	}

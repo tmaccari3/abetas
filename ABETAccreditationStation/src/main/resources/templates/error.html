@@ -1,0 +1,23 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+<link href="/css/error.css" rel="stylesheet" />
+<meta charset="ISO-8859-1">
+<title>Error</title>
+</head>
+<body layout:fragment="content">
+	<div class="error-message-container">
+		<div class="error-heading">
+			Whoops! Something went wrong! 
+		</div>
+		<br>
+		<p class="error-message">Here's some possible reasons why:</p>
+		<ul class="error-message">
+			<li>A URL was manually entered incorrectly</li>
+			<li>Your session may have expired</li>
+			<li>Or something we aren't aware of. Please report this to: </li>
+		</ul>
+	</div>
+</body>
+</html>

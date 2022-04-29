@@ -156,7 +156,7 @@
 				<button class="abetas-button" type="submit" name="cancel"
 					formnovalidate="formnovalidate" value="cancel">Return</button>
 			</div>
-			<div style="float: right" class="task-submit-button inline">
+			<div th:if="${!task.complete}" style="float: right" class="task-submit-button inline">
 				<button class="abetas-button" type="submit" name="id"
 					th:value="${task.id}" value="submit">Submit</button>
 			</div>

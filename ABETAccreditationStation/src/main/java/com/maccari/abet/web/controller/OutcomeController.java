@@ -1,6 +1,5 @@
 package com.maccari.abet.web.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +18,7 @@ import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.StudentOutcomeData;
 import com.maccari.abet.domain.entity.web.WebStudentOutcome;
 import com.maccari.abet.domain.service.ProgramService;
+import com.maccari.abet.exception.IllegalDownloadException;
 
 @Controller
 @RequestMapping("/outcome")
@@ -27,7 +28,12 @@ public class OutcomeController {
 	
 	@RequestMapping(value = "/index")
 	public String manage(@RequestParam(value = "id", required = true) int id,
+			@RequestHeader(value="referer", defaultValue="") String referer,
 			WebStudentOutcome webStudentOutcome, Model model, HttpSession session) {
+		if(referer == null || referer.isEmpty()) {
+        	return "redirect:/error/";
+        }
+		
 		ProgramData program = programService.getById(id);
 		model.addAttribute("outcomes", programService.getAllWebOutcomes(program));
 		model.addAttribute("progName", program.getName());
@@ -75,7 +81,12 @@ public class OutcomeController {
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "remove")
 	public String removeStudentOutcome(@RequestParam(value = "remove", required = true) 
-		int id, Model model, HttpSession session) {
+			int id, @RequestHeader(value="referer", defaultValue="") String referer, 
+			Model model, HttpSession session) {
+		if(referer == null || referer.isEmpty()) {
+        	return "redirect:/error/";
+        }
+		
 		programService.removeOutcome(programService.getOutcomeById(id));
 		int programId = (int) session.getAttribute("PROGRAM");
 
@@ -84,7 +95,12 @@ public class OutcomeController {
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "deactivate")
 	public String deactivateStudentOutcome(@RequestParam(value = "deactivate", required = true) 
-		int id, Model model, HttpSession session) {
+			int id, @RequestHeader(value="referer", defaultValue="") String referer,
+			Model model, HttpSession session) {
+		if(referer == null || referer.isEmpty()) {
+        	return "redirect:/error/";
+        }
+		
 		StudentOutcomeData studentOutcome = programService.getOutcomeById(id);
 		studentOutcome.setActive(false);
 		programService.updateOutcome(studentOutcome);
@@ -95,7 +111,12 @@ public class OutcomeController {
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "reactivate")
 	public String reactivateStudentOutcome(@RequestParam(value = "reactivate", required = true) 
-		int id, HttpSession session) {
+			int id, @RequestHeader(value="referer", defaultValue="") String referer,
+			HttpSession session) {
+		if(referer == null || referer.isEmpty()) {
+        	return "redirect:/error/";
+        }
+		
 		StudentOutcomeData studentOutcome = programService.getOutcomeById(id);
 		studentOutcome.setActive(true);
 		programService.updateOutcome(studentOutcome);

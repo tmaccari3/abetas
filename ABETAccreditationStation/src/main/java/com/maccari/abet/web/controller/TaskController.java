@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -176,8 +177,12 @@ public class TaskController {
 	}
 	
 	@GetMapping("/edit")
-	public String editTaskDetails(@RequestParam(value = "id", required = true)
-			int id, Model model) {
+	public String editTaskDetails(@RequestParam(value = "id", required = true) int id, 
+			@RequestHeader(value="referer", defaultValue="") String referer, Model model) {
+		if(referer == null || referer.isEmpty()) {
+        	return "redirect:/error/";
+        }
+		
 		WebTask webTask = taskService.taskToWebTask(taskService.getById(id));
 		File file = null;
 		if(webTask.getUploadedFile() != null) {
@@ -222,21 +227,29 @@ public class TaskController {
 	}
 	
 	@RequestMapping(value = "/delete")
-	public String displayTaskForRemoval(@RequestParam(value = "id", required = true) 
-		int id, Model model) {
+	public String displayTaskForRemoval(@RequestParam(value = "id", required = true) int id, 
+			@RequestHeader(value="referer", defaultValue="") String referer, Model model) {
+		if(referer == null || referer.isEmpty()) {
+        	return "redirect:/error/";
+        }
+		
 		model.addAttribute("task", taskService.getFullTaskById(id));
 		
 		return "task/delete";
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
-	public String deleteTask(@RequestParam(value = "id", required = true) 
-		int id, Model model) {
+	public String deleteTask(@RequestParam(value = "id", required = true) int id,
+			@RequestHeader(value="referer", defaultValue="") String referer, Model model) {
+		if(referer == null || referer.isEmpty()) {
+        	return "redirect:/error/";
+        }
+		
 		Task task = taskService.getById(id);
 		taskService.remove(task);
 		
 		for(TaskAssignee assignee : task.getAssignees()) {
-			System.out.println("About to delete: " + assignee + task.getId());
+			System.out.println("About to delete: " + assignee.getEmail() + task.getId());
 			reminderService.deleteJob(assignee.getEmail() + task.getId());
 		}
 		
@@ -249,9 +262,12 @@ public class TaskController {
 	}
 	
 	@GetMapping("/details")
-	public String viewTaskDetails(@RequestParam(value = "id", required = true)
-			int id, Model model) {
+	public String viewTaskDetails(@RequestParam(value = "id", required = true) int id, 
+			@RequestHeader(value="referer", defaultValue="") String referer, Model model) {
 		model.addAttribute("task", taskService.getFullTaskById(id));
+		if(referer == null || referer.isEmpty()) {
+        	return "redirect:/error/";
+        }
 		
 		return "task/details";
 	}
@@ -269,13 +285,7 @@ public class TaskController {
 
 	@ModelAttribute("progTypes")
 	public ArrayList<ProgramData> getPrograms(Principal principal) {
-		ArrayList<ProgramData> p = (ArrayList<ProgramData>) programService.getActivePrograms(principal.getName());
-		for(ProgramData ps : p) {
-			System.out.println("here's what i got");
-			System.out.println(ps.getName());
-		}
-		
-		return p;
+		return (ArrayList<ProgramData>) programService.getActivePrograms(principal.getName());
 	}
 	
 	@ModelAttribute("uploadedFile")

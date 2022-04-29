@@ -186,7 +186,6 @@ public class ProgramService implements Service<ProgramData> {
 	public void fillPrograms(WebUser user) {
 		ArrayList<ProgramData> programs = new ArrayList<ProgramData>();
 		for(Integer id : user.getProgramIds()) {
-			System.out.println("id: " + id + " found: " + programDao.findById((long) id).get());
 			programs.add(programDao.findById((long) id).get());
 		}
 		

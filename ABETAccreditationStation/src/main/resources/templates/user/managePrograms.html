@@ -24,7 +24,7 @@
 				</tr>
 				<tr th:each="user : ${users}">
 					<td th:text="${user.email}"></td>
-					<td th:text="${user.programs}"></td>
+					<td th:text="${user.formattedPrograms}"></td>
 					<td>
 						<div class="option">
 							<form action="/user/edit/programs">

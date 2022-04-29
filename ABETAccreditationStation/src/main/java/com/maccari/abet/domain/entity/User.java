@@ -143,7 +143,25 @@ public class User implements Persistable<UUID> {
 		}
 		String item = roles.get(iter);
 		if(item != null) {
-			result += item.toString();
+			result += item.substring(5);
+		}
+		
+		return result;
+	}
+	
+	public String formattedPrograms() {
+		if(programs.size() == 0) {
+			return "N/A";
+		}
+		
+		String result = "";
+		int iter;
+		for(iter = 0; iter < programs.size() - 1; iter++) {
+			result += programs.get(iter).getName() + ", ";
+		}
+		String item = programs.get(iter).getName();
+		if(item != null) {
+			result += item;
 		}
 		
 		return result;

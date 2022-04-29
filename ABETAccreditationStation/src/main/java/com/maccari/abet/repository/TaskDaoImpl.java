@@ -68,8 +68,8 @@ public class TaskDaoImpl implements TaskDao {
 	@Override
 	@Transactional
 	public <S extends Task> S save(S entity) {
-		Instant instant = Instant.now(); Timestamp ts = instant != null ?
-				Timestamp.from(instant) : null;
+		Instant instant = Instant.now(); 
+		Timestamp ts = instant != null ? Timestamp.from(instant) : null;
 		
 		entity.setAssignDate(ts);
 		
