@@ -162,7 +162,7 @@
 					<div>
 						<label class="top">Programs: </label> <select
 							class="program-multi" th:field="*{programs}" multiple="multiple">
-							<option th:each="aProg : ${progTypes}" th:field="*{programs}"
+							<option th:each="aProg : ${filterProgs}" th:field="*{programs}"
 								th:value="${aProg.id}" th:text="${aProg.name}">Part
 								name</option>
 						</select>

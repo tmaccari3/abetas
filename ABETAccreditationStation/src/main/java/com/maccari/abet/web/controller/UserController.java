@@ -1,5 +1,6 @@
 package com.maccari.abet.web.controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -63,6 +64,13 @@ public class UserController {
 	
 	private final String systemEmail = "abetastest@gmail.com";
 	
+	@RequestMapping(value = "/user/summary")
+	public String summary(Principal principal, Model model) {
+		model.addAttribute("user", userService.getUserByEmail(principal.getName()));
+		
+		return "user/summary";
+	}
+	
 	@RequestMapping(value = "/manage")
 	public String manage(Model model) {
 		model.addAttribute("users", userService.getAll());
@@ -84,15 +92,15 @@ public class UserController {
 	
 	@RequestMapping(value = "/register/request", method = RequestMethod.POST, params = "submit")
 	public String submitEmail(@Valid WebEmail email, BindingResult bindingResult) {
-		emailValidator.validate(email, bindingResult);
+		//emailValidator.validate(email, bindingResult);
 		if(bindingResult.hasErrors()) {
 			return "user/request";
 		}
 		email.setTo(systemEmail);
 		try {
-			emailService.sendRegistrationEmail(email);
+			emailService.sendRequestEmail(email);
 		} catch(MessagingException e) {
-			System.out.println("Registration failed, email not sent.");
+			System.out.println("Request failed, email not sent.");
 		}
 		
 		return "redirect:/";
@@ -110,7 +118,7 @@ public class UserController {
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String addUser(@Valid WebUser webUser, BindingResult bindingResult) {
-		userValidator.validate(webUser, bindingResult);
+		webUserValidator.validate(webUser, bindingResult);
 		if(userService.userExists(webUser.getEmail())) {
 			bindingResult.rejectValue("email", "user.already.exists");
 		}
@@ -118,11 +126,18 @@ public class UserController {
 			return "user/register";
 		}
 		
-		String encodedPswd = passwordEncoder.encode(webUser.getPassword());
+		String password = userService.generateTempPassword();
+		String encodedPswd = passwordEncoder.encode(password);
 		User user = userService.convertWebUser(webUser);
 		user.setPassword(encodedPswd);
 		
 		userService.create(user);
+		
+		try {
+			emailService.sendRegistrationEmail(webUser.getEmail(), systemEmail, password);
+		} catch(MessagingException e) {
+			System.out.println("Registration failed, email not sent.");
+		}
 		
 		return "redirect:/manage";
 	}
@@ -209,6 +224,27 @@ public class UserController {
 		}
 		
 		return "redirect:/manage";
+	}
+	
+	@RequestMapping(value = "/user/change/password", method = RequestMethod.GET)
+	public String changePassword(@RequestParam(value = "email", required = true) 
+			String email, @RequestHeader(value="referer", defaultValue="") String referer,
+			Model model) {
+		model.addAttribute("webUser", userService.getUserByEmail(email));
+		
+		return "user/changePassword";
+	}
+	
+	@RequestMapping(value = "/user/change/password", method = RequestMethod.POST)
+	public String submitChangePassword(@Valid WebUser webUser, BindingResult bindingResult) {
+		userValidator.validate(webUser, bindingResult);
+		if(bindingResult.hasErrors()) {
+			return "user/changePassword";
+		}
+		String encodedPswd = passwordEncoder.encode(webUser.getPassword());
+		userService.changePassword(encodedPswd, webUser.getEmail());
+		
+		return "redirect:/user/summary";
 	}
 	
 	//automatically logs a user in after they register for an account

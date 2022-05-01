@@ -52,6 +52,16 @@ public class DocumentController {
 		return "document/index";
 	}
 	
+	@GetMapping(value = "/index/from/home")
+	public String viewDocumentsFromHome(@RequestParam(value = "progId", required = true) int progId,
+			DocumentSearch documentSearch, Model model) {
+		documentSearch.getPrograms().add(progId);
+		model.addAttribute("recentDocuments", docService.getRecentDocuments(documentSearch.getRecentCount()));
+		model.addAttribute("searchDocuments", docService.getBySearch(documentSearch));
+		
+		return "document/index";
+	}
+	
 	@RequestMapping(value = "/index", method = RequestMethod.POST)
 	public String searchDocuments(@Valid DocumentSearch documentSearch, Model model, 
 			BindingResult bindingResult) {
@@ -154,6 +164,14 @@ public class DocumentController {
 	
 	@ModelAttribute("progTypes")
 	public ArrayList<ProgramData> getPrograms(Principal principal) {
-		return (ArrayList<ProgramData>) programService.getActivePrograms(principal.getName());
+		if(principal != null) {
+			return (ArrayList<ProgramData>) programService.getActivePrograms(principal.getName());
+		}
+		return (ArrayList<ProgramData>) programService.getActivePrograms();
+	}
+	
+	@ModelAttribute("filterProgs")
+	public ArrayList<ProgramData> getFilterPrograms(Principal principal) {
+		return (ArrayList<ProgramData>) programService.getAll();
 	}
 }

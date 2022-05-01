@@ -30,19 +30,6 @@
 					<p class="error" th:if="${#fields.hasErrors('from')}"
 						th:errors="*{from}">Subject Error</p>
 				</div>
-				<div></div>
-				<div class="inline center">
-					<label>Chosen Password:</label> <input type="password"
-						th:field="*{password}" />
-				</div>
-				<div class="inline center">
-					<label>Repeat Password:</label> <input type="password"
-						th:field="*{confPassword}" />
-				</div>
-			</div>
-			<div class="error" style="text-align: center"
-				th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
-				password error
 			</div>
 			<br>
 			<div class="body-container">

@@ -28,7 +28,6 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.QUser;
 import com.maccari.abet.domain.entity.User;
-import com.maccari.abet.utility.WebList;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 /*
@@ -80,6 +79,17 @@ public class UserDaoImpl implements UserDao {
 			
 	        return entity;
 	    }
+	}
+	
+	@Transactional
+	@Override
+	public void changePassword(String encodedPassword, String email) {
+		em.joinTransaction();
+		em.createNativeQuery("UPDATE account SET password=:password"
+				+ " WHERE email=:email")
+			.setParameter("password", encodedPassword)
+			.setParameter("email", email)
+			.executeUpdate();
 	}
 	
 	@Override

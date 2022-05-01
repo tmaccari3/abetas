@@ -2,6 +2,7 @@ package com.maccari.abet.domain.service;
 
 import java.util.List;
 
+import org.apache.commons.text.RandomStringGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,6 +10,7 @@ import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.User;
 import com.maccari.abet.domain.entity.web.WebUser;
 import com.maccari.abet.repository.UserDao;
+import com.maccari.abet.utility.PasswordGenerator;
 
 /*
  * UserService.java 
@@ -25,6 +27,9 @@ import com.maccari.abet.repository.UserDao;
 public class UserService implements Service<User> {
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private PasswordGenerator passGen;
 	
 	@Override
 	public List<User> getAll() {
@@ -55,12 +60,20 @@ public class UserService implements Service<User> {
 		return userDao.save(item);
 	}
 	
+	public void changePassword(String encodedPassword, String email) {
+		userDao.changePassword(encodedPassword, email);
+	}
+	
 	public User getUserByEmail(String email) {
 		return userDao.getUserByEmail(email);
 	}
 	
 	public List<String> getRoles(){
 		return userDao.getRoles();
+	}
+	
+	public String generateTempPassword() {
+		return passGen.generateCommonTextPassword();
 	}
 	
 	public User convertWebUser(WebUser webUser) {

@@ -1,0 +1,31 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+<link href="/css/manage.css" rel="stylesheet" />
+<meta charset="ISO-8859-1">
+<title>Account Summary</title>
+</head>
+<body layout:fragment="content">
+	<div class="user-details-container">
+		<h3>User Summary</h3>
+		<div class="user-title">
+			<h6>Email Address:</h6>
+		</div>
+		<p th:text="${user.email}" /></p>
+		<div class="user-title">
+			<h6>Role(s)</h6>
+		</div>
+		<div th:each="role : *{user.roles}">
+			<p th:text="${role}"></p>
+		</div>
+		<br>
+		<form action="#" th:action="@{/user/change/password}" method="get">
+			<div class="inline">
+				<button class="abetas-button" type="submit" name="email"
+					th:value="${user.email}">Change password</button>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

@@ -17,8 +17,8 @@ public class WebUserValidator implements Validator {
 	@Override
 	public void validate(Object target, Errors errors) {
 		WebUser user = (WebUser) target;
-
-		if (user.getRoles().isEmpty()) {
+		
+		if(user.getRoles().isEmpty()) {
 			errors.rejectValue("roles", "webUser.roles.empty");
 		}
 	}

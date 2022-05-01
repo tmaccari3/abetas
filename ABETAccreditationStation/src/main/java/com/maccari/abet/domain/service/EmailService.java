@@ -1,6 +1,10 @@
 package com.maccari.abet.domain.service;
 
+import javax.mail.MessagingException;
+
 import org.springframework.stereotype.Component;
+
+import com.maccari.abet.domain.entity.web.WebEmail;
 
 /*
  * EmailService.java 
@@ -15,4 +19,8 @@ import org.springframework.stereotype.Component;
 @Component
 public interface EmailService {
 	void sendEmail(String to, String from, String subject, String text);
+	
+	void sendRequestEmail(WebEmail email) throws MessagingException;
+	
+	void sendRegistrationEmail(String to, String from, String password) throws MessagingException;
 }

@@ -20,12 +20,6 @@ public class WebEmail {
 	@Email(message = "Enter a valid email address")
 	private String from;
 	
-	@Size(min=8, message = "Password must be at least 8 characters.")
-	private String password;
-	
-	@Size(min=8, message = "Password must be at least 8 characters.")
-	private String confPassword;
-	
 	private String subject;
 	
 	private String body;
@@ -44,22 +38,6 @@ public class WebEmail {
 
 	public void setFrom(String from) {
 		this.from = from;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getConfPassword() {
-		return confPassword;
-	}
-
-	public void setConfPassword(String confPassword) {
-		this.confPassword = confPassword;
 	}
 
 	public String getSubject() {

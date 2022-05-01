@@ -20,12 +20,12 @@ public class UserValidator implements Validator {
 		String password = user.getPassword();
 		String confPassword = user.getConfPassword();
 
-		if (!password.equals(confPassword)) {
-			errors.rejectValue("password", "user.password.misMatch");
+		if(password.length() < 8 || confPassword.length() < 8) {
+			errors.rejectValue("roles", "user.password.length");
 		}
 		
-		if (user.getRoles().isEmpty()) {
-			errors.rejectValue("roles", "webUser.roles.empty");
+		if (!password.equals(confPassword)) {
+			errors.rejectValue("password", "user.password.misMatch");
 		}
 	}
 }

@@ -97,10 +97,6 @@ public class ProgramService implements Service<ProgramData> {
 		return studentOutcomeDao.updateOutcome(item);
 	}
 	
-	public List<ProgramData> getAllPrograms(){
-		return programDao.getAllPrograms();
-	}
-	
 	// Gets all programs, converts them to WebPrograms, and sorts them by id
 	public List<WebProgram> getAllWebPrograms() {
 		List<WebProgram> webPrograms = new ArrayList<WebProgram>();

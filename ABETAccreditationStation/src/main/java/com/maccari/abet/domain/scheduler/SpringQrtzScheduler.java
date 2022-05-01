@@ -42,11 +42,6 @@ public class SpringQrtzScheduler {
     @Autowired
     private ApplicationContext applicationContext;
 
-    @PostConstruct
-    public void init() {
-        logger.info("Hello world from Spring...");
-    }
-    
     @Bean
     public JobTriggerNameContainer jobTriggerNameContainer() {
     	return new JobTriggerNameContainer(jobName, triggerName);

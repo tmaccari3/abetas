@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout}">
@@ -8,16 +9,18 @@
 </head>
 <body layout:fragment="content">
 	<div class="error-message-container">
-		<div class="error-heading">
-			Whoops! Something went wrong! 
-		</div>
+		<div class="error-heading">Whoops! Something went wrong!</div>
 		<br>
-		<p class="error-message">Here's some possible reasons why:</p>
-		<ul class="error-message">
-			<li>A URL was manually entered incorrectly</li>
-			<li>Your session may have expired</li>
-			<li>Or something we aren't aware of. Please report this to: </li>
-		</ul>
+		<div class="error-message" th:if="${msg ne null}" 
+			th:text="'Error message: ' + ${msg}"></div>
+		<div th:if="${msg == null}">
+			<p class="error-message">Here's some possible reasons why:</p>
+			<ul class="error-message">
+				<li>A URL was manually entered incorrectly</li>
+				<li>Your session may have expired</li>
+				<li>Or something we aren't aware of. Please report this to:</li>
+			</ul>
+		</div>
 	</div>
 </body>
 </html>

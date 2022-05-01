@@ -28,11 +28,9 @@ public class WebUser {
 
 	private List<String> roles;
 	
-	@Size(min=8, message = "Password must be at least 8 characters.")
-	private String password;
+	private String password = "";
 	
-	@Size(min=8, message = "Password must be at least 8 characters.")
-	private String confPassword;
+	private String confPassword = "";
 
 	public WebUser() {
 		this.programIds = new ArrayList<Integer>();

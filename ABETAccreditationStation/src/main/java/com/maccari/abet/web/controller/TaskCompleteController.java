@@ -49,9 +49,15 @@ public class TaskCompleteController {
 			@RequestHeader(value="referer", defaultValue="") String referer,
 			WebDocument webDocument, Model model, HttpSession session) {
 		Task task = getTaskById(id);
-		if(referer == null || referer.isEmpty() || task.isSubmitted()) {
+		if(referer == null || referer.isEmpty()) {
         	return "redirect:/error/";
         }
+		
+		if(task.isSubmitted()) {
+			model.addAttribute("msg", "Task has already been submitted.");
+			
+        	return "redirect:/error/";
+		}
 		
 		model.addAttribute("task", task);
 		session.setAttribute("TASK_ID", task.getId());
@@ -138,7 +144,10 @@ public class TaskCompleteController {
 			@RequestHeader(value="referer", defaultValue="") String referer,
 			Model model, HttpSession session) {
 		Task task = getTaskById(id);
-		if(referer == null || referer.isEmpty() || task.isComplete()) {
+		if(task.isComplete()) {
+        	return "redirect:/error/?msg=Task has already been completed.";
+		}
+		if(referer == null || referer.isEmpty()) {
         	return "redirect:/error/";
         }
 		

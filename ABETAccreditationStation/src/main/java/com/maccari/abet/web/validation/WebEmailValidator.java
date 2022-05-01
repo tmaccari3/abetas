@@ -15,13 +15,13 @@ public class WebEmailValidator implements Validator {
 	
 	@Override
 	public void validate(Object target, Errors errors) {
-		WebEmail user = (WebEmail) target;
+		/*WebEmail user = (WebEmail) target;
 
 		String password = user.getPassword();
 		String confPassword = user.getConfPassword();
 
 		if (!password.equals(confPassword)) {
 			errors.rejectValue("password", "user.password.misMatch");
-		}
+		}*/
 	}
 }
