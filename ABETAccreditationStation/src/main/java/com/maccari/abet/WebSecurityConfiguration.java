@@ -33,13 +33,15 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/", "/home", "/login", "/403", "/doc/index").permitAll()
-			.antMatchers("/task/index").hasAnyRole("FACULTY", "ASSESSMENT_COORD", "ADMIN")
-			.antMatchers("/task/create", "/task/edit", "/task/delete", "/task/viewCreated", "/program/**", 
-					"/outcome/**", "/user/edit/programs").hasAnyRole("ASSESSMENT_COORD")
-			.antMatchers("doc/create", "doc/edit", "/task/complete").hasAnyRole("FACULTY")
-			.antMatchers("/manage/**", "/register", "/home/edit", "user/remove", 
-					"user/edit").hasAnyRole("ADMIN")
+		http.authorizeRequests().antMatchers("/", "/home", "/login", "/403", "/doc/index/**",
+				"/user/summary", "/register/request", "/user/change/password", 
+				"/doc/details").permitAll()
+			.antMatchers("/task/index", "/task/details", "/doc/**", "/task/doc/complete")
+				.hasAnyRole("FACULTY", "ASSESSMENT_COORD")
+			.antMatchers("/task/**", "/program/**", "/outcome/**", "/user/edit/programs", 
+					"/task/doc/submit").hasAnyRole("ASSESSMENT_COORD")
+			.antMatchers("/manage/**", "/register", "user/remove", "user/edit",
+					"/user/**").hasAnyRole("ADMIN")
 			.and().formLogin().loginPage("/login").defaultSuccessUrl("/")
 			.and().exceptionHandling().accessDeniedPage("/403");
 	}

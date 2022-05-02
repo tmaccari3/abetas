@@ -114,6 +114,7 @@ public class TaskDaoImpl implements TaskDao {
 				.setParameter(2, id)
 				.executeUpdate();	
 		}
+		entity.setId(id);
 		
 		return entity;
 	}

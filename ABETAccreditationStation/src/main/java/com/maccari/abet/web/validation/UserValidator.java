@@ -21,7 +21,7 @@ public class UserValidator implements Validator {
 		String confPassword = user.getConfPassword();
 
 		if(password.length() < 8 || confPassword.length() < 8) {
-			errors.rejectValue("roles", "user.password.length");
+			errors.rejectValue("password", "user.password.length");
 		}
 		
 		if (!password.equals(confPassword)) {

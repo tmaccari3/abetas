@@ -131,6 +131,7 @@ public class User implements Persistable<UUID> {
         this.update = true;
     }
 	
+    // For presentation purposes
 	public String formattedRoles() {
 		if(roles.size() == 0) {
 			return "N/A";
@@ -149,9 +150,26 @@ public class User implements Persistable<UUID> {
 		return result;
 	}
 	
+	// For presentation purposes
+	public List<String> formattedRolesVertical() {
+		List<String> result = new ArrayList<String>();
+		if(roles.isEmpty()) {
+			result.add("None");
+			
+			return result; 
+		}
+		int iter;
+		for(iter = 0; iter < roles.size(); iter++) {
+			result.add(roles.get(iter).toString().substring(5));
+		}
+		
+		return result;
+	}
+	
+	// For presentation purposes
 	public String formattedPrograms() {
 		if(programs.size() == 0) {
-			return "N/A";
+			return "None";
 		}
 		
 		String result = "";
@@ -162,6 +180,22 @@ public class User implements Persistable<UUID> {
 		String item = programs.get(iter).getName();
 		if(item != null) {
 			result += item;
+		}
+		
+		return result;
+	}
+	
+	// For presentation purposes
+	public List<String> formattedProgramsVertical() {
+		List<String> result = new ArrayList<String>();
+		if(programs.isEmpty()) {
+			result.add("N/A");
+			
+			return result; 
+		}
+		int iter;
+		for(iter = 0; iter < programs.size(); iter++) {
+			result.add(programs.get(iter).getName());
 		}
 		
 		return result;

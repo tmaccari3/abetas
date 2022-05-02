@@ -51,7 +51,7 @@
 </head>
 <body>
 	<div class="header" sec:authorize="isAuthenticated()">
-		Welcome, <span onClick="goToSummary('summary')" sec:authentication="name"></span>
+		Welcome, <span class="clickable" onClick="goToSummary('summary')" sec:authentication="name"></span>
 		<form id="summary" action="#" th:action="@{/user/summary}" method="get"></form>
 	</div>
 	<div class="header-div">
@@ -61,7 +61,7 @@
 					<span class="fas fa-home"></span> Home
 				</button>
 			</form>
-			<div class="dropdown" sec:authorize="hasAnyRole('ASSESSMENT_COORD, ADMIN')">
+			<div class="dropdown" sec:authorize="hasAnyRole('ADMIN, ASSESSMENT_COORD')">
 				<button class="btn btn-default dropdown-toggle admin-menu"
 					type="button" id="menu1" data-toggle="dropdown">
 					User Menu<span class="caret"></span>
@@ -82,7 +82,7 @@
 					<li role="presentation" class="divider"></li>
 				</ul>
 			</div>
-			<div class="dropdown" sec:authorize="hasAnyRole('FACULTY, ASSESSMENT_COORD, ADMIN')">
+			<div class="dropdown" sec:authorize="hasAnyRole('FACULTY, ASSESSMENT_COORD')">
 				<button class="btn btn-default dropdown-toggle admin-menu"
 					type="button" id="menu1" data-toggle="dropdown">
 					Task Menu <span class="caret"></span>
@@ -90,7 +90,7 @@
 				<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
 					<li role="presentation">
 						<div
-							sec:authorize="hasAnyRole('FACULTY, ASSESSMENT_COORD, ADMIN')">
+							sec:authorize="hasAnyRole('FACULTY, ASSESSMENT_COORD')">
 							<form action="/task/index">
 								<button type="submit" class="menu-item-button">View My
 									Tasks</button>
@@ -121,7 +121,7 @@
 					<button type="submit">Program Menu</button>
 				</form>
 			</div>
-			<div sec:authorize="hasAnyRole('FACULTY, ASSESSMENT_COORD, ADMIN')">
+			<div sec:authorize="hasAnyRole('FACULTY, ASSESSMENT_COORD')">
 				<form action="/doc/create">
 					<button type="submit">Submit Documentation</button>
 				</form>

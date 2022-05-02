@@ -93,6 +93,10 @@ public class UserController {
 	@RequestMapping(value = "/register/request", method = RequestMethod.POST, params = "submit")
 	public String submitEmail(@Valid WebEmail email, BindingResult bindingResult) {
 		//emailValidator.validate(email, bindingResult);
+		if(userService.userExists(email.getFrom())) {
+			bindingResult.rejectValue("from", "user.already.exists");
+		}
+		
 		if(bindingResult.hasErrors()) {
 			return "user/request";
 		}
@@ -198,6 +202,8 @@ public class UserController {
 	    String mapping = (String) req.getAttribute(
                 HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
 		if(bindingResult.hasErrors()) {
+			System.out.println("EROR");
+			System.out.println(bindingResult.getAllErrors());
 			if(mapping.contains("programs")) {
 				return "user/editPrograms";
 			}
@@ -258,7 +264,7 @@ public class UserController {
 	
 	@ModelAttribute("progTypes")
 	public ArrayList<ProgramData> getPrograms() {
-		return (ArrayList<ProgramData>) programService.getActivePrograms();
+		return (ArrayList<ProgramData>) programService.getAll();
 	}
 	
 	@ModelAttribute("roleTypes")

@@ -241,6 +241,7 @@ public class DocumentDaoImpl implements DocumentDao {
 				+ "FROM (SELECT document.id AS d_id, "
 						+ "to_tsvector(document.title) || "
 				        + "to_tsvector(document.description) || "
+				        + "to_tsvector(document.author) || "
 						+ "to_tsvector(coalesce(string_agg(document_program.name, ' '))) || "
 				        + "to_tsvector(coalesce(string_agg(document_outcome.name, ' '))) || "
 				        + "to_tsvector(coalesce(string_agg(document_tag.tag, ' '))) "

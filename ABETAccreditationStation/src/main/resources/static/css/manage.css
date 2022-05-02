@@ -6,6 +6,11 @@
 	width: 100%;
 }
 
+.user-details {
+	display: inline-block;
+	width: 49%;
+}
+
 .user-details-container {
 	position: relative;
 	margin: auto;
@@ -14,12 +19,18 @@
 	border: 5px groove;
 	padding: 20px;
 	border-color: gray;
-	width: 30%;
-	min-width: 400px;
+	width: 40%;
+	min-width: 450px;
 }
 
 .user-title {
 	border-bottom: 1px solid #bfbfbf;
+}
+
+.user-summary-container {
+	padding: 2px;
+	background-color: #edf2f7;
+	border: 2px solid black;
 }
 
 .options-container {

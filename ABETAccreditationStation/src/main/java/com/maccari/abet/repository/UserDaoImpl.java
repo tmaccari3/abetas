@@ -28,6 +28,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import com.maccari.abet.domain.entity.ProgramData;
 import com.maccari.abet.domain.entity.QUser;
 import com.maccari.abet.domain.entity.User;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 /*
@@ -45,6 +46,14 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 public class UserDaoImpl implements UserDao {
 	@PersistenceContext
 	private EntityManager em;
+	
+	private JPAQueryFactory queryFactory;
+
+	@Autowired
+	public void setDataSource(DataSource dataSource) {
+		this.queryFactory = new JPAQueryFactory(em);
+	}
+	
 
 	@Override
 	public <S extends User> S save(S entity) {
@@ -135,6 +144,15 @@ public class UserDaoImpl implements UserDao {
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}*/
+	}
+	
+	@Override
+	public User getAdmin() {
+		QUser user = QUser.user;
+		JPAQuery<User> query = queryFactory.selectFrom(user)
+				.where(user.roles.contains("ROLE_ADMIN"));
+		
+		return query.fetchFirst();
 	}
 
 	@Override

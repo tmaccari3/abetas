@@ -68,6 +68,10 @@ public class UserService implements Service<User> {
 		return userDao.getUserByEmail(email);
 	}
 	
+	public User getAdmin() {
+		return userDao.getAdmin();
+	}
+	
 	public List<String> getRoles(){
 		return userDao.getRoles();
 	}

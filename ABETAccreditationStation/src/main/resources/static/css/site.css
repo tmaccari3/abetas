@@ -1,12 +1,12 @@
 @charset "ISO-8859-1";
 
 html {
-    height: 100%;
+	height: 100%;
 }
 
 body {
 	background-color: #e6eeff;
-    height: 100%;
+	height: 100%;
 }
 
 .container {
@@ -111,18 +111,57 @@ body {
 /*-------site wide-------*/
 .abetas-button {
 	color: black;
-    background-color: #d0d0e1;
-    border-color: #a3a3c2;
-    border-radius: 4px;
+	background-color: #d0d0e1;
+	border-color: #a3a3c2;
+	border-radius: 4px;
 	font-size: 12px;
 	font-weight: bold;
 }
 
 .abetas-file-button {
 	color: black;
-    border-color: #a3a3c2;
+	border-color: #a3a3c2;
 	font-size: 12px;
 	font-weight: bold;
+}
+
+.tool-tip {
+	position: relative;
+	display: inline-block;
+}
+
+.tool-tip .tool-tip-text {
+	visibility: hidden;
+	width: 160px;
+	background-color: #3d3d5c;
+	color: #fff;
+	text-align: center;
+	padding: 5px 0;
+	border-radius: 6px;
+	position: absolute;
+	z-index: 1;
+	bottom: 120%;
+	left: 50%;
+	margin-left: -80px;
+	
+	opacity: 0;
+    transition: opacity .5s;
+}
+
+.tool-tip .tool-tip-text::after {
+	content: "";
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: #3d3d5c transparent transparent transparent;
+}
+
+.tool-tip:hover .tool-tip-text {
+	visibility: visible;
+	opacity: 1;
 }
 
 .label-button {
@@ -131,7 +170,7 @@ body {
 }
 
 .title {
-	border-bottom: 1px solid  #bfbfbf;
+	border-bottom: 1px solid #bfbfbf;
 }
 
 .title-container {
@@ -174,15 +213,19 @@ input[type=file] {
 
 .checkbox input {
 	vertical-align: middle;
-    position: relative;
-    bottom: 1px;
+	position: relative;
+	bottom: 1px;
 }
 
 .checkbox label {
 	display: block;
 }
 
-.error { 
+.clickable {
+	cursor: pointer;
+}
+
+.error {
 	color: red;
 	font-weight: italic;
 }

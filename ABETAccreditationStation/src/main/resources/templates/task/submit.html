@@ -152,13 +152,13 @@
 			</div>
 		</div>
 		<div class="task-submit">
-			<div style="float: left" class="task-submit-button inline">
+			<div th:if="${!task.complete}" style="float: left" class="task-submit-button inline">
+				<button class="abetas-button" type="submit" name="id"
+					th:value="${task.id}" value="submit">Mark as Complete</button>
+			</div>
+			<div style="float: right" class="task-submit-button inline">
 				<button class="abetas-button" type="submit" name="cancel"
 					formnovalidate="formnovalidate" value="cancel">Return</button>
-			</div>
-			<div th:if="${!task.complete}" style="float: right" class="task-submit-button inline">
-				<button class="abetas-button" type="submit" name="id"
-					th:value="${task.id}" value="submit">Submit</button>
 			</div>
 		</div>
 	</form>

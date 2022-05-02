@@ -63,8 +63,21 @@ public class ReminderService {
 			// Set group name to sender email + task id for a unique key combination
 			JobDetail job = jobFactoryProvider.getObject(email.getTo() + task.getId())
 					.getObject();
+			
+			JobDetail assessCordJob = jobFactoryProvider.getObject(task.getCoordinator() + task.getId())
+					.getObject();
 			email.setSubject("ABET Accrediation Station: Task Notification");
 			email.setBody(task.toString());
+			
+			assessCordJob.getJobDataMap().put("from", email.getFrom());
+			assessCordJob.getJobDataMap().put("to", task.getCoordinator());
+			assessCordJob.getJobDataMap().put("subject", email.getSubject());
+			String body = "This task is a week overdue. Consider reaching out to "
+					+ "its assignees.\n\n" + task.toString() + "\nAssignee List: \n";
+			for(String assignee : task.getAssignees()) {
+				body += assignee + "\n";
+			}
+			assessCordJob.getJobDataMap().put("body", body);
 			
 			job.getJobDataMap().put("from", email.getFrom());
 			job.getJobDataMap().put("to", email.getTo());
@@ -74,13 +87,18 @@ public class ReminderService {
 			// Produce a trigger with group name same as job, interval of execution 
 		    // and the amount of times to repeat the trigger
 			SimpleTriggerFactoryBean triggerFactory = triggerFactoryProvider
-					.getObject(null, email.getTo() + task.getId(), 2, 60);
+					.getObject(null, email.getTo() + task.getId(), 3, 60, 5);
 			Trigger trigger = triggerFactory.getObject();
+			
+			SimpleTriggerFactoryBean assessCordTriggerFactory = triggerFactoryProvider
+					.getObject(null, task.getCoordinator() + task.getId(), 0, 0, 180 * 1000);
+			Trigger assessCordTrigger = assessCordTriggerFactory.getObject();
 
 			scheduler.start();
 			scheduler.scheduleJob(job, trigger);
+			scheduler.scheduleJob(assessCordJob, assessCordTrigger);
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			System.out.println("Job schedule error: " + e.getMessage());
 		}
 	}
 	

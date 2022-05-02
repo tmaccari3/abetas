@@ -11,18 +11,18 @@
 	<div class="parent-div">
 		<div class="row">
 			<div class="left-div cell">
-				<h5>Accredited Programs</h5>
+				<h4>University Programs</h4>
 				<br>
 				<div th:each="prog : ${progTypes}">
-					<div th:if="${prog.isActive}">
+					<!-- <div th:if="${prog.isActive}"> -->
 						<br> 
 						<a th:href="@{/doc/index/from/home?
 							progId={progId}(progId=${prog.id})}" th:text="${prog.name}">
 						</a>
-					</div>
+					<!-- </div> -->
 				</div>
 			</div>
-			<div class="middle-div cell"></div>
+			<!-- <div class="middle-div cell"></div>
 			<div class="right-div cell">
 				<h5>Programs Seeking Accreditation</h5>
 				<br>
@@ -34,7 +34,7 @@
 						</a>
 					</div>
 				</div>
-			</div>
+			</div> -->
 		</div>
 	</div>
 </body>

@@ -62,7 +62,7 @@ public class EmailServiceImpl implements EmailService {
 		helper.setSubject("ABETAS Account Created");	
 
 		String text = "An account has been created for: " + to;
-		text += "with password: " + password;
+		text += " with password: " + password;
 		text += "\n\nIt is recommended that you change your password to something"
 				+ " you are more likely to remember.";
 		text += "\n\nYou can do this by clicking your email at the top left of the"

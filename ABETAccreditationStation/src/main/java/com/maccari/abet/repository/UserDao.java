@@ -22,6 +22,8 @@ public interface UserDao extends CrudRepository<User, Long> {
 	
 	User getUserByEmail(String email);
 	
+	User getAdmin();
+	
 	void changePassword(String encodedPassword, String email);
 	
 	List<String> getRoles();

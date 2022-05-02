@@ -14,7 +14,7 @@
 			<input type="hidden"
 					th:field="*{email}" th:value="${email}" />
 			<input type="hidden"
-					th:field="*{programs}" th:value="${programs}" />
+					th:field="*{programIds}" th:value="${programIds}" />
 			<br>
 			<div class="user-title">
 				<h6>Email Address:</h6>
@@ -23,8 +23,6 @@
 			<div class="user-title">
 				<h6>Role(s)</h6>
 			</div>
-			<label th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Role
-				Error</label>
 			<ul>
 				<li th:each="aRole : ${roleTypes}"><input type="checkbox"
 					th:field="*{roles}" th:value="${aRole}" /> <label

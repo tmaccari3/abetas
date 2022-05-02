@@ -35,7 +35,7 @@ public class DocumentSearch {
 	
 	private int searchCount = 20;
 	
-	private int recentCount = 20;
+	private int recentCount = 10;
 	
 	private String fullTextSearch = ""; 
 	

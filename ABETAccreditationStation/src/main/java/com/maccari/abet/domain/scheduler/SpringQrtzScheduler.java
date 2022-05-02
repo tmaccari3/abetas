@@ -88,7 +88,7 @@ public class SpringQrtzScheduler {
     @Bean
     @Scope("prototype")
     public SimpleTriggerFactoryBean trigger(JobDetail job, String group, 
-    	int repeatCount, int interval) {
+    	int repeatCount, int interval, int delay) {
         SimpleTriggerFactoryBean triggerFactory = new SimpleTriggerFactoryBean();
         if(job != null) {
             triggerFactory.setJobDetail(job);	
@@ -98,7 +98,7 @@ public class SpringQrtzScheduler {
 
         triggerFactory.setRepeatInterval((interval) * 1000);
         triggerFactory.setRepeatCount(repeatCount);
-        triggerFactory.setStartDelay(5);
+        triggerFactory.setStartDelay(delay);
         triggerFactory.setName(triggerName);
         triggerFactory.setGroup(group);
         
