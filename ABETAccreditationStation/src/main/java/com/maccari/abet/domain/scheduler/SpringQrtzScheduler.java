@@ -32,8 +32,6 @@ public class SpringQrtzScheduler {
 
     Logger logger = LoggerFactory.getLogger(getClass());
     
-    private static final int weekInSeconds = 604800;
-    
     // static names for jobs and triggers
     private static final String jobName = "RDJob";
     
@@ -96,7 +94,7 @@ public class SpringQrtzScheduler {
 
         logger.info("Configuring trigger to fire every {} seconds", interval);
 
-        triggerFactory.setRepeatInterval((interval) * 1000);
+        triggerFactory.setRepeatInterval(interval);
         triggerFactory.setRepeatCount(repeatCount);
         triggerFactory.setStartDelay(delay);
         triggerFactory.setName(triggerName);

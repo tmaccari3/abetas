@@ -24,7 +24,8 @@ public class TaskValidator implements Validator {
 	@Override
 	public void validate(Object target, Errors errors) {
 		WebTask task = (WebTask) target;
-
+		System.out.println(task.getAssignees());
+		System.out.println(task.getCoordinator());
 		if(task.getPrograms().isEmpty()) {
 			errors.rejectValue("programs", "program.empty");
 		}
@@ -37,16 +38,16 @@ public class TaskValidator implements Validator {
 			errors.rejectValue("assignees", "task.assignees.empty");
 		}
 		
+		if(task.getAssignees().contains(task.getCoordinator())) {
+			errors.rejectValue("assignees", "task.assignees.self");
+		}
+		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date(System.currentTimeMillis()));
-		calendar.add(Calendar.WEEK_OF_MONTH, 1);
+		calendar.add(Calendar.DAY_OF_WEEK, 6);
 		
 		if(task.getDueDate().before(calendar.getTime())) {
 			errors.rejectValue("dueDate", "dueDate.invalid");
 		}
-		
-		/*if(task.getUploadedFile() == null) {
-			errors.rejectValue("uploadedFile", "file.null");
-		}*/
 	}
 }

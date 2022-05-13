@@ -16,7 +16,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,7 +28,6 @@ import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.service.FileService;
 import com.maccari.abet.exception.IllegalDownloadException;
 import com.maccari.abet.exception.StorageFileNotFoundException;
-import com.maccari.abet.repository.FileDao;
 
 @Controller
 public class FileUploadController {

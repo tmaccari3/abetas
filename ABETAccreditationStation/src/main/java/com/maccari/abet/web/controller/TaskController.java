@@ -138,6 +138,7 @@ public class TaskController {
 			BindingResult bindingResult, Model model, final HttpServletRequest req,
 			HttpSession session) {
 		webTask.setUploadedFile((File) session.getAttribute("UPLOADED_FILE"));
+		webTask.setCoordinator(principal.getName());
 		taskValidator.validate(webTask, bindingResult);
 		
 		int invalidEmail = taskService.userExists(webTask.getAssignees());
@@ -154,7 +155,6 @@ public class TaskController {
 			return "task/create";
 		}
 		
-		webTask.setCoordinator(principal.getName());
 		webTask.setId(taskService.createAndGetId(taskService.webTaskToTask(webTask)));
 		
 		session.removeAttribute("UPLOADED_FILE");
@@ -199,6 +199,7 @@ public class TaskController {
 	public String editTask(Principal principal, @Valid WebTask webTask, 
 			BindingResult bindingResult, Model model, HttpSession session) {
 		webTask.setUploadedFile((File) session.getAttribute("UPLOADED_FILE"));
+		webTask.setCoordinator(principal.getName());
 		taskValidator.validate(webTask, bindingResult);
 		
 		if(taskService.userExists(webTask.getAssignees()) >= 0) {
@@ -214,7 +215,6 @@ public class TaskController {
 			return "task/edit";
 		}
 		
-		webTask.setCoordinator(principal.getName());
 		taskService.update(taskService.webTaskToTask(webTask));
 		
 		session.removeAttribute("UPLOADED_FILE");
@@ -250,9 +250,9 @@ public class TaskController {
 		taskService.remove(task);
 		
 		for(TaskAssignee assignee : task.getAssignees()) {
-			System.out.println("About to delete: " + assignee.getEmail() + task.getId());
 			reminderService.deleteJob(assignee.getEmail() + task.getId());
 		}
+		reminderService.deleteJob(task.getCoordinator() + task.getId());
 		
 		return "redirect:/task/viewCreated";
 	}
@@ -279,7 +279,7 @@ public class TaskController {
 		for(String emailAddress : task.getAssignees()) {
 			System.out.println("Scheduling for " + emailAddress + "...");
 			email.setTo(emailAddress);
-			//reminderService.sendImmediately(email, task);
+			reminderService.sendImmediately(email, task);
 			reminderService.scheduleReminder(email, task);
 		}
 	}

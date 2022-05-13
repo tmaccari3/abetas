@@ -1,5 +1,8 @@
 package com.maccari.abet.domain.service;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import javax.annotation.PostConstruct;
 
 import org.quartz.JobDetail;
@@ -45,6 +48,10 @@ public class ReminderService {
 	@Autowired
 	private EmailService emailService;
 	
+	// Time conversion constants
+	private static final int weekInMilliseconds = 604800000;
+	private static final int dayInMilliseconds = 86400000;
+	
 	@PostConstruct
 	public void initScheduler() {
 		this.scheduler = schedulerFactory.getObject();
@@ -64,8 +71,8 @@ public class ReminderService {
 			JobDetail job = jobFactoryProvider.getObject(email.getTo() + task.getId())
 					.getObject();
 			
-			JobDetail assessCordJob = jobFactoryProvider.getObject(task.getCoordinator() + task.getId())
-					.getObject();
+			JobDetail assessCordJob = jobFactoryProvider.getObject(task.getCoordinator() 
+					+ task.getId()).getObject();
 			email.setSubject("ABET Accrediation Station: Task Notification");
 			email.setBody(task.toString());
 			
@@ -84,14 +91,20 @@ public class ReminderService {
 			job.getJobDataMap().put("subject", email.getSubject());
 			job.getJobDataMap().put("body", email.getBody());
 			
+			// Get the amount of time before the a week prior to the task 
+			// due date for the purpose of delaying the job
+			int days = daysToWait(task.getDueDate());
+			
 			// Produce a trigger with group name same as job, interval of execution 
 		    // and the amount of times to repeat the trigger
 			SimpleTriggerFactoryBean triggerFactory = triggerFactoryProvider
-					.getObject(null, email.getTo() + task.getId(), 3, 60, 5);
+					.getObject(null, email.getTo() + task.getId(), 2, weekInMilliseconds, 
+							(days  - 7) * dayInMilliseconds);
 			Trigger trigger = triggerFactory.getObject();
 			
 			SimpleTriggerFactoryBean assessCordTriggerFactory = triggerFactoryProvider
-					.getObject(null, task.getCoordinator() + task.getId(), 0, 0, 180 * 1000);
+					.getObject(null, task.getCoordinator() + task.getId(), 0, 0, 
+							days * dayInMilliseconds);
 			Trigger assessCordTrigger = assessCordTriggerFactory.getObject();
 
 			scheduler.start();
@@ -116,5 +129,26 @@ public class ReminderService {
 	
 	public void unscheduleJob(String group) {
 		// TODO Auto-generated method stub
+	}
+	
+	private int daysToWait(Date dueDate) {
+		Calendar calendar1 = Calendar.getInstance();
+		calendar1.setTime(new Date(System.currentTimeMillis()));
+		Calendar calendar2 = Calendar.getInstance();
+		calendar2.setTime(dueDate);
+		
+		int days = 0;
+		while(!sameDay(calendar1, calendar2)) {
+			calendar1.add(Calendar.DAY_OF_WEEK, 1);
+			days++;
+		}
+		
+		return days;
+	}
+	
+	private boolean sameDay(Calendar c1, Calendar c2) {
+		return c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)
+				&& c1.get(Calendar.MONTH) == c2.get(Calendar.MONTH)
+				&& c1.get(Calendar.DAY_OF_MONTH) == c2.get(Calendar.DAY_OF_MONTH);
 	}
 }

@@ -23,9 +23,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.maccari.abet.domain.entity.Document;
 import com.maccari.abet.domain.entity.File;
 import com.maccari.abet.domain.entity.Task;
+import com.maccari.abet.domain.entity.relation.task.TaskAssignee;
 import com.maccari.abet.domain.entity.web.WebDocument;
 import com.maccari.abet.domain.service.DocumentService;
 import com.maccari.abet.domain.service.FileService;
+import com.maccari.abet.domain.service.ReminderService;
 import com.maccari.abet.domain.service.TaskService;
 import com.maccari.abet.web.validation.DocumentValidator;
 
@@ -43,6 +45,9 @@ public class TaskCompleteController {
 	
 	@Autowired
 	private FileService fileService;
+	
+	@Autowired
+	private ReminderService reminderService;
 	
 	@RequestMapping(value = "/complete")
 	public String completeTask(@RequestParam(value = "id", required = true) int id, 
@@ -119,6 +124,11 @@ public class TaskCompleteController {
 		task.setSubmitted(true);
 		taskService.updateSubmit(task);
 		
+		for(TaskAssignee assignee : task.getAssignees()) {
+			reminderService.deleteJob(assignee.getEmail() + task.getId());
+		}
+		reminderService.deleteJob(task.getCoordinator() + task.getId());
+		
 		session.removeAttribute("TASK_ID");
 		
 		return "redirect:/task/index";
@@ -144,9 +154,6 @@ public class TaskCompleteController {
 			@RequestHeader(value="referer", defaultValue="") String referer,
 			Model model, HttpSession session) {
 		Task task = getTaskById(id);
-		if(task.isComplete()) {
-        	return "redirect:/error/?msg=Task has already been completed.";
-		}
 		if(referer == null || referer.isEmpty()) {
         	return "redirect:/error/";
         }
@@ -162,8 +169,11 @@ public class TaskCompleteController {
 	@RequestMapping(value = "/submit", method = RequestMethod.POST)
 	public String verifyTaskSubmission(@RequestParam(value = "id", required = true)
 		int id, Model model, HttpSession session) {
-		ArrayList<Document> documents = (ArrayList<Document>) docService.getDocsForTask(id);
 		Task task = getTaskById(id);
+		if(task.isComplete()) {
+        	return "redirect:/error/?msg=Task has already been completed.";
+		}
+		ArrayList<Document> documents = (ArrayList<Document>) docService.getDocsForTask(id);
 		
 		if(documents.isEmpty()) {
 			model.addAttribute("invalid_submit", "No submission has been made, "

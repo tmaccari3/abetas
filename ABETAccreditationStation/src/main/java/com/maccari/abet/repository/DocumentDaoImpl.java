@@ -237,6 +237,7 @@ public class DocumentDaoImpl implements DocumentDao {
 			}
 		}
 		searchScan.close();
+
 		Query query = em.createNativeQuery("SELECT d_id " 
 				+ "FROM (SELECT document.id AS d_id, "
 						+ "to_tsvector(document.title) || "
@@ -259,7 +260,8 @@ public class DocumentDaoImpl implements DocumentDao {
 		List<Integer> ids = query.getResultList();
 		
 		TypedQuery<Document> docQuery = em.createQuery("SELECT d FROM Document d "
-				+ "WHERE d.id IN :ids", Document.class)
+				+ "WHERE d.id IN :ids "
+				+ "ORDER BY d.submitDate desc", Document.class)
 				.setParameter("ids", ids);
 		
 		return docQuery.getResultList();
